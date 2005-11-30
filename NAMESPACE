@@ -1,0 +1,22 @@
+     import(boot)
+     import(MASS)
+     import(methods)
+     importFrom(graphics, plot)
+     #importClassesFrom(boot,boot)
+     export("calc.relimp", "boot.relimp", "booteval.relimp","print.relimplm","print.relimplmbooteval","plot.relimplm","plot.relimplmbooteval","$.relimplm"
+)
+
+   exportClasses("relimplm", "relimplmboot", "relimplmbooteval")
+   #exportMethods("plot", "show", "$")
+   exportMethods("coerce")
+S3method(print,relimplm)
+S3method(plot,relimplm)
+S3method(print,relimplmbooteval)
+S3method(plot,relimplmbooteval)
+S3method("$",relimplm)
+S3method("$",relimplmbooteval)
+
+#S3method("as",relimplm)
+
+
+ 
