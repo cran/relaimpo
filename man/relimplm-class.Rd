@@ -32,15 +32,16 @@ Objects should only be created by calls to the function \code{calc.relimp}.
     \item{\code{first.diff}:}{Object of class \code{"numeric"} }
     \item{\code{betasq.diff}:}{Object of class \code{"numeric"}  }
     \item{\code{pratt.diff}:}{Object of class \code{"numeric"} }
-    \item{\code{namen}:}{Object of class \code{"character"}: variable names  }
+    \item{\code{namen}:}{Object of class \code{"character"}: variable names, starting with name for response }
     \item{\code{type}:}{Object of class \code{"character"}: metrics that have been calculated }
   }
 }
 \section{Methods}{
   \describe{
     \item{coerce}{If an object of this class is coerced to list by \code{as(object, "list")}, 
-    only the numeric slots are output to the list in the following order: \code{var.y}, \code{R2}, \code{lmg}, \code{lmg.rank}, \code{lmg.diff}, 
-next three in non-US version only: \code{pmvd}, \code{pmvd.rank}, \code{pmvd.diff}, \code{last},  \code{last.rank}, \code{last.diff}, ...
+    the slots are output to the list in the following order: \code{var.y}, \code{R2}, \code{lmg}, \code{lmg.rank}, \code{lmg.diff}, 
+next three in non-US version only: \code{pmvd}, \code{pmvd.rank}, \code{pmvd.diff}, \code{last},  
+\code{last.rank}, \code{last.diff}, ..., \code{pratt}, \code{pratt.rank}, \code{pratt.diff}, \code{namen}, \code{type}
 }
 }
 }
