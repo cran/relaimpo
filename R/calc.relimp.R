@@ -125,7 +125,7 @@ function (covg, type = "lmg", diff = FALSE, rank = TRUE, rela = TRUE)
     # as far as requested by the call
     # default: R2, lmg, rank.lmg
     slot(ausgabe, "namen") <- names
-    slot(ausgabe, "type") <- type
+    slot(ausgabe, "type") <- alltype[which(alltype %in% type)]
     return(ausgabe)
 }
 
