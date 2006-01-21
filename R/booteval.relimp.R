@@ -86,8 +86,8 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
                 bootnames <- c(bootnames, paste(diffnam, ".", 
                   a, "diff", sep = ""))
                 if (a %in% typesel) 
-                  slot(ausgabe, paste(a, "diff", "boot", sep = ".")) <- bootrun@boot$t[, 
-                    zaehl:(zaehl + p * (p - 1)/2 - 1)]
+                  slot(ausgabe, paste(a, "diff", "boot", sep = ".")) <- matrix(bootrun@boot$t[, 
+                    zaehl:(zaehl + p * (p - 1)/2 - 1)],1,p * (p - 1)/2)
                 zaehl <- zaehl + p * (p - 1)/2
             }
             if (a %in% typesel && !typname[1] == "") 

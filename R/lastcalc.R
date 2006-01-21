@@ -25,7 +25,7 @@ function (ausgabe, p, variances, rank, diff, rela)
         diffIII <- wahrIII[nchoosek(p, 2)[1, ]] - wahrIII[nchoosek(p, 
             2)[2, ]]
     if (diff & p == 2) 
-        diffIII <- wahrIII[1] - wahr[2]
+        diffIII <- wahrIII[1] - wahrIII[2]
 
     # output results
     slot(ausgabe, "last") <- wahrIII
