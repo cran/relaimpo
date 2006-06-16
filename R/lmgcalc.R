@@ -1,5 +1,5 @@
 "lmgcalc" <-
-function (ausgabe, p, indices, variances, rank, diff, rela) 
+function (ausgabe, p, indices, variances, rank, diff, rela, var.y) 
 {
     # Author and copyright holder: Ulrike Groemping
 
@@ -33,7 +33,7 @@ function (ausgabe, p, indices, variances, rank, diff, rela)
     # normalize
     if (rela) 
         wahr <- as.numeric(wahr/sum(wahr))
-    else wahr <- as.numeric(wahr/(factorial(p) * variances[[1]]))
+    else wahr <- as.numeric(wahr/(factorial(p) * var.y))
     # ranks
     raenge <- p + 1 - rank(wahr)
     # pairwise differences

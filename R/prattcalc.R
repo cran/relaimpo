@@ -1,5 +1,5 @@
 "prattcalc" <- 
-function (ausgabe, covg, p, rank, diff, rela) 
+function (ausgabe, covg, p, rank, diff, rela, var.y) 
 {
     # Author and copyright holder: Ulrike Groemping
 
@@ -9,7 +9,7 @@ function (ausgabe, covg, p, rank, diff, rela)
     # program that calculates the contribution according Pratts method,
     # i.e. standardized beta*correlation = beta*covariance/vary
     wahrpratt <- solve(covg[2:(p + 1), 2:(p + 1)], covg[2:(p + 
-        1), 1]) * covg[2:(p + 1), 1]/covg[1, 1]
+        1), 1]) * covg[2:(p + 1), 1]/var.y
 
     # normalize
     if (rela) 

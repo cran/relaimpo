@@ -1,5 +1,5 @@
 "firstcalc" <-
-function (ausgabe, p, variances, rank, diff, rela) 
+function (ausgabe, p, variances, rank, diff, rela, var.y) 
 {
     # Author and copyright holder: Ulrike Groemping
 
@@ -14,7 +14,7 @@ function (ausgabe, p, variances, rank, diff, rela)
     # normalize
     if (rela) 
         wahr1st <- wahr1st/sum(wahr1st)
-    else wahr1st <- wahr1st/(variances[[1]])
+    else wahr1st <- wahr1st/var.y
 
     # ranking
     raenge1st <- p + 1 - rank(wahr1st)

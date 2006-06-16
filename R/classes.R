@@ -1,8 +1,10 @@
 
 #classes and methods in the following
+setClassUnion("numintnull", c("numeric", "integer", "NULL"))
+setClassUnion("charnull", c("character", "NULL"))
 
 setClass("relimplm",representation=representation(
-    var.y="numeric",R2="numeric",
+    var.y="numeric",R2="numeric",R2.decomp="numeric",
     lmg="numeric",pmvd="numeric",first="numeric",last="numeric",
     betasq="numeric",pratt="numeric",
     lmg.rank="numeric",pmvd.rank="numeric",
@@ -11,11 +13,14 @@ setClass("relimplm",representation=representation(
     lmg.diff="numeric",pmvd.diff="numeric",first.diff="numeric",
     last.diff="numeric",
     betasq.diff="numeric",pratt.diff="numeric",
-    namen="character",type="character"))
+    namen="character",nobs="numeric",type="character",rela="logical",
+    always="numintnull",alwaysnam="charnull"))
 setValidity("relimplm",function(object){
     p<-length(slot(object,"namen"))-1
     var.y <- is(slot(object,"var.y"),"numeric") && slot(object,"var.y")>0
     R2<-is(object@R2,"numeric") && object@R2>=0 && object@R2<=1
+    R2.decomp<-is(object@R2.decomp,"numeric") && object@R2.decomp>0 && 
+             object@R2.decomp<=object@R2
     lmg<-is(object@lmg,"numeric") && (length(object@lmg) %in% c(0,p))
     lmg.rank<-is(object@lmg.rank,"numeric") && (length(object@lmg.rank) %in% c(0,p))
     lmg.diff<-is(object@lmg.diff,"numeric") && (length(object@lmg.diff) %in% c(0,p*(p-1)/2))
@@ -41,36 +46,13 @@ setValidity("relimplm",function(object){
         && betasq && betasq.rank && betasq.diff 
         && pratt && pratt.rank && pratt.diff && namen)
     })
-setAs("relimplm","list",function(from,to){
-    to<-slot(from,"var.y")
-    to<-append(to,list(R2=slot(from,"R2")))
-    if (length(from@lmg)>0) to<-append(to,list(lmg=as.vector(from@lmg)))
-    if (length(from@lmg.rank)>0) to<-append(to,list(lmg.rank=as.vector(from@lmg.rank)))
-    if (length(from@lmg.diff)>0) to<-append(to,list(lmg.diff=as.vector(from@lmg.diff)))
-    if (length(from@pmvd)>0) to<-append(to,list(pmvd=as.vector(from@pmvd)))
-    if (length(from@pmvd.rank)>0) to<-append(to,list(pmvd.rank=as.vector(from@pmvd.rank)))
-    if (length(from@pmvd.diff)>0) to<-append(to,list(pmvd.diff=as.vector(from@pmvd.diff)))
-    if (length(from@last)>0) to<-append(to,list(last=as.vector(from@last)))
-    if (length(from@last.rank)>0) to<-append(to,list(last.rank=as.vector(from@last.rank)))
-    if (length(from@last.diff)>0) to<-append(to,list(last.diff=as.vector(from@last.diff)))
-    if (length(from@first)>0) to<-append(to,list(first=as.vector(from@first)))
-    if (length(from@first.rank)>0) to<-append(to,list(first.rank=as.vector(from@first.rank)))
-    if (length(from@first.diff)>0) to<-append(to,list(first.diff=as.vector(from@first.diff)))
-    if (length(from@betasq)>0) to<-append(to,list(betasq=as.vector(from@betasq)))
-    if (length(from@betasq.rank)>0) to<-append(to,list(betasq.rank=as.vector(from@betasq.rank)))
-    if (length(from@betasq.diff)>0) to<-append(to,list(betasq.diff=as.vector(from@betasq.diff)))
-    if (length(from@pratt)>0) to<-append(to,list(pratt=as.vector(from@pratt)))
-    if (length(from@pratt.rank)>0) to<-append(to,list(pratt.rank=as.vector(from@pratt.rank)))
-    if (length(from@pratt.diff)>0) to<-append(to,list(pratt.diff=as.vector(from@pratt.diff)))
-    if (length(from@namen)>0) to<-append(to,list(namen=as.vector(from@namen)))
-    return(to)})
-
 
 setOldClass("boot") 
 
 setClass("relimplmboot",representation=representation(
     boot="boot",type="character",nboot="numeric",
-    rank="logical",diff="logical",rela="logical"))
+    rank="logical",diff="logical",rela="logical",fixed="logical", 
+    namen="character", nobs="numeric", always="numintnull",alwaysnam="charnull"))
 
 setClass("relimplmbooteval",representation=representation(
     lmg.lower="matrix",lmg.upper="matrix",
@@ -91,7 +73,7 @@ setClass("relimplmbooteval",representation=representation(
     pratt.lower="matrix",pratt.upper="matrix",
     pratt.rank.lower="matrix",pratt.rank.upper="matrix",
     pratt.diff.lower="matrix",pratt.diff.upper="matrix",
-    var.y.boot="numeric",R2.boot="numeric",
+    var.y.boot="numeric",R2.boot="numeric",R2.decomp.boot="numeric",
     lmg.boot="matrix",pmvd.boot="matrix",last.boot="matrix",
     first.boot="matrix",betasq.boot="matrix",pratt.boot="matrix",
     lmg.rank.boot="matrix",pmvd.rank.boot="matrix",last.rank.boot="matrix",
@@ -99,7 +81,7 @@ setClass("relimplmbooteval",representation=representation(
     lmg.diff.boot="matrix",pmvd.diff.boot="matrix",last.diff.boot="matrix",
     first.diff.boot="matrix",betasq.diff.boot="matrix",pratt.diff.boot="matrix",
     level="numeric",nboot="numeric",diffnam="character",rank="logical",diff="logical",
-    rela="logical",type="character",sort="logical",bty="character",mark="matrix",
+    rela="logical",fixed="logical",type="character",sort="logical",bty="character",mark="matrix",
     markdiff="matrix"),contains="relimplm")
 
 

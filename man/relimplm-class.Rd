@@ -14,6 +14,7 @@ Objects should only be created by calls to the function \code{calc.relimp}.
   \describe{
     \item{\code{var.y}:}{Object of class \code{"numeric"} }
     \item{\code{R2}:}{Object of class \code{"numeric"} }
+    \item{\code{R2.decomp}:}{Object of class \code{"numeric"} }
     \item{\code{lmg}:}{Object of class \code{"numeric"} }
     \item{\code{pmvd}:}{Object of class \code{"numeric"} }
     \item{\code{last}:}{Object of class \code{"numeric"} }
@@ -33,7 +34,12 @@ Objects should only be created by calls to the function \code{calc.relimp}.
     \item{\code{betasq.diff}:}{Object of class \code{"numeric"}  }
     \item{\code{pratt.diff}:}{Object of class \code{"numeric"} }
     \item{\code{namen}:}{Object of class \code{"character"}: variable names, starting with name for response }
+    \item{\code{nobs}:}{Object of class \code{"numeric"}: number of valid observations used in analysis 
+                                            (available only if calculations are based on raw data) }
     \item{\code{type}:}{Object of class \code{"character"}: metrics that have been calculated }
+    \item{\code{rela}:}{Object of class \code{"logical"}: TRUE means that metrics have been normalized to sum 100pct }
+    \item{\code{always}:}{Object of class \code{"numintnull"}: variables always in the model (adjusted for) }
+    \item{\code{alwaysnam}:}{Object of class \code{"charnull"}: variable names of variables always in model }
   }
 }
 \section{Methods}{
@@ -41,7 +47,8 @@ Objects should only be created by calls to the function \code{calc.relimp}.
     \item{coerce}{If an object of this class is coerced to list by \code{as(object, "list")}, 
     the slots are output to the list in the following order: \code{var.y}, \code{R2}, \code{lmg}, \code{lmg.rank}, \code{lmg.diff}, 
 next three in non-US version only: \code{pmvd}, \code{pmvd.rank}, \code{pmvd.diff}, \code{last},  
-\code{last.rank}, \code{last.diff}, ..., \code{pratt}, \code{pratt.rank}, \code{pratt.diff}, \code{namen}, \code{type}
+\code{last.rank}, \code{last.diff}, ..., \code{pratt}, \code{pratt.rank}, \code{pratt.diff}, \code{namen}, \code{type}, 
+\code{rela}, \code{always}, \code{alwaysnam}
 }
 }
 }
@@ -49,7 +56,7 @@ next three in non-US version only: \code{pmvd}, \code{pmvd.rank}, \code{pmvd.dif
 
 
 \seealso{
-  See also \code{\link{calc.relimp}}
+  See also \code{\link{calc.relimp}}, \pkg{\link{relaimpo}}
 }
 \keyword{classes}
 \keyword{methods}

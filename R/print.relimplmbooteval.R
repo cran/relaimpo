@@ -5,6 +5,8 @@ function (x, ...)
         stop("x must be the output from function booteval.relimp")
     p <- length(slot(x, "namen")) - 1
     nlev <- length(x@level)
+
+    ## all information on options etc. of metric calculation included in print.relimplm(x)
     print.relimplm(x)
     cat("\n", "\n", "Confidence interval information (", x@nboot, 
         "bootstrap replicates, bty=", x@bty, "):", "\n")
@@ -34,6 +36,8 @@ function (x, ...)
     }
     cat("CAUTION: Bootstrap confidence intervals can be somewhat liberal.", 
         "\n")
+    if (x@fixed) cat("NOTE: X-matrix has been considered as fixed for bootstrapping.", 
+        "\n")
 
     # differences
     if (x@diff) {
@@ -51,6 +55,8 @@ function (x, ...)
         cat("* indicates that CI for difference does not include 0.", 
             "\n")
         cat("CAUTION: Bootstrap confidence intervals can be somewhat liberal.", 
+            "\n")
+        if (x@fixed) cat("NOTE: X-matrix has been considered as fixed for bootstrapping.", 
             "\n")
     }
 }

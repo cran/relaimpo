@@ -1,5 +1,5 @@
 "betasqcalc" <-
-function (ausgabe, covg, p, variances, rank, diff, rela) 
+function (ausgabe, covg, p, variances, rank, diff, rela, var.y) 
 {
     # Author and copyright holder: Ulrike Groemping
 
@@ -12,7 +12,7 @@ function (ausgabe, covg, p, variances, rank, diff, rela)
 
     #squared standardized beta
     wahrbetasq <- solve(covg[2:(p + 1), 2:(p + 1)], covg[2:(p + 
-        1), 1])^2 * diag(covg[2:(p + 1), 2:(p + 1)])/variances[[1]]
+        1), 1])^2 * diag(covg[2:(p + 1), 2:(p + 1)])/var.y
 
     # normalize
     if (rela) 

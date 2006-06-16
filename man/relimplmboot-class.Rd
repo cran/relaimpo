@@ -15,6 +15,11 @@ Objects should only be created by calls to the function \code{boot.relimp}.
     \item{\code{rank}:}{Object of class \code{"logical"}, have ranks been bootstrapped ? }
     \item{\code{diff}:}{Object of class \code{"logical"}, have differences been bootstrapped ? }
     \item{\code{rela}:}{Object of class \code{"logical"}, have the metrics been forced to add up to 100pct (TRUE) or not? }
+    \item{\code{fixed}:}{Object of class \code{"logical"}, has bootstrapping been done for fixed (TRUE) or random (FALSE) regressors? }
+    \item{\code{namen}:}{Object of class \code{"character"}: variable names of all variables (y and the regressors) }
+    \item{\code{nobs}:}{Object of class \code{"numeric"}: number of valid observations used in calculations }
+    \item{\code{always}:}{Object of class \code{"numintnull"}: variables always in the model }
+    \item{\code{alwaysnam}:}{Object of class \code{"charnull"}: variable names of variables always in model }
   }
 }
 \section{Methods}{

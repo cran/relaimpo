@@ -12,16 +12,16 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     # result (ergebnis) contains estimated percentages, estimated ranks, CIs for percentages, CIs for ranks
 
     # bootrun is the result of bootstrap runs from boot.relimp
-    # bty is bty of bootstrap intervals, default BCa, 
-    #       eventually intended that list can be given like in package boot
+    # bty is the type of bootstrap intervals, default BCa, 
+    #       eventually intended that vector can be given like in package boot
     #       currently bty only takes one single bty
     #      (rank intervals always with bty percentile, 
     #       since BCa does not work properly with ranks and normal not reasonable)
-    # level is the confidence level, list can be given like in package boot
+    # level is the confidence level, scalar or vector can be given like in package boot (option conf for boot.ci)
     # sort (if TRUE) requests that output is sorted by size of relative importances
     # norank (if TRUE) requests suppression of results for ranks (although ranks have been bootstrapped)
     # nodiff (if TRUE) requests suppression of results for differences (although differences have been bootstrapped)
-    # typesel is the list of metric types for which evaluation is requested
+    # typesel is the character string, character vector or list of metric types for which evaluation is requested
 
     # error control
     if (!(is(bootrun, "relimplmboot"))) 
@@ -36,16 +36,19 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     rank <- bootrun@rank
     diff <- bootrun@diff
     rela <- bootrun@rela
+    always <- bootrun@always
 
     #combine y and x and calulate covariance
     empcov <- cov(bootrun@boot$data)
 
-    p <- ncol(empcov) - 1
+    plong <- ncol(empcov) - 1
+    p <- plong
+    if (!is.null(always)) p <- plong - length(always)
     nlev <- length(level)
 
     # prepare output object by first providing estimates themselves
     ausgabe <- calc.relimp(empcov, type = type, diff = diff, 
-        rank = rank, rela = rela)
+        rank = rank, rela = rela, always=always)
     # extend output object
     class(ausgabe) <- "relimplmbooteval"
     ausgabe@level <- level
@@ -53,19 +56,23 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     ausgabe@bty <- bty
     ausgabe@rank <- rank
     ausgabe@diff <- diff
+    ausgabe@rela <- rela
+    ausgabe@fixed <- bootrun@fixed
     #provide names for identifying statistics
-    names <- colnames(bootrun@boot$data)[2:(p + 1)]
+    names <- colnames(bootrun@boot$data)[2:(plong+1)]
+    if (!is.null(always)) names <- names[setdiff(2:(plong + 1),always)-1]
     diffnam <- paste(names[nchoosek(p, 2)[1, ]], names[nchoosek(p, 
         2)[2, ]], sep = "-")
     ausgabe@var.y.boot <- bootrun@boot$t[, 1]
     ausgabe@R2.boot <- bootrun@boot$t[, 2]
+    ausgabe@R2.decomp.boot <- bootrun@boot$t[, 3]
 
 
     #assign names to elements from bootrun in order to be able to refer to them later
     #columns of matrices can be referred to by their colnames (in quotes in square brackets instead of index)
     #elements of vectors analogously
-    zaehl <- 3
-    bootnames <- c("var.y", "R2")
+    zaehl <- 4
+    bootnames <- c("var.y", "R2", "R2.decomp")
     typname <- ""
     for (a in c("lmg", "pmvd", "last", "first", "betasq", "pratt")) {
         if (a %in% type) {
@@ -96,6 +103,10 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
                 typname <- a
         }
     }
+    ## omit always in case it was appended as numeric variable
+    bootrun@boot$t<-bootrun@boot$t[,1:length(bootnames)]
+    bootrun@boot$t0<-bootrun@boot$t0[1:length(bootnames)]
+
     colnames(bootrun@boot$t) <- bootnames
     names(bootrun@boot$t0) <- bootnames
     ntype <- length(typname)
@@ -262,9 +273,9 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
                   nlev)
             } # loop j
             mark[((aa - 1) * (p + 1) + 1):(aa * (p + 1) - 1), 
-                ] <- matrix(cbind(percent, mark[((aa - 1) * (p + 
-                1) + 1):(aa * (p + 1) - 1), 2:(1 + nlev)], t(cilower), 
-                t(ciupper)), p, 3 * nlev + 1)
+                ] <- matrix(cbind(format(percent,scientific=F), mark[((aa - 1) * (p + 
+                1) + 1):(aa * (p + 1) - 1), 2:(1 + nlev)], format(t(cilower),scientific=F), 
+                format(t(ciupper),scientific=F)), p, 3 * nlev + 1)
         } #if rank and !norank
 
         if (!rank || norank) {
@@ -288,7 +299,7 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     if (rank && !norank) 
         mark[, c(1, (2 + nlev):(3 * nlev + 1))] <- substr(mark[, 
             c(1, (2 + nlev):(3 * nlev + 1))], 1, 6)
-    else mark <- round(mark, digits = 4)
+    ## else mark <- round(mark, digits = 4) moved to later character determination
     if (sort && rank && !norank) 
         marksort[, c(1, (2 + nlev):(3 * nlev + 1))] <- substr(marksort[, 
             c(1, (2 + nlev):(3 * nlev + 1))], 1, 6)
@@ -297,6 +308,20 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     if (sort) 
         ausgabe@mark <- marksort
     else ausgabe@mark <- mark
+
+    ## eliminate unwanted 0s instead of blanks
+    if (norank || !rank)
+    {
+    hilf <- matrix(substr(as.character(format(ausgabe@mark,scientific=F)),1,6),
+             nrow(ausgabe@mark),ncol(ausgabe@mark))
+    if (ntype>1) {
+       for (i in 1:(ntype-1)) 
+         hilf[i*(p+1),]<-rep("",ncol(hilf))
+    }
+    rownames(hilf) <- rownames(ausgabe@mark)
+    colnames(hilf) <- colnames(ausgabe@mark)
+    ausgabe@mark <- hilf
+    }
 
     # differences
     if (diff && !nodiff) {
@@ -369,6 +394,7 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     } # if diff and !nodiff
 
     # set correct options for printing in output object
+    ausgabe@nobs <- bootrun@nobs
     ausgabe@diff <- diff && !nodiff
     ausgabe@rank <- rank && !norank
     ausgabe@sort <- sort

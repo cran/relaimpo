@@ -12,11 +12,16 @@ For completeness, several other metrics are also on offer. Other packages with r
 }
 \details{
   \pkg{relaimpo} calculates the metrics and also offers the possibility of bootstrapping them and of displaying results in print and graphically. 
+
+  It is possible to designate a subset of variables as adjustment variables that always stay in the model so that relative importance is only 
+  assessed among the remaining variables.
 }
 \references{ 
 Chevan, A. and Sutherland, M. (1991) Hierarchical Partitioning. \emph{The American Statistician} \bold{45}, 90--96.
 
-Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1, March 8 2005), downloadable at \url{http://www.qwafafew.org/?q=filestore/download/268}
+Darlington, R.B. (1968) Multiple regression in psychological research and practice. \emph{Psychological Bulletin}  \bold{69}, 161--182.
+
+Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{http://www.prismanalytics.com/docs/RelativeImportance050319.pdf}
 
 Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivariate and Multivariate Analysis}, Glenview IL: Scott, Foresman.
 

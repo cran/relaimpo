@@ -3,8 +3,16 @@
      import(methods)
      importFrom(graphics, plot)
      #importClassesFrom(boot,boot)
-     export("calc.relimp", "boot.relimp", "booteval.relimp","print.relimplm","print.relimplmbooteval","plot.relimplm","plot.relimplmbooteval","$.relimplm"
-)
+##     exportPattern("\\.relimp$")
+##     exportPattern("\\.relimplm$")
+##     exportPattern("\\.relimplmbooteval$")
+##     exportPattern("\\.relimp.default$")
+##     exportPattern("\\.relimp.formula$")
+##     export("calc.relimp", "boot.relimp", "booteval.relimp")
+     export("calc.relimp", "boot.relimp", "booteval.relimp","print.relimplm","print.relimplmbooteval",
+             "plot.relimplm","plot.relimplmbooteval","$.relimplm", 
+             "calc.relimp.default", "calc.relimp.formula", "calc.relimp.lm",
+              "boot.relimp.default", "boot.relimp.formula", "boot.relimp.lm")
 
    exportClasses("relimplm", "relimplmboot", "relimplmbooteval")
    #exportMethods("plot", "show", "$")
@@ -15,6 +23,10 @@ S3method(print,relimplmbooteval)
 S3method(plot,relimplmbooteval)
 S3method("$",relimplm)
 S3method("$",relimplmbooteval)
+S3method(calc.relimp,lm)
+S3method(boot.relimp,lm)
+S3method(calc.relimp,formula)
+S3method(boot.relimp,formula)
 
 #S3method("as",relimplm)
 

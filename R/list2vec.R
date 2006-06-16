@@ -12,7 +12,7 @@ function(liste)
     {
     for (a in 2:length(liste))
     {
-    if (is.numeric(liste[[a]])) ausgabe<-c(ausgabe,liste[[a]])
+    if (is.numeric(liste[[a]])) ausgabe<-c(ausgabe,as.numeric(liste[[a]]))
     }
     }
     return(ausgabe)

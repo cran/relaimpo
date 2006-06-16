@@ -1,5 +1,8 @@
 \name{booteval.relimp}
 \alias{boot.relimp}
+\alias{boot.relimp.default}
+\alias{boot.relimp.formula}
+\alias{boot.relimp.lm}
 \alias{booteval.relimp}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Functions to Bootstrap Relative Importance Metrics }
@@ -12,41 +15,123 @@
       produces bar plots with confidence indication of the relative importance metrics. 
 }
 \usage{
-boot.relimp(y, x, b = 1500, type = "lmg", 
-    rank = TRUE, diff = TRUE, rela = TRUE)
+## generic function
+boot.relimp(object, ...)
 
+## default S3 method, should be called without suffix ".default"
+boot.relimp.default(object, x = NULL, ..., b = 1000, type = "lmg", 
+    rank = TRUE, diff = TRUE, rela = FALSE, always = NULL, fixed=FALSE)
+
+## S3 method for formula objects, should be called without suffix ".formula"
+boot.relimp.formula(formula, data, na.action, ..., subset = NULL)
+
+## S3 method for objects of class lm, should be called without suffix ".lm"
+boot.relimp.lm(object, ...)
+
+## function for evaluating bootstrap results
 booteval.relimp(bootrun, bty = "bca", level = 0.95, 
     sort = FALSE, norank = FALSE, nodiff = FALSE, 
     typesel = c("lmg", "pmvd", "last", "first", "betasq", "pratt"))
 }
 %- end of 'usage'
 \arguments{
-  \item{y}{ \code{y} is a vector of response data }
-  \item{x}{ \code{x} is a matrix or data frame of regressor variables }
-  \item{b}{ \code{b} is the number of bootstrap runs requested on boot.relimp (default: b=1500). 
+  \item{object   }{ The class of this object determines which of the methods is used:
+        There are special methods for output objects from function \code{\link{lm}} and for formula objects.
+        For all other types of object, the default method is used.
+
+        Thus, object can be
+
+        a formula (e.g. y~x1+x2+x3) without interaction terms and without factors
+
+        OR
+
+        the output of a linear model call (class \code{lm}, but not \code{glm} or \code{mlm}); 
+        output objects from \code{lm} or \code{aov} (without factors in x variables) work;
+        there may be further functions that output objects inheriting from \code{lm} 
+        which may or may not work reasonably with \code{calc.relimp}; 
+        for \code{calc.relimp} to be appropriate, the underlying model must at least be linear!
+
+        OR 
+
+        the covariance matrix of a response y and regressors x, 
+	(e.g. obtained by cov(cbind(y,x)), if y is a column vector of response values 
+	and x a corresponding matrix of regressors) 
+
+        OR 
+        
+        a (raw) data matrix or data frame with the response variable in the first column 
+        (numeric variables only, no factors)
+
+
+        OR
+
+        a response vector or one-column matrix, 
+        if \code{x} contains the corresponding matrix or data frame of regressors.}
+
+  \item{formula   }{ The first object, if a formula is to be given; one response, no factors, and no interaction terms }
+  \item{x   }{ a (raw) data matrix or data frame containing the regressors (no factors), 
+       if \code{object} is a response vector or one-column matrix
+
+        OR 
+        
+        NULL, if \code{object} is anything else }
+  \item{b}{ is the number of bootstrap runs requested on boot.relimp (default: \code{b=1000}). 
        Make sure to set this to a lower number, if you are simply testing code. }
-  \item{type}{ \code{type} is a character vector requesting metrics that are to be calculated. 
-       Available metrics: \code{lmg}, \code{pmvd} (non-US version only), \code{last}, \code{first}, \code{betasq}, \code{pratt},
-       described in \code{\link{calc.relimp}} }
-  \item{rank}{ \code{rank} is a logical requesting bootstrapping of ranks (\code{rank=TRUE}, default) for each metric from type }
-  \item{diff}{ \code{diff} is a logical requesting bootstrapping of pairwise differences in relative importance (\code{diff=TRUE}, default) for each metric in type }
-  \item{rela}{ \code{rela} is a logical requesting relative importances summing to 100% (\code{rela=TRUE}, default). }
-If rela is FALSE, some of the metrics sum to \eqn{R^2} (\code{lmg}, \code{pmvd}, \code{pratt}), others do not have a meaningful sum (\code{last}, \code{first}, \code{betasq}). More detail is given in \code{\link{calc.relimp}}.}
-  \item{bootrun}{ \code{bootrun} is an object of class \code{relimplmboot} created by function \code{boot.relimp}. It hands over all relevant information on the bootstrap runs to function \code{booteval.relimp}. }
-  \item{bty}{ \code{bty} is the type of bootstrap interval requested, as handed over to the function \code{boot.ci} from package 
-       \code{boot}. Possible choices are \code{bca}, \code{perc}, \code{basic} and \code{norm}. \code{student} is not supported.  }
-  \item{level}{ \code{level} is a single confidence level or a numeric vector of confidence levels. }
-  \item{sort}{ \code{sort} is a logical requesting output sorted by size of relative contribution (\code{sort=TRUE}) or by variable position in list (\code{sort=FALSE}, default). }
-  \item{norank}{ \code{norank} is a logical that suppresses of rank letters (\code{norank=TRUE}) even if ranks have been bootstrapped. }
-  \item{nodiff}{ \code{nodiff} is a logical that suppresses output of confidence intervals for differences (\code{nodiff=TRUE}), even if differences have been bootstrapped. }
-  \item{typesel}{ \code{typesel} provides the metrics that are to be reported. Default: all available ones (intersection of those available in object \code{bootrun} and those requested in \code{typesel})}
+  \item{type}{ can be a character string, character vector or list of character strings.
+       It is the collection of metrics that are to be calculated. 
+       Available metrics: \code{lmg}, \code{pmvd} (non-US version only), \code{last}, \code{first}, 
+       \code{betasq}, \code{pratt}, as
+       described in \code{\link{calc.relimp}}.}
+  \item{rank}{ is a logical requesting bootstrapping of ranks (\code{rank=TRUE}, default) for each metric from type }
+  \item{diff}{ is a logical requesting bootstrapping of pairwise differences in relative importance (\code{diff=TRUE}, 
+         default) for each metric in type }
+  \item{rela}{ is a logical requesting relative importances summing to 100% (\code{rela=TRUE}). 
+         If rela is FALSE (default), some of the metrics sum to \eqn{R^2} (\code{lmg}, \code{pmvd}, \code{pratt}), 
+         others do not have a meaningful sum (\code{last}, \code{first}, \code{betasq}). 
+         More detail is given in \code{\link{calc.relimp}}.}
+  \item{always }{ is a vector of column numbers or names of variables to be always in the 
+       model (adjusted for). Valid numbers are 2 to \dQuote{number of regressors + 1} (1 is reserved for the response), 
+       valid character strings are all column names of \code{y} or \code{x} respectively that refer to regressor variables.
+
+       Relative importance is only assessed for the variables not selected in \code{always}. }
+  \item{fixed}{ is a logical requesting bootstrapping for a fixed design matrix (if TRUE). 
+       The default is bootstrapping for randomly drawn samples (fixed = FALSE). }
+  \item{data}{ if first object is of class formula: 
+       an optional matrix or data frame that the variables in formula and subset come from; 
+       if it is omitted, all names must be meaningful in the environment from which boot.relimp is called}
+  \item{subset}{ if first object is of class formula: 
+        an optional expression indicating the subset of the rows of \code{data} that should be used in the fit. 
+          This can be a logical vector, or a numeric vector indicating which observation numbers are to be included, 
+          or a  character  vector of the row names to be included.  All (non-missing) observations are included by
+          default. }
+  \item{na.action}{ if first object is of class formula: 
+        an optional function that indicates what should happen when the data contain 'NA's. 
+        The default is first, any na.action attribute of data, second the setting given in the call to calc.relimp,
+        third the na.action setting of options. Possible choices are "na.fail",  
+        (print an error message and terminate if there are any incomplete observations), 
+        "na.omit" or "na.exclude" (equivalent for package \code{relaimpo}, 
+        both analyse complete cases only and print a warning, this is also what is done the default method ). }
+  \item{...}{ usable for further arguments, particularly all arguments of default method can be given to all other methods }
+  \item{bootrun}{ is an object of class \code{relimplmboot} created by function \code{boot.relimp}. 
+         It hands over all relevant information on the bootstrap runs to function \code{booteval.relimp}. }
+  \item{bty}{ is the type of bootstrap interval requested (a character string), 
+        as handed over to the function \code{boot.ci} from package \code{boot}. 
+        Possible choices are \code{bca}, \code{perc}, \code{basic} and \code{norm}. 
+        \code{student} is not supported.  }
+  \item{level}{ is a single confidence level or a numeric vector of confidence levels. }
+  \item{sort}{ is a logical requesting output sorted by size of relative contribution (\code{sort=TRUE}) or by variable position in list (\code{sort=FALSE}, default). }
+  \item{norank}{ is a logical that suppresses of rank letters (\code{norank=TRUE}) even if ranks have been bootstrapped. }
+  \item{nodiff}{ is a logical that suppresses output of confidence intervals for differences (\code{nodiff=TRUE}), even if differences have been bootstrapped. }
+  \item{typesel}{ provides the metrics that are to be reported. Default: all available ones 
+       (intersection of those available in object \code{bootrun} and those requested in \code{typesel}). 
+       \code{typesel} accepts the same values as \code{type}.}
 }
 %- end of arguments
 
 \details{
 Calculations of metrics are based on the function \code{calc.relimp}. 
 Bootstrapping is done with the R package \code{boot}, 
-resampling the full observation vectors (combinations of response and regressors, cf. Fox (2002). 
+resampling the full observation vectors (combinations of response and regressors, cf. Fox (2002)). 
 
 The output provides results for all selected relative importance metrics. 
 The output object can be printed and plotted (description of syntax: \code{\link{classesmethods.relaimpo}}).   
@@ -64,7 +149,7 @@ Graphical output: Application of the plot method to the object created by \code{
 yields barplot representations for all bootstrapped metrics (all in one graphics window). Confidence level (\code{lev=}) 
 and number of characters in variable names to be used (\code{names.abbrev=}) can be modified. 
 Confidence bounds are indicated on the graphs by added vertical lines. 
-\code{par()} options can be used for modifying output (exception: mfrow is overridden by the plot method).
+\code{par()} options can be used for modifying output (exceptions: mfrow, oma and mar are overridden by the plot method).
 }
 %- end of details
 \value{
@@ -72,10 +157,11 @@ Confidence bounds are indicated on the graphs by added vertical lines.
   \code{booteval.relimp} returns an object of class \code{relimplmbooteval}, the items of which can be accessed by 
   the \code{$} or the \code{@} extractors. 
 
-	In addition to the items described for function \code{calc.relimp}, which are also available here, 
+	In addition to the items described for function \code{\link{calc.relimp}}, which are also available here, 
 the following items may be of interest for further calculations:
   \item{metric.lower }{matrix of lower confidence bounds for \dQuote{metric}: one row for each confidence level, 
-        one column for each element of \dQuote{metric}. \dQuote{metric} can be any of \code{lmg}, \code{lmg.rank}, \code{lmg.diff}, ... 
+        one column for each element of \dQuote{metric}. \dQuote{metric} can be any of \code{lmg}, \code{lmg.rank}, 
+        \code{lmg.diff}, ... 
        (replace \code{lmg} with other available relative importance metrics, cf. \code{\link{calc.relimp}})}
   \item{metric.upper }{matrix of upper confidence bounds for \dQuote{metric}: one row for each confidence level, 
         one column for each element of \dQuote{metric}}
@@ -89,7 +175,9 @@ the following items may be of interest for further calculations:
 \references{
 Chevan, A. and Sutherland, M. (1991) Hierarchical Partitioning. \emph{The American Statistician} \bold{45}, 90--96.
 
-Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1, March 8 2005), downloadable at \url{http://www.qwafafew.org/?q=filestore/download/268}
+Darlington, R.B. (1968) Multiple regression in psychological research and practice. \emph{Psychological Bulletin}  \bold{69}, 161--182.
+
+Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{http://www.prismanalytics.com/docs/RelativeImportance050319.pdf}
 
 Fox, J. (2002) Bootstrapping regression models. \emph{An R and S-PLUS Companion to Applied Regression: A web appendix to the book}.  	
 \url{http://cran.r-project.org/doc/contrib/Fox-Companion/appendix-bootstrapping.pdf}.
@@ -105,13 +193,18 @@ under the geographical restriction "outside of the US" because of potential issu
 from Ulrike Groempings website (cf. references section). Whenever you load the package, a display tells you, which version you are loading. }
 
 \section{Warning }{The bootstrap confidence intervals should be used for exploratory purposes only. 
-They are somewhat liberal: Simulations have shown that non-coverage probabilities can be twice the 
-nominal probabilities. More investigations are needed.
+They can be somewhat liberal: Limited simulations for percentile intervals have shown that non-coverage probabilities 
+can be up to twice the nominal probabilities. More investigations are needed.
 
 Be aware that the method itself needs some computing time in case of many regressors. 
-Hence, bootstrapping should be used with awareness of computing time issues.} 
+Hence, bootstrapping should be used with awareness of computing time issues.
 
-\seealso{ See also \code{\link{calc.relimp}}, \code{\link{classesmethods.relaimpo}}  }
+\code{relaimpo} is a package for univariate linear models. 
+Using \code{relaimpo} on objects that inherit from class \code{lm} but are not univariate linear model objects 
+may produce nonsensical results without warning. Objects of classes \code{mlm} and \code{glm} lead to an error message. 
+} 
+
+\seealso{ See also \pkg{\link{relaimpo}}, \code{\link{calc.relimp}}, \code{\link{classesmethods.relaimpo}}  }
 \examples{
 #####################################################################
 ### Example: relative importance of various socioeconomic indicators 
@@ -120,9 +213,15 @@ Hence, bootstrapping should be used with awareness of computing time issues.}
 #####################################################################
 data(swiss)
    # bootstrapping
-       bootswiss <- boot.relimp(swiss[,1], swiss[,2:6], b = 100,  
+       bootswiss <- boot.relimp(swiss, b = 100,  
                 type = c("lmg", "last", "first", "pratt"),
                 rank = TRUE, diff = TRUE, rela = TRUE)
+       # for demonstration purposes only 100 bootstrap replications
+
+       #alternatively, use formula interface
+       bootsub <- boot.relimp(Fertility~Education+Catholic+Infant.Mortality, swiss, 
+              subset=Catholic>40, b = 100, type = c("lmg", "last", "first", "pratt"),
+              rank = TRUE, diff = TRUE)
        # for demonstration purposes only 100 bootstrap replications
 
    #default output
@@ -133,7 +232,7 @@ data(swiss)
 
     #sorted printout, chosen confidence levels, chosen interval method
     #store as object
-        result <- booteval.relimp(bootswiss, bty="perc", 
+        result <- booteval.relimp(bootsub, bty="perc", 
               sort = TRUE, level=c(0.8,0.9))
     #output driven by print method
         result
@@ -147,8 +246,7 @@ data(swiss)
         par(las=2)
         plot(result, level=0.9,names.abbrev=6)
     #plot does react to options set with par()
-    #exception: mfrow-option is set within plot, 
-    #depending on the number of metrics to be shown
+    #exceptions: mfrow, mar and oma are set within the plot routine itself
 }
 \keyword{ multivariate }% at least one, from doc/KEYWORDS
 \keyword{ models }% __ONLY ONE__ keyword per line

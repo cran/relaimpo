@@ -47,6 +47,7 @@ Objects should only be created by calls to function \code{booteval.relimp}.
     \item{\code{pratt.diff.upper}:}{Object of class \code{"matrix"}  }
     \item{\code{var.y.boot}:}{Object of class \code{"numeric"}  }
     \item{\code{R2.boot}:}{Object of class \code{"numeric"}  }
+    \item{\code{R2.decomp.boot}:}{Object of class \code{"numeric"}  }
     \item{\code{lmg.boot}:}{Object of class \code{"matrix"}  }
     \item{\code{pmvd.boot}:}{Object of class \code{"matrix"}  }
     \item{\code{last.boot}:}{Object of class \code{"matrix"}  }
@@ -71,6 +72,7 @@ Objects should only be created by calls to function \code{booteval.relimp}.
     \item{\code{rank}:}{Object of class \code{"logical"}  }
     \item{\code{diff}:}{Object of class \code{"logical"}  }
     \item{\code{rela}:}{Object of class \code{"logical"}  }
+    \item{\code{fixed}:}{Object of class \code{"logical"}  }
     \item{\code{type}:}{Object of class \code{"character"}  }
     \item{\code{sort}:}{Object of class \code{"logical"}  }
     \item{\code{bty}:}{Object of class \code{"character"}  }
@@ -78,6 +80,7 @@ Objects should only be created by calls to function \code{booteval.relimp}.
     \item{\code{markdiff}:}{Object of class \code{"matrix"}  }
     \item{\code{var.y}:}{Object of class \code{"numeric"}  }
     \item{\code{R2}:}{Object of class \code{"numeric"}  }
+    \item{\code{R2.decomp}:}{Object of class \code{"numeric"}  }
     \item{\code{lmg}:}{Object of class \code{"numeric"}  }
     \item{\code{pmvd}:}{Object of class \code{"numeric"}  }
     \item{\code{first}:}{Object of class \code{"numeric"}  }
@@ -97,13 +100,16 @@ Objects should only be created by calls to function \code{booteval.relimp}.
     \item{\code{betasq.diff}:}{Object of class \code{"numeric"}  }
     \item{\code{pratt.diff}:}{Object of class \code{"numeric"}  }
     \item{\code{namen}:}{Object of class \code{"character"}  }
+    \item{\code{nobs}:}{Object of class \code{"numeric"}: number of valid observations used in analysis  }
+    \item{\code{always}:}{Object of class \code{"numintnull"}: variables always in the model }
+    \item{\code{alwaysnam}:}{Object of class \code{"charnull"}: variable names of variables always in model }
   }
 }
 \section{Extends}{
 Class \code{"relimplm"}, directly.
 }
 \section{Methods}{
-    No methods are defined with \code{relimplmbooteval} in the signature.
+    There is a print method and a plot method for this class.
 }
 \author{ Ulrike Groemping, TFH Berlin}
 \seealso{

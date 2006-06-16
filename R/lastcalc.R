@@ -1,5 +1,5 @@
 "lastcalc" <-
-function (ausgabe, p, variances, rank, diff, rela) 
+function (ausgabe, p, variances, rank, diff, rela, var.y) 
 {
     # Author and copyright holder: Ulrike Groemping
 
@@ -15,7 +15,7 @@ function (ausgabe, p, variances, rank, diff, rela)
     # normalize
     if (rela) 
         wahrIII <- wahrIII/sum(wahrIII)
-    else wahrIII <- wahrIII/(variances[[1]])
+    else wahrIII <- wahrIII/var.y
 
     # ranking
     raengeIII <- p + 1 - rank(wahrIII)
