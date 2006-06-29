@@ -1,7 +1,5 @@
 boot.relimp.formula <- function(formula, data, na.action, ..., subset=NULL){
-    if ( missing(formula) || (max(attr(terms(formula),"order")) != 1) || 
-        (attr(terms(formula),"response") != 1) ) 
-        stop("formula missing or incorrect")
+    if (missing(formula)) stop("formula missing")
     if (missing(na.action)) 
         na.action <- getOption("na.action")
     m <- match.call(expand.dots = FALSE)
@@ -13,6 +11,7 @@ boot.relimp.formula <- function(formula, data, na.action, ..., subset=NULL){
 
     terms <- attr(mf,"terms")
     resp <- attr(terms,"response")
+    if (resp != 1 ) stop("incorrect formula") 
     if (max(attr(terms,"order")) != 1) stop ("formula contains higher order terms")
     if (attr(terms,"intercept") != 1) stop ("model must contain intercept")
 
