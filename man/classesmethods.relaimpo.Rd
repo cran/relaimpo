@@ -45,7 +45,7 @@
   \item{lev}{ \code{lev} is a numeric that provides the confidence level to be plotted (default: maximum available confidence level). }
 }
 \details{
-Print methods produce annotated output for \code{calc.relimp} and \code{booteval.relimp}. 
+Print and show methods produce annotated output for \code{calc.relimp} and \code{booteval.relimp}. 
 The plot methods produce barplots of relative contributions, 
 either of the metrics alone for output objects of class \code{relimplm} from function \code{calc.relimp}, 
 or of the metrics with lines indicating confidence intervals for output objects of class \code{relimplmbooteval} 
@@ -59,10 +59,12 @@ In addition, there is a method that allows using \$ for extracting slots of clas
 and \code{relimplmbooteval}, i.e. elements from results of functions \code{calc.relimp} and \code{booteval.relimp} 
 can be extracted as though the output objects were lists.
 }
+
 \references{ Go to \url{http://www.tfh-berlin.de/~groemp} for further information and references.}
 \author{ Ulrike Groemping, TFH Berlin }
 
-\seealso{ See also \pkg{\link{relaimpo}}, \code{\link{calc.relimp}}, \code{\link{booteval.relimp}}    }
+\seealso{ See also \pkg{\link{relaimpo}}, \code{\link{calc.relimp}}, \code{\link{booteval.relimp}}, 
+       \code{\link{relimplm-class}}, \code{\link{relimplmboot-class}}, \code{\link{relimplmbooteval-class}}    }
 \keyword{ multivariate }% at least one, from doc/KEYWORDS
 \keyword{ models }% __ONLY ONE__ keyword per line
 \keyword{ htest }% __ONLY ONE__ keyword per line

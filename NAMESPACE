@@ -15,8 +15,8 @@
               "boot.relimp.default", "boot.relimp.formula", "boot.relimp.lm")
 
    exportClasses("relimplm", "relimplmboot", "relimplmbooteval")
-   #exportMethods("plot", "show", "$")
-   exportMethods("coerce")
+   #exportMethods("plot", "$")
+   exportMethods("coerce", "show", "print")
 S3method(print,relimplm)
 S3method(plot,relimplm)
 S3method(print,relimplmbooteval)

@@ -2,6 +2,8 @@
 \docType{class}
 \alias{relimplm-class}
 \alias{coerce,relimplm,list-method}
+\alias{show,relimplm-method}
+\alias{print,relimplm-method}
 
 \title{Class relimplm }
 \description{  This is the class of output objects from the function \code{calc.relimp} 
@@ -49,14 +51,17 @@ Objects should only be created by calls to the function \code{calc.relimp}.
 next three in non-US version only: \code{pmvd}, \code{pmvd.rank}, \code{pmvd.diff}, \code{last},  
 \code{last.rank}, \code{last.diff}, ..., \code{pratt}, \code{pratt.rank}, \code{pratt.diff}, \code{namen}, \code{type}, 
 \code{rela}, \code{always}, \code{alwaysnam}
+  }
+    \item{print}{~~meaningful printout of object }
+    \item{show}{~~identical to \code{print}}
 }
-}
+    In addition, there is a method for plotting.
 }
 \author{ Ulrike Groemping, TFH Berlin }
 
 
 \seealso{
-  See also \code{\link{calc.relimp}}, \pkg{\link{relaimpo}}
+  See also \code{\link{calc.relimp}}, \code{\link{print.relimplm}}, \code{\link{plot.relimplm}}, \pkg{\link{relaimpo}}
 }
 \keyword{classes}
 \keyword{methods}

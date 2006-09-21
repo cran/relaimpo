@@ -1,6 +1,8 @@
 \name{relimplmbooteval-class}
 \docType{class}
 \alias{relimplmbooteval-class}
+\alias{show,relimplmbooteval-method}
+\alias{print,relimplmbooteval-method}
 
 \title{Class relimplmbooteval }
 \description{  Output object from function \code{\link{booteval.relimp}}, described there. }
@@ -109,10 +111,15 @@ Objects should only be created by calls to function \code{booteval.relimp}.
 Class \code{"relimplm"}, directly.
 }
 \section{Methods}{
-    There is a print method and a plot method for this class.
+    \describe{
+    \item{print}{~~meaningful printout of object }
+    \item{show}{~~identical to \code{print}}
+    }
+    In addition, there is a method for plotting.
 }
 \author{ Ulrike Groemping, TFH Berlin}
 \seealso{
-  See also \code{\link{relimplm-class}}, \code{\link{booteval.relimp}}
+  See also \code{\link{relimplm-class}}, \code{\link{booteval.relimp}}, \code{\link{print.relimplmbooteval}}, 
+    \code{\link{plot.relimplmbooteval}}}
 }
 \keyword{classes}

@@ -1,6 +1,8 @@
 \name{relimplmboot-class}
 \docType{class}
 \alias{relimplmboot-class}
+\alias{show,relimplmboot-method}
+\alias{print,relimplmboot-method}
 
 \title{Class relimplmboot }
 \description{  This is the class for output objects from function \code{boot.relimp}. It is needed as input to function \code{booteval.relimp}. }
@@ -23,7 +25,10 @@ Objects should only be created by calls to the function \code{boot.relimp}.
   }
 }
 \section{Methods}{
-No methods defined with class "relimplmboot" in the signature.
+  \describe{
+    \item{print}{~~meaningful error message, since objects of this class should not be printed }
+    \item{show}{~~identical to \code{print}}
+  }
 }
 \author{ Ulrike Groemping, TFH Berlin }
 \seealso{
