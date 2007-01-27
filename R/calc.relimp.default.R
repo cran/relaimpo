@@ -1,7 +1,13 @@
 "calc.relimp.default" <-
-function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela = FALSE, always = NULL) 
+function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela = FALSE, always = NULL, 
+        groups = NULL, groupnames=NULL) 
 {
     y<-object
+
+#### blockweise auskommentierte Alternativen stammen aus anderem R-File, das
+#### evtl. vorhergehende verworfene Versionen, evtl. aber auch spätere Verbesserungen enthält
+
+
     # Author and copyright holder: Ulrike Groemping
 
     #This routine is distributed under GPL version 2 or newer.
@@ -16,6 +22,8 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     # x is
     #   - a matrix or data frame of x-variables if y is a response variable 
     #   - NULL otherwise
+    # groups gives variable combinations that are to be treated as a group
+    # groupnames gives a name for each variable combination
 
     #error control and initialization
 
@@ -44,15 +52,15 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     }
 
     if (!is.null(x)) {
+       if ( (is.matrix(y) && ncol(y)>1) || !is.numeric(y) )
+           stop(paste("object must be a numeric vector or one-column matrix,",
+              "\n", "if x is also given.",sep=""))
         if (!(length(y) == nrow(x))) 
             stop("number of rows in object and x MUST be identical")
        if (is.data.frame(x) && any(as.logical(lapply(x,is.factor))))
            stop("x must not contain factors.")
        if (is.matrix(x) && !is.numeric(x))
            stop("Matrix x must be numeric.")
-       if ( (is.matrix(y) && ncol(y)>1) || !is.numeric(y) )
-           stop(paste("object must be a numeric vector or one-column matrix,",
-              "\n", "if x is also given.",sep=""))
         n <- length(y)
         nomiss <- complete.cases(y,x)
         nobs <- sum(nomiss)
@@ -65,7 +73,6 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
         if (colnames(covg)[1]=="y") colnames(covg)[1] <- deparse(substitute(object))       
         if (is.null(colnames(x))) colnames(covg)[2:ncol(covg)] <- paste("X", 1:ncol(x), sep = "")
         }
-
 
     # type is a character listing (vector incl. single character string, list, matrix) 
     #    that chooses one or more of the available relative importance metrics (in any order)
@@ -84,7 +91,7 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     #    character strings to variable names
 
     # now, after treatment of the data frame, all covg need to be square matrices
-    if (!is.matrix(covg)) stop(paste("If covg is square, ", "\n", 
+    if (!is.matrix(covg)) stop(paste("If object is square, ", "\n", 
           "it must be a covariance matrix (of type matrix)."))
 
     # check covariance matrix properties
@@ -112,6 +119,7 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
 
     # no of regressors
     p <- ncol(covg) - 1
+    g <- p
     names <- colnames(covg)
     if (is.null(names)) 
         names <- c("y", paste("X", 1:p, sep = ""))
@@ -123,9 +131,9 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     if (is.numeric(always) && !always == as.integer(always))
         stop("always must contain integer numbers (numeric or integer) or variable names.")
     if ((is.numeric(always) || is.integer(always)) && (min(always)<2 || max(always)>p+1))
-        stop("Numbers in always must be between 2 and p+1, corresponding to the position of regressors in covg.")
+        stop("Numbers in always must be between 2 and p+1, corresponding to the position of regressors in cov(Y,X1,...,Xp).")
     if (is.character(always) && !all(always %in% names[2:(p+1)]))
-        stop("Names in always must come from the names of columns 2 to p+1 of covg.")
+        stop("Names in always must come from the names of the regressors.")
  
     #initialise output matrices
     wahr <- matrix(0, 1, p)
@@ -134,9 +142,6 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     var.y <- covg[1,1]
     covall <- covg
     andere <- alle
-    if ((is.numeric(always) || is.integer(always)) && !all(always %in% 2:(p+1)))
-        stop(paste("Numbers in always must refer to columns 2 to ", p+1, " in covg", sep=""))
-
 
     # adjust out variables that are supposed to always stay in the model
     if (!is.null(always))
@@ -149,11 +154,77 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
              covg <- covg[andere, andere] - covg[andere,always]%*%solve(covg[always,always],covg[always,andere])
                  var.y.distrib <- covg[1,1]  
              alwaysnam <- names[always]
-             names <- names[andere]
+       ##      names <- names[andere]      ## wird dies benötigt ?
              R2.always <- (var.y - covg[1,1])/var.y
-             p <- p - length(always)
-             alle <- 1:(p+1)
+       ##      p <- p - length(always)      ## wird dies benötigt ?
+       ##      alle <- 1:(p+1)      ## wird dies benötigt ?
          }
+
+    g <- p - length(always)
+    if (!is.null(groups)) 
+    {
+    if (any(c("betasq","pratt") %in% type)) stop("Metrics betasq and pratt do not work with groups.") 
+    if (!is.list(groups)) {
+        if (is.character(groups)) 
+            groups <- which(names %in% groups)
+        if ((is.numeric(groups) || is.integer(groups)) && !all(groups %in% 2:(p+1)))
+            stop(paste("Numbers in groups must refer to columns 2 to ", p+1, " in cov(Y,X1,...,Xp).", sep=""))
+       if (length(groups) <= 1) 
+            stop("groups must list groups of more than one regressor.")
+       groups=list(groups)
+        }
+    else {
+       groups <- lapply(groups, function(obj){        
+        if (is.character(obj)) 
+            obj <- which(names %in% obj)
+        if ((is.numeric(obj) || is.integer(obj)) && !all(obj %in% 2:(p+1)))
+            stop(paste("Numbers in elements of groups must refer to columns 2 to ", p+1, " in cov(Y,X1,...,Xp).", sep=""))
+        if (length(obj) <= 1) 
+            stop("Each element of groups must contain more than one regressor.")  
+        obj } )
+        if (!length(list2vec(groups))==length(unique(list2vec(groups))))
+            stop("Overlapping groups are not permitted!")
+      }
+    if (any(always %in% list2vec(groups))) 
+       stop("groups must not refer to regressors that also occur in always.")
+
+    if (!is.null(groupnames)) { 
+       if (!length(groups)==length(groupnames)) 
+       stop(paste("groupnames must have one entry for each group.", "\n", 
+           "There are", length(groups), "groups and", length(groupnames), "group names.")) } 
+       else groupnames <- paste("G", 1:length(groups), sep="") 
+
+       ## groupdocu will support printing the meaning of groups
+       groupdocu <- list(groupnames, lapply(groups, function(obj){names[obj]}))
+                 ### use correct columns of x-matrix
+       groupdocu[[1]] <- append(groupdocu[[1]],  as.list(names[setdiff(2:(p+1), c(list2vec(groups),always))]))
+       groupdocu[[2]] <- append(groupdocu[[2]],  as.list(names[setdiff(2:(p+1), c(list2vec(groups),always))]))
+
+       ## groups will be used for picking appropriate elements from covariance matrix
+       ## g ist number of groups
+       groupnames <- c(groupnames, names[setdiff(alle, c(1,list2vec(groups),always))]) 
+       groups <- append(groups, as.list(setdiff(alle, c(1,list2vec(groups),always))))
+
+## oder
+##       groupdocu <- list(as.list(groupnames), lapply(groups, function(obj){names[obj]}))
+##       names <- cbind(groupnames, names[setdiff(alle, list2vec(groups))]) 
+##       groups <- append(groups, as.list(setdiff(2:(p+1), list2vec(groups))))
+
+       g <- length(groups)
+       }       
+##    ## always-Manipulationen, die nach groups-Abschnitt erfolgen sollen
+    if (!is.null(always)) {
+    names <- names[andere]
+    p <- p - length(always)
+    alle <- 1:(p+1)
+##    ### ??? !!! hier groups bekommt zu viel abgezogen, wenn mehr als ein Element!!!
+    if (!is.null(groups)) groups <- lapply(groups, function(obj){
+         obj - rowSums(matrix(obj,length(obj),length(always),byrow=F)>matrix(always,length(obj),length(always),byrow=T))
+         } )
+##    ## always==obj impossible because of error checking
+
+    }
+
 
     # start by calculating all conditional variances of y
     # construct all subsets with function nchoosek (included in relaimpo, taken from package vsn),
@@ -161,67 +232,68 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     # and write them to vectors in same position as with index matrices
 
     #initialise lists of index matrices and variance rows
-
+    
     #first element of list unconditional, list initialized in full length
-    indices <- rep(list(0), p + 1)
-    variances <- rep(list(covg[1, 1]), p + 1)
+    indices <- rep(list(0), g + 1)
+    variances <- rep(list(covg[1, 1]), g + 1)
     #conditioning on all variables, i.e. var=s^2
-    indices[[p + 1]] <- matrix(1:p, p, 1)
-    variances[[p + 1]] <- covg[1:1] - covg[1, 2:(p + 1)] %*% 
+    indices[[g + 1]] <- matrix(1:g, g, 1)
+    variances[[g + 1]] <- covg[1:1] - covg[1, 2:(p + 1)] %*% 
         solve(covg[2:(p + 1), 2:(p + 1)], covg[2:(p + 1), 1])
-    hilf <- varicalc(type, alle, covg, p, indices, variances)
+    hilf <- varicalc(type, alle, covg, p, indices, variances, g, groups)
 
     indices <- hilf$indices
     variances <- hilf$variances
 
     #output R-squared in order to show the total that is subdivided
     if (!is.null(always)) ausgabe <- new("relimplm", var.y = var.y, 
-        R2 = as.numeric(1 - variances[[p + 1]]/var.y), 
-        R2.decomp = as.numeric(variances[[1]] - variances[[p + 1]])/var.y)
+        R2 = as.numeric(1 - variances[[g + 1]]/var.y), 
+        R2.decomp = as.numeric(variances[[1]] - variances[[g + 1]])/var.y)
     if (is.null(always)) ausgabe <- new("relimplm", var.y = as.numeric(variances[[1]]), 
-        R2 = as.numeric(1 - variances[[p + 1]]/variances[[1]]), 
-        R2.decomp = as.numeric(1 - variances[[p + 1]]/variances[[1]]))
+        R2 = as.numeric(1 - variances[[g + 1]]/variances[[1]]), 
+        R2.decomp = as.numeric(1 - variances[[g + 1]]/variances[[1]]))
 
+    if (!is.null(groups)) names <- c(names[1],as.character(groupnames))
     if ("lmg" %in% type) 
         {
-        ausgabe <- lmgcalc(ausgabe, p, indices, variances, rank, 
+        ausgabe <- lmgcalc(ausgabe, g, indices, variances, rank, 
             diff, rela, var.y)
-        names(ausgabe@lmg)<-names[2:(p+1)]
-        if (rank) names(ausgabe@lmg.rank)<-names[2:(p+1)]
+        names(ausgabe@lmg)<-names[2:(g+1)]
+        if (rank) names(ausgabe@lmg.rank)<-names[2:(g+1)]
         }
     if ("pmvd" %in% type) 
         {
-        ausgabe <- pmvdcalc(ausgabe, p, indices, variances, rank, 
+        ausgabe <- pmvdcalc(ausgabe, g, indices, variances, rank, 
             diff, rela)
-        names(ausgabe@pmvd)<-names[2:(p+1)]
-        if (rank) names(ausgabe@pmvd.rank)<-names[2:(p+1)]
+        names(ausgabe@pmvd)<-names[2:(g+1)]
+        if (rank) names(ausgabe@pmvd.rank)<-names[2:(g+1)]
         }
    if ("last" %in% type) 
         {
-        ausgabe <- lastcalc(ausgabe, p, variances, rank, diff, 
+        ausgabe <- lastcalc(ausgabe, g, variances, rank, diff, 
             rela, var.y)
-        names(ausgabe@last)<-names[2:(p+1)] 
-        if (rank) names(ausgabe@last.rank)<-names[2:(p+1)]
+        names(ausgabe@last)<-names[2:(g+1)] 
+        if (rank) names(ausgabe@last.rank)<-names[2:(g+1)]
         }
    if ("first" %in% type) 
         {
-        ausgabe <- firstcalc(ausgabe, p, variances, rank, diff, 
+        ausgabe <- firstcalc(ausgabe, g, variances, rank, diff, 
             rela, var.y)
-        names(ausgabe@first)<-names[2:(p+1)]
-        if (rank) names(ausgabe@first.rank)<-names[2:(p+1)]
+        names(ausgabe@first)<-names[2:(g+1)]
+        if (rank) names(ausgabe@first.rank)<-names[2:(g+1)]
         }
     if ("betasq" %in% type) 
         {
-        ausgabe <- betasqcalc(ausgabe, covg, p, variances, rank, 
+        ausgabe <- betasqcalc(ausgabe, covg, g, variances, rank, 
             diff, rela, var.y)
-        names(ausgabe@betasq)<-names[2:(p+1)]
-        if (rank) names(ausgabe@betasq.rank)<-names[2:(p+1)]
+        names(ausgabe@betasq)<-names[2:(g+1)]
+        if (rank) names(ausgabe@betasq.rank)<-names[2:(g+1)]
         }
     if ("pratt" %in% type) 
         {
-        ausgabe <- prattcalc(ausgabe, covg, p, rank, diff, rela, var.y)
-        names(ausgabe@pratt)<-names[2:(p+1)]
-        if (rank) names(ausgabe@pratt.rank)<-names[2:(p+1)]
+        ausgabe <- prattcalc(ausgabe, covg, g, rank, diff, rela, var.y)
+        names(ausgabe@pratt)<-names[2:(g+1)]
+        if (rank) names(ausgabe@pratt.rank)<-names[2:(g+1)]
         }
 
     #ausgabe contains (in this order) var.y, R2, lmg, rank.lmg, diff.lmg, 
@@ -240,6 +312,7 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     slot(ausgabe, "type") <- alltype[which(alltype %in% type)]
            # this cryptic approach ensures the correct order of types
            # and makes it possible for type to be a list without generating an error
+    if (!is.null(groups)) slot(ausgabe, "groupdocu") <- groupdocu
     return(ausgabe)
 }
 

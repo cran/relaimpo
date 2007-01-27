@@ -14,7 +14,7 @@ setClass("relimplm",representation=representation(
     last.diff="numeric",
     betasq.diff="numeric",pratt.diff="numeric",
     namen="character",nobs="numeric",type="character",rela="logical",
-    always="numintnull",alwaysnam="charnull"))
+    always="numintnull",alwaysnam="charnull", groupdocu="list"))
 setValidity("relimplm",function(object){
     p<-length(slot(object,"namen"))-1
     var.y <- is(slot(object,"var.y"),"numeric") && slot(object,"var.y")>0
@@ -52,7 +52,8 @@ setOldClass("boot")
 setClass("relimplmboot",representation=representation(
     boot="boot",type="character",nboot="numeric",
     rank="logical",diff="logical",rela="logical",fixed="logical", 
-    namen="character", nobs="numeric", always="numintnull",alwaysnam="charnull"))
+    namen="character", nobs="numeric", always="numintnull",alwaysnam="charnull",
+    groupdocu="list"))
 
 setClass("relimplmbooteval",representation=representation(
     lmg.lower="matrix",lmg.upper="matrix",

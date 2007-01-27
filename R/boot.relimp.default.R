@@ -1,8 +1,10 @@
 "boot.relimp.default" <-
 function (object, x = NULL, ..., b = 1000, type = "lmg", rank = TRUE, diff = TRUE, 
-    rela = FALSE, always = NULL, fixed = FALSE) 
+    rela = FALSE, always = NULL, groups = NULL, groupnames = NULL, fixed = FALSE) 
 {
    y <- object
+   ogroupnames <- groupnames
+   ogroups <- groups
     # Author and copyright holder: Ulrike Groemping
 
     #This routine is distributed under GPL version 2 or newer.
@@ -118,9 +120,86 @@ function (object, x = NULL, ..., b = 1000, type = "lmg", rank = TRUE, diff = TRU
     if (is.character(always) && !all(always %in% names[2:(p+1)]))
         stop("Names in always must be names of the regressor variables.")
 
-    if (!is.null(always) && is.character(always)) always <- which(names %in% always)
-      ## now always is numeric
+    alle <- 1:(p+1)
+    alwaysnam <- NULL
+    if (!is.null(always)) {
+        if (is.character(always)) always <- which(names %in% always) 
+        alwaysnam <- names[always]
+        ## now always is numeric
+        andere <- setdiff(alle, always)
+        }
+    g <- p - length(always)
+    if (!is.null(groups)) 
+    {
+    if (any(c("betasq","pratt") %in% type)) stop("Metrics betasq and pratt do not work with groups.") 
+    if (!is.list(groups)) {
+        if (is.character(groups)) 
+            groups <- which(names %in% groups)
+        if ((is.numeric(groups) || is.integer(groups)) && !all(groups %in% 2:(p+1)))
+            stop(paste("Numbers in groups must refer to columns 2 to ", p+1, " in cov(Y,X1,...,Xp)", sep=""))
+       if (length(groups) <= 1) 
+            stop("groups must list groups of more than one regressor.")
+       groups=list(groups)
+        }
+    else {
+       groups <- lapply(groups, function(obj){        
+        if (is.character(obj)) 
+            obj <- which(names %in% obj)
+        if ((is.numeric(obj) || is.integer(obj)) && !all(obj %in% 2:(p+1)))
+            stop(paste("Numbers in elements of groups must refer to columns 2 to ", p+1, " in cov(Y,X1,...,Xp).", sep=""))
+        if (length(obj) <= 1) 
+            stop("Each element of groups must contain more than one regressor.")  
+        obj } )
 
+       if (!length(list2vec(groups))==length(unique(list2vec(groups))))
+            stop("Overlapping groups are not permitted!")
+       }
+
+    if (any(always %in% list2vec(groups))) 
+       stop("groups must not refer to regressors that also occur in always.")
+
+    if (!is.null(groupnames)) { 
+       if (!length(groups)==length(groupnames)) 
+       stop(paste("groupnames must have one entry for each group.", "\n", 
+           "There are", length(groups), "groups and", length(groupnames), "group names.")) }
+    else groupnames <- paste("G", 1:length(groups), sep="") 
+       ## groupdocu will support printing the meaning of groups
+       groupdocu <- list(groupnames, lapply(groups, function(obj){names[obj]}))
+                 ### use correct columns of x-matrix
+       groupdocu[[1]] <- append(groupdocu[[1]],  as.list(names[setdiff(2:(p+1), c(list2vec(groups),always))]))
+       groupdocu[[2]] <- append(groupdocu[[2]],  as.list(names[setdiff(2:(p+1), c(list2vec(groups),always))]))
+
+       ## groups will be used for picking appropriate elements from covariance matrix
+       ## g ist number of groups
+       groupnames <- c(groupnames, names[setdiff(alle, c(1,list2vec(groups),always))]) 
+       groups <- append(groups, as.list(setdiff(alle, c(1,list2vec(groups),always))))
+
+## oder
+##       groupdocu <- list(as.list(groupnames), lapply(groups, function(obj){names[obj]}))
+##       names <- cbind(groupnames, names[setdiff(alle, list2vec(groups))]) 
+##       groups <- append(groups, as.list(setdiff(2:(p+1), list2vec(groups))))
+
+       g <- length(groups)
+       }    ## end if !is.null(groups)
+##    ## always-Manipulationen, die nach groups-Abschnitt erfolgen sollen
+    if (!is.null(always)) {
+       names <- names[andere]
+       p <- p - length(always)
+       alle <- 1:(p+1)
+##    ### ??? !!! hier groups bekommt zu viel abgezogen, wenn mehr als ein Element!!!
+    if (!is.null(groups)) {
+         groups <- lapply(groups, function(obj){
+             obj - rowSums(matrix(obj,length(obj),length(always),byrow=F)>matrix(always,length(obj),
+             length(always),byrow=T))
+         } 
+         )
+         names <- c(names[1],as.character(groupnames))
+         }
+         }
+##    ## always==obj impossible because of error checking
+
+    
+    
     # prepare output object
     ausgabe <- new("relimplmboot")
     ausgabe@type <- alltype[which(alltype %in% type)]
@@ -130,20 +209,26 @@ function (object, x = NULL, ..., b = 1000, type = "lmg", rank = TRUE, diff = TRU
     ausgabe@diff <- diff
     ausgabe@rela <- rela
     ausgabe@always <- always
+    ausgabe@alwaysnam <- alwaysnam
     ausgabe@fixed <- fixed
-    ausgabe@namen <- colnames(daten)
+    ausgabe@namen <- names    # variable names of y and decomposition variables
+    if (!is.null(groups)) ausgabe@groupdocu <- groupdocu
 
     #provide names for identifying statistics
-    names <- colnames(x)[setdiff(1:p,always)]
-    preduced <- p - length(always)
-    diffnam <- paste(names[nchoosek(preduced, 2)[1, ]], names[nchoosek(preduced, 
-        2)[2, ]], sep = "-")
+##    names <- colnames(x)[setdiff(1:p,union(always, groups))]
+##    if (!is.null(groups)) names=c(groupnames,names)  # groupnames needs to have g elements
+
+##    preduced <- p - length(always)      # no. of variables used in calculations
+##    g <- length(names)                  # no. of groups, potentially lower than preduced (not higher) 
+
+##    diffnam <- paste(names[2:(g+1)][nchoosek(g, 2)[1, ]], names[2:(g+1)][nchoosek(g, 
+##        2)[2, ]], sep = "-")
 
     #run bootstrap
     #options for calc.relimp handed over after b
     if (!fixed) {
     booterg <- boot(daten, calcrelimp.forboot, b, type = type, 
-        diff = diff, rank = rank, rela = rela, always = always)
+        diff = diff, rank = rank, rela = rela, always = always, groups=ogroups, groupnames=ogroupnames)
     ausgabe@boot <- booterg
     }
     else {
@@ -151,10 +236,27 @@ function (object, x = NULL, ..., b = 1000, type = "lmg", rank = TRUE, diff = TRU
        e <- linmod$residuals
        fit <- linmod$fitted.values
        booterg <- boot(data.frame(x,fit=fit,e=e), calcrelimp.forboot.fixed, b, type = type, 
-             diff = diff, rank = rank, rela = rela, always = always)
+             diff = diff, rank = rank, rela = rela, always = always, groups=ogroups, groupnames=ogroupnames)
        booterg$data <- daten
        slot(ausgabe,"boot") <- booterg
     }
+##       ## groupdocu will support printing the meaning of groups
+##       if (!is.null(groups)) {
+##       groupdocu <- list(groupnames, lapply(groups, function(obj){ausgabe@namen[obj]}))
+##       groupdocu[[1]] <- append(groupdocu[[1]],  as.list(ausgabe@namen[setdiff(2:(p+1), 
+##                 union(list2vec(groups),always))]))
+##       groupdocu[[2]] <- append(groupdocu[[2]],  as.list(ausgabe@namen[setdiff(2:(p+1), 
+##                 union(list2vec(groups),always))]))
+##       }
+
+##       names <- c(ausgabe@namen[1],groupnames, ausgabe@namen[setdiff(2:(p+1), union(list2vec(groups,always))])
+##       groups <- append(groups, as.list(setdiff(2:(p+1), union(list2vec(groups),always) ) ) )
+##       g <- length(groupdocu[[2]])
+
+
+##    ausgabe@namen <- names
+##    ausgabe@covg <- cov(daten)
+
     return(ausgabe)
 }
 

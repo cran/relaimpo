@@ -3,6 +3,9 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     nodiff = FALSE, typesel = c("lmg", "pmvd", "last", "first", 
         "betasq", "pratt")) 
 {
+
+###!!! ACHTUNG: Ausgabeformat für die booteval-Werte falsch, 
+###!!! Bei Gruppen ohne always werden falsche Variablennamen verwendet
     # Author and copyright holder: Ulrike Groemping
 
     # This routine is distributed under GPL version 2 or newer.
@@ -44,11 +47,24 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     plong <- ncol(empcov) - 1
     p <- plong
     if (!is.null(always)) p <- plong - length(always)
+    g <- p
     nlev <- length(level)
+    if (length(bootrun@groupdocu)>0) {
+    groups <- bootrun@groupdocu[[2]]
+    g <- length(groups)
+    groupnames <- bootrun@groupdocu[[1]][which(sapply(groups, length)>1)]
+    groups <- groups[which(sapply(groups, length)>1)]
+    }
+    else 
+    {
+    groups <- NULL
+    groupnames <- NULL
+    }
 
     # prepare output object by first providing estimates themselves
     ausgabe <- calc.relimp(empcov, type = type, diff = diff, 
-        rank = rank, rela = rela, always=always)
+        rank = rank, rela = rela, always=always, groups=groups, 
+        groupnames=groupnames)
     # extend output object
     class(ausgabe) <- "relimplmbooteval"
     ausgabe@level <- level
@@ -58,11 +74,11 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     ausgabe@diff <- diff
     ausgabe@rela <- rela
     ausgabe@fixed <- bootrun@fixed
-    #provide names for identifying statistics
-    names <- colnames(bootrun@boot$data)[2:(plong+1)]
-    if (!is.null(always)) names <- names[setdiff(2:(plong + 1),always)-1]
-    diffnam <- paste(names[nchoosek(p, 2)[1, ]], names[nchoosek(p, 
-        2)[2, ]], sep = "-")
+    #provide names for identifying statistics (ungrouped case)
+    names <- bootrun@namen
+    if (!is.null(always)) names <- setdiff(names, bootrun@alwaysnam)
+    if (!is.null(groupnames)) names <- c(names[1],as.character(bootrun@groupdocu[[1]]))
+    diffnam <- paste(names[2:(g+1)][nchoosek(g, 2)[1, ]], names[2:(g+1)][nchoosek(g,2)[2, ]], sep = "-")
     ausgabe@var.y.boot <- bootrun@boot$t[, 1]
     ausgabe@R2.boot <- bootrun@boot$t[, 2]
     ausgabe@R2.decomp.boot <- bootrun@boot$t[, 3]
@@ -76,26 +92,26 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     typname <- ""
     for (a in c("lmg", "pmvd", "last", "first", "betasq", "pratt")) {
         if (a %in% type) {
-            bootnames <- c(bootnames, paste(names, ".", a, sep = ""))
+            bootnames <- c(bootnames, paste(names[2:(g+1)], ".", a, sep = ""))
             if (a %in% typesel) 
                 slot(ausgabe, paste(a, "boot", sep = ".")) <- bootrun@boot$t[, 
-                  zaehl:(zaehl + p - 1)]
-            zaehl <- zaehl + p
+                  zaehl:(zaehl + g - 1)]
+            zaehl <- zaehl + g
             if (rank) {
-                bootnames <- c(bootnames, paste(names, ".", a, 
+                bootnames <- c(bootnames, paste(names[2:(g+1)], ".", a, 
                   "rank", sep = ""))
                 if (a %in% typesel) 
                   slot(ausgabe, paste(a, "rank", "boot", sep = ".")) <- bootrun@boot$t[, 
-                    zaehl:(zaehl + p - 1)]
-                zaehl <- zaehl + p
+                    zaehl:(zaehl + g - 1)]
+                zaehl <- zaehl + g
             }
             if (diff) {
                 bootnames <- c(bootnames, paste(diffnam, ".", 
                   a, "diff", sep = ""))
                 if (a %in% typesel) 
                   slot(ausgabe, paste(a, "diff", "boot", sep = ".")) <- matrix(bootrun@boot$t[, 
-                    zaehl:(zaehl + p * (p - 1)/2 - 1)],1,p * (p - 1)/2)
-                zaehl <- zaehl + p * (p - 1)/2
+                    zaehl:(zaehl + g * (g - 1)/2 - 1)],1,g * (g - 1)/2)
+                zaehl <- zaehl + g * (g - 1)/2
             }
             if (a %in% typesel && !typname[1] == "") 
                 typname <- c(typname, a)
@@ -110,29 +126,29 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     colnames(bootrun@boot$t) <- bootnames
     names(bootrun@boot$t0) <- bootnames
     ntype <- length(typname)
-    percentages <- bootrun@boot$t0[paste(names, ".", matrix(typname, 
-        p, ntype, byrow = T), sep = "")]
+    percentages <- bootrun@boot$t0[paste(names[2:(g+1)], ".", matrix(typname, 
+        g, ntype, byrow = T), sep = "")]
     if (rank) 
-        ranks <- bootrun@boot$t0[paste(names, ".", matrix(typname, 
-            p, ntype, byrow = T), "rank", sep = "")]
+        ranks <- bootrun@boot$t0[paste(names[2:(g+1)], ".", matrix(typname, 
+            g, ntype, byrow = T), "rank", sep = "")]
     if (diff) 
         diffs <- bootrun@boot$t0[paste(diffnam, ".", matrix(typname, 
-            p * (p - 1)/2, ntype, byrow = T), "diff", sep = "")]
-    perclower <- matrix(0, nlev, ntype * p, dimnames = list(level, 
+            g * (g - 1)/2, ntype, byrow = T), "diff", sep = "")]
+    perclower <- matrix(0, nlev, ntype * g, dimnames = list(level, 
         names(percentages)))
     if (rank) 
-        ranklower <- matrix(0, nlev, ntype * p, dimnames = list(level, 
+        ranklower <- matrix(0, nlev, ntype * g, dimnames = list(level, 
             names(percentages)))
     if (diff) 
-        difflower <- matrix(0, nlev, ntype * p * (p - 1)/2, dimnames = list(level, 
+        difflower <- matrix(0, nlev, ntype * g * (g - 1)/2, dimnames = list(level, 
             names(diffs)))
-    percupper <- matrix(0, nlev, ntype * p, dimnames = list(level, 
+    percupper <- matrix(0, nlev, ntype * g, dimnames = list(level, 
         names(percentages)))
     if (rank) 
-        rankupper <- matrix(0, nlev, ntype * p, dimnames = list(level, 
+        rankupper <- matrix(0, nlev, ntype * g, dimnames = list(level, 
             names(percentages)))
     if (diff) 
-        diffupper <- matrix(0, nlev, ntype * p * (p - 1)/2, dimnames = list(level, 
+        diffupper <- matrix(0, nlev, ntype * g * (g - 1)/2, dimnames = list(level, 
             names(diffs)))
 
     #strategy: if all bootstrap samples have same value-> lower=upper=that value
@@ -205,58 +221,58 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     #write confidence bounds to output object
     for (a in typname) {
         slot(ausgabe, paste(a, "lower", sep = ".")) <- matrix(perclower[, 
-            paste(names, a, sep = ".")], nlev, p)
+            paste(names[2:(g+1)], a, sep = ".")], nlev, g)
         if (rank && !norank) 
             slot(ausgabe, paste(a, "rank", "lower", sep = ".")) <- matrix(ranklower[, 
-                paste(names, a, sep = ".")], nlev, p)
+                paste(names[2:(g+1)], a, sep = ".")], nlev, g)
         if (diff && !nodiff) 
             slot(ausgabe, paste(a, "diff", "lower", sep = ".")) <- matrix(difflower[, 
                 paste(diffnam, paste(a, "diff", sep = ""), sep = ".")], 
-                nlev, p * (p - 1)/2)
+                nlev, g * (g - 1)/2)
         slot(ausgabe, paste(a, "upper", sep = ".")) <- matrix(percupper[, 
-            paste(names, a, sep = ".")], nlev, p)
+            paste(names[2:(g+1)], a, sep = ".")], nlev, g)
         if (rank && !norank) 
             slot(ausgabe, paste(a, "rank", "upper", sep = ".")) <- matrix(rankupper[, 
-                paste(names, a, sep = ".")], nlev, p)
+                paste(names[2:(g+1)], a, sep = ".")], nlev, g)
         if (diff && !nodiff) 
             slot(ausgabe, paste(a, "diff", "upper", sep = ".")) <- matrix(diffupper[, 
                 paste(diffnam, paste(a, "diff", sep = ""), sep = ".")], 
-                nlev, p * (p - 1)/2)
+                nlev, g * (g - 1)/2)
     }
     #show confidence intervals with rank marks
     #only possible, if ranks are bootstrapped
        #initialize character matrix for showing sorted results with confidence info
     if (rank && !norank) 
-        mark <- matrix(rep("", (p * ntype + ntype - 1) * (3 * 
-            nlev + 1)), p * ntype + ntype - 1, 3 * nlev + 1, 
-            dimnames = list(rep("", p * ntype + ntype - 1), c("percentage", 
+        mark <- matrix(rep("", (g * ntype + ntype - 1) * (3 * 
+            nlev + 1)), g * ntype + ntype - 1, 3 * nlev + 1, 
+            dimnames = list(rep("", g * ntype + ntype - 1), c("percentage", 
                 rep(level, 3))))
-    else mark <- matrix(rep(0, (p * ntype + ntype - 1) * (2 * 
-        nlev + 1)), p * ntype + ntype - 1, 2 * nlev + 1, dimnames = list(rep("", 
-        p * ntype + ntype - 1), c("percentage", rep(level, 2))))
+    else mark <- matrix(rep(0, (g * ntype + ntype - 1) * (2 * 
+        nlev + 1)), g * ntype + ntype - 1, 2 * nlev + 1, dimnames = list(rep("", 
+        g * ntype + ntype - 1), c("percentage", rep(level, 2))))
     if (sort) 
         marksort <- mark
     for (aa in 1:ntype) {
         a <- typname[aa]
         percent <- slot(ausgabe, a)
-        names(percent) <- names
+        names(percent) <- names[2:(g+1)]
         sortiert <- sort(percent, decreasing = T, index = T)
         percsort <- sortiert$x
         names(percsort) <- names[sortiert$ix]
         cilower <- matrix(slot(ausgabe, paste(a, "lower", sep = ".")), 
-            nlev, p)
+            nlev, g)
         ciupper <- matrix(slot(ausgabe, paste(a, "upper", sep = ".")), 
-            nlev, p)
+            nlev, g)
         if (rank && !norank) {
             lower <- matrix(slot(ausgabe, paste(a, "rank", "lower", 
-                sep = ".")), nlev, p)
+                sep = ".")), nlev, g)
             upper <- matrix(slot(ausgabe, paste(a, "rank", "upper", 
-                sep = ".")), nlev, p)
-            for (j in 1:p) {
+                sep = ".")), nlev, g)
+            for (j in 1:g) {
                 # j is the rank that might or might not be in the confidence interval 
                 # for the k-th sorted X
-             hilf <- matrix(rep("", p * nlev), p, nlev)
-                for (k in 1:p) {
+             hilf <- matrix(rep("", g * nlev), g, nlev)
+                for (k in 1:g) {
                     #k is the k-th X, i.e. the k-th entry in percent for this type
                    for (i in 1:nlev) {
                          #i is the confidence level index
@@ -266,32 +282,32 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
                   } # loop i
                 } # loop k
                 # append latest letter to mark
-                mark[((aa - 1) * (p + 1) + 1):(aa * (p + 1) - 
+                mark[((aa - 1) * (g + 1) + 1):(aa * (g + 1) - 
                   1), 2:(1 + nlev)] <- matrix(paste(mark[((aa - 
-                  1) * (p + 1) + 1):(aa * (p + 1) - 1), 2:(1 + 
-                  nlev)], matrix(hilf, p, nlev), sep = ""), p, 
+                  1) * (g + 1) + 1):(aa * (g + 1) - 1), 2:(1 + 
+                  nlev)], matrix(hilf, g, nlev), sep = ""), g, 
                   nlev)
             } # loop j
-            mark[((aa - 1) * (p + 1) + 1):(aa * (p + 1) - 1), 
-                ] <- matrix(cbind(format(percent,scientific=F), mark[((aa - 1) * (p + 
-                1) + 1):(aa * (p + 1) - 1), 2:(1 + nlev)], format(t(cilower),scientific=F), 
-                format(t(ciupper),scientific=F)), p, 3 * nlev + 1)
+            mark[((aa - 1) * (g + 1) + 1):(aa * (g + 1) - 1), 
+                ] <- matrix(cbind(format(percent,scientific=F), mark[((aa - 1) * (g + 
+                1) + 1):(aa * (g + 1) - 1), 2:(1 + nlev)], format(t(cilower),scientific=F), 
+                format(t(ciupper),scientific=F)), g, 3 * nlev + 1)
         } #if rank and !norank
 
         if (!rank || norank) {
-            mark[((aa - 1) * (p + 1) + 1):(aa * (p + 1) - 1), 
+            mark[((aa - 1) * (g + 1) + 1):(aa * (g + 1) - 1), 
                 ] <- matrix(cbind(percent, t(cilower), t(ciupper)), 
-                p, 2 * nlev + 1)
+                g, 2 * nlev + 1)
         }
-        rownames(mark)[((aa - 1) * (p + 1) + 1):(aa * (p + 1) - 
+        rownames(mark)[((aa - 1) * (g + 1) + 1):(aa * (g + 1) - 
             1)] <- paste(names(percent), a, sep = ".")
         if (sort) {
-            marksort[((aa - 1) * (p + 1) + 1):(aa * (p + 1) - 
-                1), ] <- mark[((aa - 1) * (p + 1) + 1):(aa * 
-                (p + 1) - 1), ][sortiert$ix, ]
-            rownames(marksort)[((aa - 1) * (p + 1) + 1):(aa * 
-                (p + 1) - 1)] <- rownames(mark[((aa - 1) * (p + 
-                1) + 1):(aa * (p + 1) - 1), ])[sortiert$ix]
+            marksort[((aa - 1) * (g + 1) + 1):(aa * (g + 1) - 
+                1), ] <- mark[((aa - 1) * (g + 1) + 1):(aa * 
+                (g + 1) - 1), ][sortiert$ix, ]
+            rownames(marksort)[((aa - 1) * (g + 1) + 1):(aa * 
+                (g + 1) - 1)] <- rownames(mark[((aa - 1) * (g + 
+                1) + 1):(aa * (g + 1) - 1), ])[sortiert$ix]
         }
     } # loop aa
 
@@ -316,7 +332,7 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
              nrow(ausgabe@mark),ncol(ausgabe@mark))
     if (ntype>1) {
        for (i in 1:(ntype-1)) 
-         hilf[i*(p+1),]<-rep("",ncol(hilf))
+         hilf[i*(g+1),]<-rep("",ncol(hilf))
     }
     rownames(hilf) <- rownames(ausgabe@mark)
     colnames(hilf) <- colnames(ausgabe@mark)
@@ -325,16 +341,16 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
 
     # differences
     if (diff && !nodiff) {
-        mark <- matrix(rep("", (p * (p - 1) * ntype/2 + ntype - 
-            1) * (3 * nlev + 1)), p * (p - 1) * ntype/2 + ntype - 
-            1, 3 * nlev + 1, dimnames = list(rep("", p * (p - 
+        mark <- matrix(rep("", (g * (g - 1) * ntype/2 + ntype - 
+            1) * (3 * nlev + 1)), g * (g - 1) * ntype/2 + ntype - 
+            1, 3 * nlev + 1, dimnames = list(rep("", g * (g - 
             1) * ntype/2 + ntype - 1), c("difference", rep(level, 
             3))))
         if (sort) 
-            marksort <- matrix(rep("", (p * (p - 1) * ntype/2 + 
-                ntype - 1) * (3 * nlev + 1)), p * (p - 1) * ntype/2 + 
+            marksort <- matrix(rep("", (g * (g - 1) * ntype/2 + 
+                ntype - 1) * (3 * nlev + 1)), g * (g - 1) * ntype/2 + 
                 ntype - 1, 3 * nlev + 1, dimnames = list(rep("", 
-                p * (p - 1) * ntype/2 + ntype - 1), c("difference", 
+                g * (g - 1) * ntype/2 + ntype - 1), c("difference", 
                 rep(level, 3))))
         for (aa in 1:ntype) {
             a <- typname[aa]
@@ -342,12 +358,12 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
             sortiert <- sort(abs(differ), decreasing = T, index = T)
             names(differ) <- paste(diffnam, a, sep = ".")
             difflower <- matrix(slot(ausgabe, paste(a, "diff", 
-                "lower", sep = ".")), nlev, p * (p - 1)/2)
+                "lower", sep = ".")), nlev, g * (g - 1)/2)
             diffupper <- matrix(slot(ausgabe, paste(a, "diff", 
-                "upper", sep = ".")), nlev, p * (p - 1)/2)
-            hilf <- matrix(rep("", p * (p - 1) * nlev/2), p * 
-                (p - 1)/2, nlev)
-            for (k in 1:(p * (p - 1)/2)) {
+                "upper", sep = ".")), nlev, g * (g - 1)/2)
+            hilf <- matrix(rep("", g * (g - 1) * nlev/2), g * 
+                (g - 1)/2, nlev)
+            for (k in 1:(g * (g - 1)/2)) {
                    # k refers to the k-th difference
                  for (i in 1:nlev) {
                        #i is the confidence level index
@@ -359,25 +375,25 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
             } # loop k
 
            #append latest letter to mark 
-            mark[((aa - 1) * (p * (p - 1)/2 + 1) + 1):(aa * (p * 
-                (p - 1)/2 + 1) - 1), 2:(1 + nlev)] <- matrix(paste(mark[((aa - 
-                1) * (p * (p - 1)/2 + 1) + 1):(aa * (p * (p - 
-                1)/2 + 1) - 1), 2:(1 + nlev)], matrix(hilf, p * 
-                (p - 1)/2, nlev), sep = ""), p * (p - 1)/2, nlev)
-            mark[((aa - 1) * (p * (p - 1)/2 + 1) + 1):(aa * (p * 
-                (p - 1)/2 + 1) - 1), ] <- matrix(cbind(differ, 
-                mark[((aa - 1) * (p * (p - 1)/2 + 1) + 1):(aa * 
-                  (p * (p - 1)/2 + 1) - 1), 2:(1 + nlev)], t(difflower), 
-                t(diffupper)), p * (p - 1)/2, 3 * nlev + 1)
-            rownames(mark)[((aa - 1) * (p * (p - 1)/2 + 1) + 
-                1):(aa * (p * (p - 1)/2 + 1) - 1)] <- names(differ)
+            mark[((aa - 1) * (g * (g - 1)/2 + 1) + 1):(aa * (g * 
+                (g - 1)/2 + 1) - 1), 2:(1 + nlev)] <- matrix(paste(mark[((aa - 
+                1) * (g * (g - 1)/2 + 1) + 1):(aa * (g * (g - 
+                1)/2 + 1) - 1), 2:(1 + nlev)], matrix(hilf, g * 
+                (g - 1)/2, nlev), sep = ""), g * (g - 1)/2, nlev)
+            mark[((aa - 1) * (g * (g - 1)/2 + 1) + 1):(aa * (g * 
+                (g - 1)/2 + 1) - 1), ] <- matrix(cbind(differ, 
+                mark[((aa - 1) * (g * (g - 1)/2 + 1) + 1):(aa * 
+                  (g * (g - 1)/2 + 1) - 1), 2:(1 + nlev)], t(difflower), 
+                t(diffupper)), g * (g - 1)/2, 3 * nlev + 1)
+            rownames(mark)[((aa - 1) * (g * (g - 1)/2 + 1) + 
+                1):(aa * (g * (g - 1)/2 + 1) - 1)] <- names(differ)
             if (sort) {
-                marksort[((aa - 1) * (p * (p - 1)/2 + 1) + 1):(aa * 
-                  (p * (p - 1)/2 + 1) - 1), ] <- mark[((aa - 
-                  1) * (p * (p - 1)/2 + 1) + 1):(aa * (p * (p - 
+                marksort[((aa - 1) * (g * (g - 1)/2 + 1) + 1):(aa * 
+                  (g * (g - 1)/2 + 1) - 1), ] <- mark[((aa - 
+                  1) * (g * (g - 1)/2 + 1) + 1):(aa * (g * (g - 
                   1)/2 + 1) - 1), ][sortiert$ix, ]
-                rownames(marksort)[((aa - 1) * (p * (p - 1)/2 + 
-                  1) + 1):(aa * (p * (p - 1)/2 + 1) - 1)] <- names(differ)[sortiert$ix]
+                rownames(marksort)[((aa - 1) * (g * (g - 1)/2 + 
+                  1) + 1):(aa * (g * (g - 1)/2 + 1) - 1)] <- names(differ)[sortiert$ix]
             }
         } # loop aa
 

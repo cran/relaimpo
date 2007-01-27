@@ -20,7 +20,8 @@ boot.relimp(object, ...)
 
 ## default S3 method, should be called without suffix ".default"
 boot.relimp.default(object, x = NULL, ..., b = 1000, type = "lmg", 
-    rank = TRUE, diff = TRUE, rela = FALSE, always = NULL, fixed=FALSE)
+    rank = TRUE, diff = TRUE, rela = FALSE, always = NULL, 
+    groups = NULL, groupnames = NULL, fixed=FALSE)
 
 ## S3 method for formula objects, should be called without suffix ".formula"
 boot.relimp.formula(formula, data, na.action, ..., subset = NULL)
@@ -94,6 +95,14 @@ booteval.relimp(bootrun, bty = "bca", level = 0.95,
        valid character strings are all column names of \code{y} or \code{x} respectively that refer to regressor variables.
 
        Relative importance is only assessed for the variables not selected in \code{always}. }
+  \item{groups }{ is a list of vectors of column numbers or names of variables to be combined into groups. 
+       If only one group is needed, a vector can be given. The numbers and character strings needed are of the same form 
+       as for \code{always}. Numbers and names cannot be mixed. 
+
+       Relative importance is only allocated between groups of regressors, no subdivision within groups is calculated. 
+       Regressors that do not occur in any group are included as singletons.
+       A regressor must not occur in \code{always} and in \code{groups}.}
+  \item{groupnames }{ is a vector of names for the variable groups to be used for annotation of output.}
   \item{fixed}{ is a logical requesting bootstrapping for a fixed design matrix (if TRUE). 
        The default is bootstrapping for randomly drawn samples (fixed = FALSE). }
   \item{data}{ if first object is of class formula: 

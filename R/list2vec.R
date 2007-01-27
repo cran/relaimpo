@@ -5,6 +5,13 @@ function(liste)
     # first element of list needs to be numeric
 
     # error control
+## Wird die folgende Abfrage gebraucht ?
+##    if (is.null(liste)) return(NULL)
+##
+##
+##    else 
+##    {
+
     if (!is.list(liste) || !is.numeric(liste[[1]])) 
     stop(" the argument for list2vec needs to be a list with first element numeric.")
     ausgabe <- liste[[1]]
@@ -16,5 +23,6 @@ function(liste)
     }
     }
     return(ausgabe)
+##   } ## falls die oben die vorgeschaltete if-Abfrage 
 }
 

@@ -18,7 +18,7 @@ calc.relimp(object, ...)
 
 ## default S3 method, should be called without suffix ".default"
 calc.relimp.default(object, x = NULL, ..., 
-       type = "lmg", diff = FALSE, rank = TRUE, rela = FALSE, always = NULL)
+       type = "lmg", diff = FALSE, rank = TRUE, rela = FALSE, always = NULL, groups = NULL, groupnames = NULL)
 
 ## S3 method for formula object, should be called without suffix ".formula"
 calc.relimp.formula(formula, data, na.action, ..., subset=NULL)
@@ -77,9 +77,17 @@ calc.relimp.lm(object, ...)
   \item{rela   }{ logical; if TRUE, all metrics are forced to sum to 100pct; if FALSE, details depend on specific method; default FALSE }
   \item{always }{ is a vector of column numbers or names of variables to be always in the 
        model (adjusted for). Valid numbers are 2 to (number of regressors + 1) (1 is reserved for the response), 
-       valid character strings are all column names of \code{y} or \code{x} respectively that refer to regressor variables.
+       valid character strings are all column names of \code{object} or \code{x} respectively that refer to regressor variables.
 
        Relative importance is only assessed for the variables not selected in \code{always}. }
+  \item{groups }{ is a list of vectors of column numbers or names of variables to be combined into groups. 
+       If only one group is needed, a vector can be given. The numbers and character strings needed are of the same form 
+       as for \code{always}. Numbers and names cannot be mixed. 
+
+       Relative importance is only allocated between groups of regressors, no subdivision within groups is calculated. 
+       Regressors that do not occur in any group are included as singletons.
+       A regressor must not occur in \code{always} and in \code{groups}.}
+  \item{groupnames }{ is a vector of names for the variable groups to be used for annotation of output.}
   \item{data}{ if first object is of class formula: 
        an optional matrix or data frame that the variables in formula and subset come from; 
        if it is omitted, all names must be meaningful in the environment from which calc.relimp is called}
