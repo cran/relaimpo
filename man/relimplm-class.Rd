@@ -3,7 +3,10 @@
 \alias{relimplm-class}
 \alias{coerce,relimplm,list-method}
 \alias{show,relimplm-method}
-\alias{print,relimplm-method}
+%document S4 methods only, do not make index too long
+%\alias{print,relimplm-method}
+%\alias{plot,relimplm-method}
+%\alias{$,relimplm-method}
 
 \title{Class relimplm }
 \description{  This is the class of output objects from the function \code{calc.relimp} 
@@ -45,23 +48,27 @@ Objects should only be created by calls to the function \code{calc.relimp}.
   }
 }
 \section{Methods}{
+  This documentation section documents S4 methods only. 
+  There are also S3-methods for printing, plotting and extracting slots with \$. 
+  For their usage, see \code{\link{classesmethods.relaimpo}}.
   \describe{
-    \item{coerce}{If an object of this class is coerced to list by \code{as(object, "list")}, 
+    \item{coerce}{S4-method: If an object of this class is coerced to list by \code{as(object, "list")}, 
     the slots are output to the list in the following order: \code{var.y}, \code{R2}, \code{lmg}, \code{lmg.rank}, \code{lmg.diff}, 
 next three in non-US version only: \code{pmvd}, \code{pmvd.rank}, \code{pmvd.diff}, \code{last},  
 \code{last.rank}, \code{last.diff}, ..., \code{pratt}, \code{pratt.rank}, \code{pratt.diff}, \code{namen}, \code{type}, 
 \code{rela}, \code{always}, \code{alwaysnam}
   }
-    \item{print}{~~meaningful printout of object }
-    \item{show}{~~identical to \code{print}}
+ %   \item{print}{S3-method: meaningful printout of object, see \code{\link{print.relimplm}} }
+    \item{show}{S4-method: identical to \code{print}}
+ %   \item{plot}{S3-method: barplots of percentages, see \code{\link{plot.relimplm}}}
+ %   \item{\$}{S3 method: extracts slots with \$ extractor }
 }
-    In addition, there is a method for plotting.
 }
 \author{ Ulrike Groemping, TFH Berlin }
 
 
 \seealso{
-  See also \code{\link{calc.relimp}}, \code{\link{print.relimplm}}, \code{\link{plot.relimplm}}, \pkg{\link{relaimpo}}
+  \code{\link{calc.relimp}}, \code{\link{print.relimplm}}, \code{\link{plot.relimplm}}, \pkg{\link{relaimpo}}
 }
 \keyword{classes}
 \keyword{methods}

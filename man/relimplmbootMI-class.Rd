@@ -1,15 +1,17 @@
-\name{relimplmbooteval-class}
+\name{relimplmbootMI-class}
 \docType{class}
-\alias{relimplmbooteval-class}
-\alias{show,relimplmbooteval-method}
-%\alias{print,relimplmbooteval-method}
-%\alias{plot,relimplmbooteval-method}
-%\alias{$,relimplmbooteval-method}
+\alias{relimplmbootMI-class}
+\alias{show,relimplmbootMI-method}
+%document S4 methods only, do not make index too long
+%\alias{print,relimplmbootMI-method}
+%\alias{plot,relimplmbootMI-method}
+%\alias{summary,relimplmbootMI-method}
+%\alias{$,relimplmbootMI-method}
 
-\title{Class relimplmbooteval }
-\description{  Output object from function \code{\link{booteval.relimp}}, described there. }
+\title{Class relimplmbootMI }
+\description{  Output object from function \code{\link{mianalyze.relimp}}, described there. }
 \section{Objects from the Class}{
-Objects should only be created by calls to function \code{booteval.relimp}.
+Objects should only be created by calls to function \code{mianalyze.relimp}.
 }
 \section{Slots}{
   \describe{
@@ -49,29 +51,11 @@ Objects should only be created by calls to function \code{booteval.relimp}.
     \item{\code{pratt.rank.upper}:}{Object of class \code{"matrix"}  }
     \item{\code{pratt.diff.lower}:}{Object of class \code{"matrix"}  }
     \item{\code{pratt.diff.upper}:}{Object of class \code{"matrix"}  }
-    \item{\code{var.y.boot}:}{Object of class \code{"numeric"}  }
-    \item{\code{R2.boot}:}{Object of class \code{"numeric"}  }
-    \item{\code{R2.decomp.boot}:}{Object of class \code{"numeric"}  }
-    \item{\code{lmg.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{pmvd.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{last.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{first.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{betasq.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{pratt.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{lmg.rank.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{pmvd.rank.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{last.rank.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{first.rank.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{betasq.rank.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{pratt.rank.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{lmg.diff.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{pmvd.diff.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{last.diff.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{first.diff.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{betasq.diff.boot}:}{Object of class \code{"matrix"}  }
-    \item{\code{pratt.diff.boot}:}{Object of class \code{"matrix"}  }
+    \item{\code{MIresult}:}{Object of class \code{"MIresult"}  }
     \item{\code{est}:}{Object of class \code{"numintnull"}  }
     \item{\code{vcov}:}{Object of class \code{"nummatnull"}  }
+    \item{\code{bootlist}:}{Object of class \code{"listnull"}, 
+          list of objects of class relimplmboot or null }
     \item{\code{level}:}{Object of class \code{"numeric"}  }
     \item{\code{nboot}:}{Object of class \code{"numeric"}  }
     \item{\code{diffnam}:}{Object of class \code{"character"}  }
@@ -112,23 +96,24 @@ Objects should only be created by calls to function \code{booteval.relimp}.
   }
 }
 \section{Extends}{
-Class \code{"relimplm"}, directly.
-}
+  Class \code{"relimplm"}, directly.
+    }
 \section{Methods}{
   This documentation section documents S4 methods only. 
-  There are also S3-methods for printing, plotting and extracting slots with \$. 
-  For their usage, see \code{\link{classesmethods.relaimpo}}.
+  There are also S3-methods for printing, plotting, extracting slots with \$ and producing 
+  a brief summary. For their usage, see \code{\link{classesmethods.relaimpo}}.
     \describe{
-%    \item{print}{S3 method: meaningful printout of object }
-    \item{show}{S4 method: identical to \code{print}}
-%    \item{plot}{S3 method: plots estimated proportions with indication of confidence intervals }
+%    \item{print}{ S3-method: meaningful printout of object }
+    \item{show}{ S4-method: identical to \code{print}}
+%    \item{summary}{ S3-method: applies the function \code{summary} from package \pkg{mitools} 
+         to the slot \code{MIresult} for a briefer output than the standard printout }
+%    \item{plot}{ S3-method: plots estimated proportions with indication of confidence intervals }
 %    \item{\$}{S3 method: extracts slots with \$ extractor }
     }
-}
 \author{ Ulrike Groemping, TFH Berlin}
 \seealso{
-  \code{\link{relimplm-class}}, \code{\link{relimplmboot-class}}, \code{\link{relimplmbootMI-class}}, 
-    \code{\link{booteval.relimp}}, \code{\link{print.relimplmbooteval}}, 
-    \code{\link{plot.relimplmbooteval}}
+    \code{\link{relimplm-class}}, \code{\link{relimplmbooteval-class}}, 
+    \code{\link{booteval.relimp}}, \code{\link{print.relimplmbootMI}}, 
+    \code{\link{plot.relimplmbootMI}}, \code{\link{summary.relimplmbootMI}}
 }
 \keyword{classes}

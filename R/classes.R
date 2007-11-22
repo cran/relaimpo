@@ -2,7 +2,26 @@
 #classes and methods in the following
 setClassUnion("numintnull", c("numeric", "integer", "NULL"))
 setClassUnion("charnull", c("character", "NULL"))
+setClassUnion("numintmatnull", c("numeric", "integer", "matrix", "NULL"))
+setClassUnion("listnull", c("list", "NULL"))
 
+## change UG for 1.3: included design classes
+setOldClass(c("boot"))
+setOldClass(c("MIresult"))
+setClassUnion("MIresultnull", c("MIresult", "NULL"))
+## the intention was to define slot MIresult as class MIresultnull, but that does not work
+## because of old class ?
+## For the time being, assigned class "ANY" to the slot
+
+setClassUnion("langnull", c("language", "NULL"))  ## added call slot, NULL may be removable after testing
+
+#setOldClass(c("boot", "survey.design")) 
+#setClassUnion("designnull", c("survey.design", "NULL"))
+
+## change UG for 1.3: added weights, design
+## weights only needed for calculating correct estimates
+##     no complications, since estimates can be easily calculated,
+##     once weights are known
 setClass("relimplm",representation=representation(
     var.y="numeric",R2="numeric",R2.decomp="numeric",
     lmg="numeric",pmvd="numeric",first="numeric",last="numeric",
@@ -14,7 +33,7 @@ setClass("relimplm",representation=representation(
     last.diff="numeric",
     betasq.diff="numeric",pratt.diff="numeric",
     namen="character",nobs="numeric",type="character",rela="logical",
-    always="numintnull",alwaysnam="charnull", groupdocu="list"))
+    always="numintnull",alwaysnam="charnull", groupdocu="list", call="langnull"))
 setValidity("relimplm",function(object){
     p<-length(slot(object,"namen"))-1
     var.y <- is(slot(object,"var.y"),"numeric") && slot(object,"var.y")>0
@@ -47,13 +66,13 @@ setValidity("relimplm",function(object){
         && pratt && pratt.rank && pratt.diff && namen)
     })
 
-setOldClass("boot") 
+
 
 setClass("relimplmboot",representation=representation(
     boot="boot",type="character",nboot="numeric",
     rank="logical",diff="logical",rela="logical",fixed="logical", 
     namen="character", nobs="numeric", always="numintnull",alwaysnam="charnull",
-    groupdocu="list"))
+    groupdocu="list", wt="numintnull", vcov="numintmatnull", call="langnull"))
 
 setClass("relimplmbooteval",representation=representation(
     lmg.lower="matrix",lmg.upper="matrix",
@@ -81,8 +100,37 @@ setClass("relimplmbooteval",representation=representation(
     first.rank.boot="matrix",betasq.rank.boot="matrix",pratt.rank.boot="matrix",
     lmg.diff.boot="matrix",pmvd.diff.boot="matrix",last.diff.boot="matrix",
     first.diff.boot="matrix",betasq.diff.boot="matrix",pratt.diff.boot="matrix",
+    est="numintnull", vcov="numintmatnull", 
     level="numeric",nboot="numeric",diffnam="character",rank="logical",diff="logical",
     rela="logical",fixed="logical",type="character",sort="logical",bty="character",mark="matrix",
     markdiff="matrix"),contains="relimplm")
 
+
+setClass("relimplmtest",representation=representation(
+    daten="matrix",wt="numintnull"),contains="relimplm")
+
+
+setClass("relimplmbootMI",representation=representation(
+    lmg.lower="matrix",lmg.upper="matrix",
+    lmg.rank.lower="matrix",lmg.rank.upper="matrix",
+    lmg.diff.lower="matrix",lmg.diff.upper="matrix",
+    pmvd.lower="matrix",pmvd.upper="matrix",
+    pmvd.rank.lower="matrix",pmvd.rank.upper="matrix",
+    pmvd.diff.lower="matrix",pmvd.diff.upper="matrix",
+    last.lower="matrix",last.upper="matrix",
+    last.rank.lower="matrix",last.rank.upper="matrix",
+    last.diff.lower="matrix",last.diff.upper="matrix",
+    first.lower="matrix",first.upper="matrix",
+    first.rank.lower="matrix",first.rank.upper="matrix",
+    first.diff.lower="matrix",first.diff.upper="matrix",
+    betasq.lower="matrix",betasq.upper="matrix",
+    betasq.rank.lower="matrix",betasq.rank.upper="matrix",
+    betasq.diff.lower="matrix",betasq.diff.upper="matrix",
+    pratt.lower="matrix",pratt.upper="matrix",
+    pratt.rank.lower="matrix",pratt.rank.upper="matrix",
+    pratt.diff.lower="matrix",pratt.diff.upper="matrix",
+    MIresult = "ANY", est="numintnull", vcov="numintmatnull", bootlist="listnull",
+    level="numeric",nboot="numeric",diffnam="character",rank="logical",diff="logical",
+    rela="logical",fixed="logical",type="character",sort="logical",bty="character",mark="matrix",
+    markdiff="matrix"),contains="relimplm")
 

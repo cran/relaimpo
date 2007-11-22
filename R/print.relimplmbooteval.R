@@ -1,8 +1,8 @@
 "print.relimplmbooteval" <-
 function (x, ...) 
 {
-    if (!(is(x, "relimplmbooteval"))) 
-        stop("x must be the output from function booteval.relimp")
+    if (!(is(x, "relimplmbooteval") || is(x, "relimplmbootMI"))) 
+        stop("x must be the output from function booteval.relimp or mianalyze.relimp")
     p <- length(slot(x, "namen")) - 1
     nlev <- length(x@level)
 
@@ -48,7 +48,7 @@ function (x, ...)
             "\n", "\n")
         offset <- max(nchar(rownames(x@markdiff))) + 12
         cat(paste(rep(" ", offset + nchar(paste(x@level,collapse=" ")) + 1), collapse = ""), 
-            "Lower", paste(rep(" ", 7 * nlev - 5), collapse = ""), 
+            "Lower", paste(rep(" ", 8 * nlev - 5), collapse = ""), 
             "Upper", "\n", sep = "")
         print(noquote(x@markdiff))
         cat("\n")

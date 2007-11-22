@@ -21,106 +21,54 @@ boot.relimp(object, ...)
 ## default S3 method, should be called without suffix ".default"
 boot.relimp.default(object, x = NULL, ..., b = 1000, type = "lmg", 
     rank = TRUE, diff = TRUE, rela = FALSE, always = NULL, 
-    groups = NULL, groupnames = NULL, fixed=FALSE)
+    groups = NULL, groupnames = NULL, fixed=FALSE, 
+    weights = NULL, design = NULL)
 
 ## S3 method for formula objects, should be called without suffix ".formula"
-boot.relimp.formula(formula, data, na.action, ..., subset = NULL)
+boot.relimp.formula(formula, data, weights, na.action, ..., subset = NULL)
 
 ## S3 method for objects of class lm, should be called without suffix ".lm"
-boot.relimp.lm(object, ...)
+boot.relimp.lm(object, type = "lmg", groups = NULL, groupnames=NULL, always = NULL, ..., b=1000)
 
 ## function for evaluating bootstrap results
-booteval.relimp(bootrun, bty = "bca", level = 0.95, 
+booteval.relimp(bootrun, bty = "perc", level = 0.95, 
     sort = FALSE, norank = FALSE, nodiff = FALSE, 
     typesel = c("lmg", "pmvd", "last", "first", "betasq", "pratt"))
 }
 %- end of 'usage'
 \arguments{
-  \item{object   }{ The class of this object determines which of the methods is used:
-        There are special methods for output objects from function \code{\link{lm}} and for formula objects.
-        For all other types of object, the default method is used.
+  \item{object   }{ cf. \code{\link{calc.relimp}}.}
 
-        Thus, object can be
-
-        a formula (e.g. y~x1+x2+x3) without interaction terms and without factors
-
-        OR
-
-        the output of a linear model call (class \code{lm}, but not \code{glm} or \code{mlm}); 
-        output objects from \code{lm} or \code{aov} (without factors in x variables) work;
-        there may be further functions that output objects inheriting from \code{lm} 
-        which may or may not work reasonably with \code{calc.relimp}; 
-        for \code{calc.relimp} to be appropriate, the underlying model must at least be linear!
-
-        OR 
-
-        the covariance matrix of a response y and regressors x, 
-	(e.g. obtained by cov(cbind(y,x)), if y is a column vector of response values 
-	and x a corresponding matrix of regressors) 
-
-        OR 
-        
-        a (raw) data matrix or data frame with the response variable in the first column 
-        (numeric variables only, no factors)
-
-
-        OR
-
-        a response vector or one-column matrix, 
-        if \code{x} contains the corresponding matrix or data frame of regressors.}
-
-  \item{formula   }{ The first object, if a formula is to be given; one response, no factors, and no interaction terms }
-  \item{x   }{ a (raw) data matrix or data frame containing the regressors (no factors), 
-       if \code{object} is a response vector or one-column matrix
-
-        OR 
-        
-        NULL, if \code{object} is anything else }
+  \item{formula   }{ cf. \code{\link{calc.relimp}}.
+        But note the additional restriction that - in connection with the \code{design=}-option - 
+        it is currently not possible to use factors, interactions or calculated quantities in a formula.
+        }
+  \item{x   }{ cf. \code{\link{calc.relimp}}.}
   \item{b}{ is the number of bootstrap runs requested on boot.relimp (default: \code{b=1000}). 
        Make sure to set this to a lower number, if you are simply testing code. }
-  \item{type}{ can be a character string, character vector or list of character strings.
-       It is the collection of metrics that are to be calculated. 
-       Available metrics: \code{lmg}, \code{pmvd} (non-US version only), \code{last}, \code{first}, 
-       \code{betasq}, \code{pratt}, as
-       described in \code{\link{calc.relimp}}.}
+  \item{type}{ cf. \code{\link{calc.relimp}}.}
   \item{rank}{ is a logical requesting bootstrapping of ranks (\code{rank=TRUE}, default) for each metric from type }
   \item{diff}{ is a logical requesting bootstrapping of pairwise differences in relative importance (\code{diff=TRUE}, 
          default) for each metric in type }
-  \item{rela}{ is a logical requesting relative importances summing to 100% (\code{rela=TRUE}). 
-         If rela is FALSE (default), some of the metrics sum to \eqn{R^2} (\code{lmg}, \code{pmvd}, \code{pratt}), 
-         others do not have a meaningful sum (\code{last}, \code{first}, \code{betasq}). 
-         More detail is given in \code{\link{calc.relimp}}.}
-  \item{always }{ is a vector of column numbers or names of variables to be always in the 
-       model (adjusted for). Valid numbers are 2 to \dQuote{number of regressors + 1} (1 is reserved for the response), 
-       valid character strings are all column names of \code{y} or \code{x} respectively that refer to regressor variables.
-
-       Relative importance is only assessed for the variables not selected in \code{always}. }
-  \item{groups }{ is a list of vectors of column numbers or names of variables to be combined into groups. 
-       If only one group is needed, a vector can be given. The numbers and character strings needed are of the same form 
-       as for \code{always}. Numbers and names cannot be mixed. 
-
-       Relative importance is only allocated between groups of regressors, no subdivision within groups is calculated. 
-       Regressors that do not occur in any group are included as singletons.
-       A regressor must not occur in \code{always} and in \code{groups}.}
-  \item{groupnames }{ is a vector of names for the variable groups to be used for annotation of output.}
+  \item{rela}{ cf. \code{\link{calc.relimp}}.}
+  \item{always }{ cf. \code{\link{calc.relimp}}.}
+  \item{groups }{ cf. \code{\link{calc.relimp}}.}
+  \item{groupnames }{ cf. \code{\link{calc.relimp}}.}
+  \item{weights }{ cf. \code{\link{calc.relimp}} for specification of weights. 
+       See also the Details section of this help page for usage of different types of weights. }
+  \item{design }{ cf. \code{\link{calc.relimp}}. But note that there are 
+       currently some restrictions regarding usability of other possibilities, when using a \code{design} 
+       in \code{boot.relimp}: formulae can only be simpler than usual, and factors, interactions or 
+       calculated variables in formulae are not permitted.
+       
+       For a description of the bootstrap method's treatment of designs, see the details section.
+       In the current version, using a design in bootstrapping must be considered EXPERIMENTAL.}
   \item{fixed}{ is a logical requesting bootstrapping for a fixed design matrix (if TRUE). 
        The default is bootstrapping for randomly drawn samples (fixed = FALSE). }
-  \item{data}{ if first object is of class formula: 
-       an optional matrix or data frame that the variables in formula and subset come from; 
-       if it is omitted, all names must be meaningful in the environment from which boot.relimp is called}
-  \item{subset}{ if first object is of class formula: 
-        an optional expression indicating the subset of the rows of \code{data} that should be used in the fit. 
-          This can be a logical vector, or a numeric vector indicating which observation numbers are to be included, 
-          or a  character  vector of the row names to be included.  All (non-missing) observations are included by
-          default. }
-  \item{na.action}{ if first object is of class formula: 
-        an optional function that indicates what should happen when the data contain 'NA's. 
-        The default is first, any na.action attribute of data, second the setting given in the call to calc.relimp,
-        third the na.action setting of options. Possible choices are "na.fail",  
-        (print an error message and terminate if there are any incomplete observations), 
-        "na.omit" or "na.exclude" (equivalent for package \code{relaimpo}, 
-        both analyse complete cases only and print a warning, this is also what is done the default method ). }
-  \item{...}{ usable for further arguments, particularly all arguments of default method can be given to all other methods }
+  \item{data}{ cf. \code{\link{calc.relimp}}.}
+  \item{subset}{ cf. \code{\link{calc.relimp}}.}
+  \item{na.action}{ cf. \code{\link{calc.relimp}}.}
+  \item{...}{ usable for further arguments, particularly all arguments of the default method can be given to all other methods }
   \item{bootrun}{ is an object of class \code{relimplmboot} created by function \code{boot.relimp}. 
          It hands over all relevant information on the bootstrap runs to function \code{booteval.relimp}. }
   \item{bty}{ is the type of bootstrap interval requested (a character string), 
@@ -140,7 +88,48 @@ booteval.relimp(bootrun, bty = "bca", level = 0.95,
 \details{
 Calculations of metrics are based on the function \code{calc.relimp}. 
 Bootstrapping is done with the R package \code{boot}, 
-resampling the full observation vectors (combinations of response and regressors, cf. Fox (2002)). 
+resampling the full observation vectors by default (combinations of response, weights and regressors, cf. Fox (2002)). 
+If \code{fixed=TRUE} is specified, bootstrapping is based on residuals rather than full observations, 
+keeping the X-variables fixed.
+
+If the \code{weights} option is used, weights are resampled together with the full observations, 
+and weighted contributions are calculated for each resample (no re-normalization is done within the resamples.)
+
+Please note that usage of weights in linear models can have very different reasons. 
+One motivation is a different variability of different observations, where weights are the inverse variances. 
+This is the way \code{weights} are treated in function \code{lm} and also in \code{calc.relimp} and in \code{boot.relimp}, 
+if a vector of weights is given with the \code{weights} option. Specifically, weights do not affect the 
+resampling probability in bootstrapping, i.e. each observation has the same probability to be included in resamples.
+
+If the weights in a data frame represent the multiplicity of each observation (i.e. there are several units with 
+identical combination of values in the data, and the weights represent the number of units with exactly this value 
+pattern for each row of the data frame), they can also be directly used as weights in \code{calc.relimp} for 
+calculating the metrics. However, such frequency weights cannot be appropriately accomodated in \code{boot.relimp}; 
+instead, the data frame with frequencies has to be expanded to include one row for each unit before using the 
+resampling routine (e.g. using function \code{untable} from package \pkg{reshape} or function \code{expand.table} 
+from package \pkg{epitools}.
+
+In survey situations, weights are used to generate a more representative picture of the population: 
+an observation's weight is typically the number of units of the population that this single observed unit represents. 
+In this situation, there is no reason to consider observations with higher weights as less variable than observations 
+with lower weights; thus, while estimates can again be obtained treating the weights in the same way as mentioned before,
+their usage in estimation of standard errors and in bootstrapping is different. 
+In order to appropriately accomodate survey weights for these purposes, it is not sufficient to only provide the 
+weights vector; instead, it is necessary to provide a design generated with package \pkg{survey} or an object of 
+class \code{svyglm} (produced by function \code{svyglm}) that includes the appropriate design information.
+
+Clusters are a way to take care of dependency structures like in longitudinal data. 
+Thus, while relaimpo does not (currently) cover linear mixed models (e.g. produced by function \code{lme}), it is possible to 
+accomodate clustered data by applying function \code{svyglm} with linear link function and gaussian distribution 
+to a design that contains clusters. The bootstrapping approach subsequently takes care of the dependence by considering 
+clusters as sampling units. Users who want to use this approach can mimic the second example below.
+
+If the \code{design} option is used (experimental), resampling is done within package \pkg{survey}, 
+and the resampled contributions are also calculated within package survey. The results from these calculations 
+are plugged into an object from package \pkg{boot}, and confidence interval calculation is subsequently handled in 
+\pkg{boot}. The approach is considered experimental: so far no simulation studies have been conducted for 
+complex survey designs, and because of limited experience (in spite of thorough testing) it is not unlikely that 
+bugs will be found by users who are routinely using complex survey designs.
 
 The output provides results for all selected relative importance metrics. 
 The output object can be printed and plotted (description of syntax: \code{\link{classesmethods.relaimpo}}).   
@@ -158,7 +147,8 @@ Graphical output: Application of the plot method to the object created by \code{
 yields barplot representations for all bootstrapped metrics (all in one graphics window). Confidence level (\code{lev=}) 
 and number of characters in variable names to be used (\code{names.abbrev=}) can be modified. 
 Confidence bounds are indicated on the graphs by added vertical lines. 
-\code{par()} options can be used for modifying output (exceptions: mfrow, oma and mar are overridden by the plot method).
+\code{par()} options can be used for modifying output (exceptions: \code{mfrow}, \code{oma} and 
+\code{mar} are overridden by the plot method).
 }
 %- end of details
 \value{
@@ -197,7 +187,7 @@ Go to \url{http://www.tfh-berlin.de/~groemp} for further information and referen
 }
 \author{ Ulrike Groemping, TFH Berlin }
 \note{ There are two versions of this package. The version on CRAN is globally licensed under GPL version 2 (or later). 
-There is an extended version with the interesting additional metric \bold{pmvd} that is licensed according to GPL version 2
+There is an extended version with the interesting additional metric \code{pmvd} that is licensed according to GPL version 2
 under the geographical restriction "outside of the US" because of potential issues with US patent 6,640,204. This version can be obtained 
 from Ulrike Groempings website (cf. references section). Whenever you load the package, a display tells you, which version you are loading. }
 
@@ -210,10 +200,12 @@ Hence, bootstrapping should be used with awareness of computing time issues.
 
 \code{relaimpo} is a package for univariate linear models. 
 Using \code{relaimpo} on objects that inherit from class \code{lm} but are not univariate linear model objects 
-may produce nonsensical results without warning. Objects of classes \code{mlm} and \code{glm} lead to an error message. 
+may produce nonsensical results without warning. Objects of class \code{mlm} or \code{glm} with link functions other than identity 
+or family other than gaussian lead to an error message. 
 } 
 
-\seealso{ See also \pkg{\link{relaimpo}}, \code{\link{calc.relimp}}, \code{\link{classesmethods.relaimpo}}  }
+\seealso{ \pkg{\link{relaimpo}}, \code{\link{calc.relimp}}, \code{\link{mianalyze.relimp}}, 
+     \code{\link{classesmethods.relaimpo}}  }
 \examples{
 #####################################################################
 ### Example: relative importance of various socioeconomic indicators 
@@ -233,16 +225,16 @@ data(swiss)
               rank = TRUE, diff = TRUE)
        # for demonstration purposes only 100 bootstrap replications
 
-   #default output
+   #default output (percentily intervals, as of Version 2 of the package)
     booteval.relimp(bootswiss)
-         #because of only 100 bootstrap replications, 
-         #default bca intervals produce warnings
     plot(booteval.relimp(bootswiss))
 
     #sorted printout, chosen confidence levels, chosen interval method
     #store as object
-        result <- booteval.relimp(bootsub, bty="perc", 
+        result <- booteval.relimp(bootsub, bty="bca", 
               sort = TRUE, level=c(0.8,0.9))
+         #because of only 100 bootstrap replications, 
+         #default bca intervals produce warnings
     #output driven by print method
         result
     #result plotting with default settings 
@@ -256,6 +248,69 @@ data(swiss)
         plot(result, level=0.9,names.abbrev=6)
     #plot does react to options set with par()
     #exceptions: mfrow, mar and oma are set within the plot routine itself
+
+#####################################################################
+### Example: bootstrapping clustered data                            
+###          data taken from example.lmm of package lmm
+### y is change in pulse (heart beats per minute) 
+###    15 min (occ 1 to 3) and 90 min (occ 4 to 6) after 
+###    treatment with Placebo (occ 1 or 4) low (occ 2 or 5) 
+###    or high (occ 3 or 6) dose of marihuana
+### each of 9 subjects is observed under most or all 
+### of the 6 possible conditions
+#####################################################################
+## create example data from package lmm
+y <- c(16,20,16,20,-6,-4,
+    12,24,12,-6,4,-8,
+    8,8,26,-4,4,8,
+    20,8,20,-4,
+    8,4,-8,22,-8,
+    10,20,28,-20,-4,-4,
+    4,28,24,12,8,18,
+    -8,20,24,-3,8,-24,
+    20,24,8,12)
+occ <- c(1,2,3,4,5,6,
+      1,2,3,4,5,6,
+      1,2,3,4,5,6,
+      1,2,5,6,
+      1,2,3,5,6,
+      1,2,3,4,5,6,
+      1,2,3,4,5,6,
+      1,2,3,4,5,6,
+      2,3,4,5)
+subj <- c(1,1,1,1,1,1,
+       2,2,2,2,2,2,
+       3,3,3,3,3,3,
+       4,4,4,4,
+       5,5,5,5,5,
+       6,6,6,6,6,6,
+       7,7,7,7,7,7,
+       8,8,8,8,8,8,
+       9,9,9,9)
+### manual creation of dummies
+### reference category placebo after 90min (occ=4)
+dumm1 <- as.numeric(occ==1)
+dumm2 <- as.numeric(occ==2)
+dumm3 <- as.numeric(occ==3)
+dumm5 <- as.numeric(occ==5)
+dumm6 <- as.numeric(occ==6)
+
+## create data frame
+dat <- data.frame(y,dumm1,dumm2,dumm3,dumm5,dumm6,subj)
+
+### create design with clusters
+des <- svydesign(id=~subj,data=dat)
+
+### apply bootstrapping
+### using the design with subjects as clusters implies that 
+###     clusters are generally kept in or excluded as a whole
+### of course, b=100 is too small, only chosen for speed of package creation 
+bt <- boot.relimp(y~dumm1+dumm2+dumm3+dumm5+dumm6,data=dat,
+   design=des,b=100,type=c("lmg","first","last","betasq","pratt"))
+
+### calculate and display results
+booteval.relimp(bt,lev=0.9,nodiff=TRUE)
+
 }
 \keyword{ multivariate }% at least one, from doc/KEYWORDS
 \keyword{ models }% __ONLY ONE__ keyword per line

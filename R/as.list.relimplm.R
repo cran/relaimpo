@@ -1,4 +1,4 @@
-"as.relimplm" <- function(from,to)
+"as.list.relimplm" <- function(from,to)
 {
     to <- slot(from,"var.y")
     to <- append(to,list(R2=slot(from,"R2")))

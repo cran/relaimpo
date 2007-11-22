@@ -5,8 +5,8 @@ function (x, ..., lev = max(x@level), names.abbrev = 4, ylim=NULL, main=NULL, ce
     # if chosen level not available, confidence interval for largest available level is produced
 
     #error control
-    if (!(is(x, "relimplmbooteval"))) 
-        stop("x must be the output from function booteval.relimp")
+    if (!(is(x, "relimplmbooteval") || is(x, "relimplmbootMI"))) 
+        stop("x must be the output from function booteval.relimp or mianalyze.relimp")
     if (!(is.numeric(names.abbrev))) 
         stop("names.abbrev must be a number")
     if (!(is.numeric(lev))) 

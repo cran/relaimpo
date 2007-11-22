@@ -1,11 +1,9 @@
 "booteval.relimp" <-
-function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE, 
+function (bootrun, bty = "perc", level = 0.95, sort = FALSE, norank = FALSE, 
     nodiff = FALSE, typesel = c("lmg", "pmvd", "last", "first", 
         "betasq", "pratt")) 
 {
 
-###!!! ACHTUNG: Ausgabeformat für die booteval-Werte falsch, 
-###!!! Bei Gruppen ohne always werden falsche Variablennamen verwendet
     # Author and copyright holder: Ulrike Groemping
 
     # This routine is distributed under GPL version 2 or newer.
@@ -29,6 +27,8 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     # error control
     if (!(is(bootrun, "relimplmboot"))) 
         stop("bootrun must be output from routine boot.relimp")
+    if ("type" %in% names(sys.call(1))) 
+        stop("type is not a valid option for booteval.relimp. \n You may have intended to use bty or typesel.")
     if (!bty %in% c("perc", "bca", "norm", "basic")) 
         stop("bty type MUST be one of ", "perc ", "bca ", "norm ", 
             "basic")
@@ -40,18 +40,13 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     diff <- bootrun@diff
     rela <- bootrun@rela
     always <- bootrun@always
+    wt <- bootrun@wt
+    if (is.null(wt)) wt <- rep(1, nrow(bootrun@boot$data))
+    
 
-    #combine y and x and calulate covariance
-    empcov <- cov(bootrun@boot$data)
-
-    plong <- ncol(empcov) - 1
-    p <- plong
-    if (!is.null(always)) p <- plong - length(always)
-    g <- p
     nlev <- length(level)
     if (length(bootrun@groupdocu)>0) {
     groups <- bootrun@groupdocu[[2]]
-    g <- length(groups)
     groupnames <- bootrun@groupdocu[[1]][which(sapply(groups, length)>1)]
     groups <- groups[which(sapply(groups, length)>1)]
     }
@@ -60,13 +55,20 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     groups <- NULL
     groupnames <- NULL
     }
-
+    
     # prepare output object by first providing estimates themselves
-    ausgabe <- calc.relimp(empcov, type = type, diff = diff, 
+
+    ## relimplm-Objekt generated
+    ## values will subsequently be corrected, since they are wrong in case of interactions
+    ## because ngroups information is not available here
+    ausgabe <- calc.relimp(bootrun@boot$data, weights=wt, type = type, diff = diff, 
         rank = rank, rela = rela, always=always, groups=groups, 
         groupnames=groupnames)
+    g <- length(ausgabe@namen)-1
+    if (length(ausgabe@groupdocu)>0) g <- length(ausgabe@groupdocu[[2]])
+
     # extend output object
-    class(ausgabe) <- "relimplmbooteval"
+    ausgabe <- new("relimplmbooteval", ausgabe)  ## change UG for 1.3
     ausgabe@level <- level
     ausgabe@nboot <- bootrun@nboot
     ausgabe@bty <- bty
@@ -93,14 +95,16 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     for (a in c("lmg", "pmvd", "last", "first", "betasq", "pratt")) {
         if (a %in% type) {
             bootnames <- c(bootnames, paste(names[2:(g+1)], ".", a, sep = ""))
-            if (a %in% typesel) 
+            if (a %in% typesel) {
+                slot(ausgabe, a) <- bootrun@boot$t0[zaehl:(zaehl + g - 1)]
                 slot(ausgabe, paste(a, "boot", sep = ".")) <- bootrun@boot$t[, 
-                  zaehl:(zaehl + g - 1)]
+                  zaehl:(zaehl + g - 1)]}
             zaehl <- zaehl + g
             if (rank) {
                 bootnames <- c(bootnames, paste(names[2:(g+1)], ".", a, 
                   "rank", sep = ""))
                 if (a %in% typesel) 
+                  slot(ausgabe, paste(a, "rank", sep = ".")) <- bootrun@boot$t0[zaehl:(zaehl + g - 1)]
                   slot(ausgabe, paste(a, "rank", "boot", sep = ".")) <- bootrun@boot$t[, 
                     zaehl:(zaehl + g - 1)]
                 zaehl <- zaehl + g
@@ -109,6 +113,7 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
                 bootnames <- c(bootnames, paste(diffnam, ".", 
                   a, "diff", sep = ""))
                 if (a %in% typesel) 
+                  slot(ausgabe, paste(a, "diff", sep = ".")) <- bootrun@boot$t0[zaehl:(zaehl + g*(g - 1)/2-1)]
                   slot(ausgabe, paste(a, "diff", "boot", sep = ".")) <- matrix(bootrun@boot$t[, 
                     zaehl:(zaehl + g * (g - 1)/2 - 1)],1,g * (g - 1)/2)
                 zaehl <- zaehl + g * (g - 1)/2
@@ -125,6 +130,9 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
 
     colnames(bootrun@boot$t) <- bootnames
     names(bootrun@boot$t0) <- bootnames
+    if (!is.null(bootrun@vcov)){
+    colnames(bootrun@vcov) <- bootnames
+    rownames(bootrun@vcov) <- bootnames}
     ntype <- length(typname)
     percentages <- bootrun@boot$t0[paste(names[2:(g+1)], ".", matrix(typname, 
         g, ntype, byrow = T), sep = "")]
@@ -241,7 +249,7 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     }
     #show confidence intervals with rank marks
     #only possible, if ranks are bootstrapped
-       #initialize character matrix for showing sorted results with confidence info
+       #initialize (character) matrix for showing (sorted) results with confidence info
     if (rank && !norank) 
         mark <- matrix(rep("", (g * ntype + ntype - 1) * (3 * 
             nlev + 1)), g * ntype + ntype - 1, 3 * nlev + 1, 
@@ -313,31 +321,30 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
 
     # reduce number of displayed digits in percentages
     if (rank && !norank) 
-        mark[, c(1, (2 + nlev):(3 * nlev + 1))] <- substr(mark[, 
-            c(1, (2 + nlev):(3 * nlev + 1))], 1, 6)
-    ## else mark <- round(mark, digits = 4) moved to later character determination
+        mark[, c(1, (2 + nlev):(3 * nlev + 1))] <- format(round(as.numeric(mark[, 
+            c(1, (2 + nlev):(3 * nlev + 1))]), digits=4), nsmall=4, scientific=FALSE)
+    else mark <- format(round(mark, digits = 4), nsmall=4, scientific=FALSE) 
     if (sort && rank && !norank) 
-        marksort[, c(1, (2 + nlev):(3 * nlev + 1))] <- substr(marksort[, 
-            c(1, (2 + nlev):(3 * nlev + 1))], 1, 6)
+        marksort[, c(1, (2 + nlev):(3 * nlev + 1))] <- format(round(as.numeric(marksort[, 
+            c(1, (2 + nlev):(3 * nlev + 1))]), digits=4), nsmall=4, scientific=FALSE)
     if (sort && (!rank || norank)) 
-        marksort <- round(marksort, digits = 4)
-    if (sort) 
+        marksort <- format(round(marksort, digits = 4), nsmall=4, scientific=FALSE)
+    ## eliminate unwanted zeros or NAs between metrics in case of more than one metric
+    ## and output desired result
+    if (sort) {
+        if (ntype>1) {
+           for (i in 1:(ntype-1)) 
+             marksort[i*(g+1),]<-rep("",ncol(marksort))
+           }
         ausgabe@mark <- marksort
-    else ausgabe@mark <- mark
-
-    ## eliminate unwanted 0s instead of blanks
-    if (norank || !rank)
-    {
-    hilf <- matrix(substr(as.character(format(ausgabe@mark,scientific=F)),1,6),
-             nrow(ausgabe@mark),ncol(ausgabe@mark))
-    if (ntype>1) {
-       for (i in 1:(ntype-1)) 
-         hilf[i*(g+1),]<-rep("",ncol(hilf))
-    }
-    rownames(hilf) <- rownames(ausgabe@mark)
-    colnames(hilf) <- colnames(ausgabe@mark)
-    ausgabe@mark <- hilf
-    }
+        }
+    else {
+        if (ntype>1) {
+        for (i in 1:(ntype-1)) 
+           mark[i*(g+1),]<-rep("",ncol(mark))
+           }
+        ausgabe@mark <- mark
+        }
 
     # differences
     if (diff && !nodiff) {
@@ -369,7 +376,7 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
                        #i is the confidence level index
                    if (0 < difflower[i, k] | 0 > diffupper[i, 
                     k]) 
-                    hilf[k, i] <- "*"
+                    hilf[k, i] <- " * "
                   else hilf[k, i] <- " "
                 } # loop i
             } # loop k
@@ -398,13 +405,22 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
         } # loop aa
 
         ##reduce number of displayed digits in percentage differences
-        mark[, c(1, (2 + nlev):(3 * nlev + 1))] <- substr(mark[, 
-            c(1, (2 + nlev):(3 * nlev + 1))], 1, 6)
-        if (!sort) 
+        if (!sort) {
+            mark[, c(1, (2 + nlev):(3 * nlev + 1))] <- format(round(as.numeric(mark[, 
+                c(1, (2 + nlev):(3 * nlev + 1))]), digits=4), nsmall=4, scientific=FALSE)
+            if (ntype>1) {
+              for (i in 1:(ntype-1)) 
+                 mark[i * (g * (g - 1) / 2 + 1),] <- rep("", ncol(mark))
+               }
             ausgabe@markdiff <- mark
+            }
         if (sort) {
-            marksort[, c(1, (2 + nlev):(3 * nlev + 1))] <- substr(marksort[, 
-                c(1, (2 + nlev):(3 * nlev + 1))], 1, 6)
+            marksort[, c(1, (2 + nlev):(3 * nlev + 1))] <- format(round(as.numeric(marksort[, 
+                c(1, (2 + nlev):(3 * nlev + 1))]), digits=4), nsmall=4, scientific=FALSE)
+            if (ntype>1) {
+              for (i in 1:(ntype-1)) 
+                 marksort[i * (g * (g - 1) / 2 + 1),] <- rep("", ncol(marksort))
+               }
             ausgabe@markdiff <- marksort
         }
     } # if diff and !nodiff
@@ -414,6 +430,7 @@ function (bootrun, bty = "bca", level = 0.95, sort = FALSE, norank = FALSE,
     ausgabe@diff <- diff && !nodiff
     ausgabe@rank <- rank && !norank
     ausgabe@sort <- sort
+    ausgabe@est <- bootrun@boot$t0
+    ausgabe@vcov <- bootrun@vcov
     return(ausgabe)
 }
-

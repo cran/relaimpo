@@ -1,6 +1,7 @@
 "varicalc" <- 
-function (type, alle, covg, p, indices, variances, g, groups) 
+function (type, alle, covg, p, indices, variances, g, groups, ngroups=NULL, WW=NULL) 
 {
+if (!(is.null(ngroups) || length(groups)==length(ngroups))) stop ("unexpected error occurred in varicalc")
     # Author and copyright holder: Ulrike Groemping
 
     #This routine is distributed under GPL version 2 or newer.
@@ -21,12 +22,6 @@ function (type, alle, covg, p, indices, variances, g, groups)
         for (j in 1:(choose(g, k))) {
             if (is.null(groups)) diese <- jetzt[,j] + 1
             else diese <- list2vec(groups[jetzt[,j]])
-               
-#### ist das folgende neuer oder älter ???
-##            diese <- jetzt[,j] + 1
-##            cat(diese, "\n")
-##            cat(groups[[1]],"\n")
-##            if (!is.null(groups)) diese <- list2vec(groups[diese - 1])
 
             andere <- setdiff(alle, diese)
             varjetzt[j] <- (covg[andere, andere] - covg[andere, 
@@ -35,6 +30,21 @@ function (type, alle, covg, p, indices, variances, g, groups)
         }
         variances[[k + 1]] <- varjetzt
     }
+    ## change by ML
+    if (length(WW[[1]]) > 0) {
+      for (j in 2:(length(indices)-1)) {
+        if (!is.null(ngroups)) WWc <- apply(indices[[j]],2,checkWW,WW[[1]],ngroups)
+        else WWc <- apply(indices[[j]],2,checkWW,WW[[1]])
+        variances[[j]] <- variances[[j]][,WWc]
+        if (is.vector(indices[[j]][,WWc])) {
+           indices[[j]] <- matrix(indices[[j]][,WWc], ncol = 1)
+        } else {
+          indices[[j]] <- indices[[j]][,WWc]
+      }
+      }
+          indices[[2]] <- matrix(indices[[2]], nrow = 1)
+    }
+    ## change by ML end
     return(list(indices = indices, variances = variances))
 }
 

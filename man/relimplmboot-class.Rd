@@ -2,7 +2,7 @@
 \docType{class}
 \alias{relimplmboot-class}
 \alias{show,relimplmboot-method}
-\alias{print,relimplmboot-method}
+%\alias{print,relimplmboot-method}
 
 \title{Class relimplmboot }
 \description{  This is the class for output objects from function \code{boot.relimp}. It is needed as input to function \code{booteval.relimp}. }
@@ -25,13 +25,16 @@ Objects should only be created by calls to the function \code{boot.relimp}.
   }
 }
 \section{Methods}{
+  This documentation section documents S4 methods only. 
+  There is an analogous S3-method for printing.
   \describe{
-    \item{print}{~~meaningful error message, since objects of this class should not be printed }
-    \item{show}{~~identical to \code{print}}
+%    \item{print}{S3 method: meaningful error message, since objects of this class should not be printed }
+    \item{show}{S4 method: identical to \code{print}}
   }
 }
 \author{ Ulrike Groemping, TFH Berlin }
 \seealso{
-  See also \code{\link{boot.relimp}}, \code{\link{booteval.relimp}},\code{\link{relimplmbooteval-class}}
+  \code{\link{boot.relimp}}, \code{\link{booteval.relimp}},
+  \code{\link{relimplmbooteval-class}},\code{\link{relimplmbootMI-class}}
 }
 \keyword{classes}
