@@ -2,10 +2,10 @@
 #cat("sp",spalten,"ng:","\n")
 #for (i in 1:length(ngroups)) cat(ngroups[[i]],"\n")
 
-# Diese Funktion berechnet den Faktor für eine Modellpermutation,
-# also z.B. wie häufig die erste Variable an zweiter Stelle mit
+# Diese Funktion berechnet den Faktor fuer eine Modellpermutation,
+# also z.B. wie haeufig die erste Variable an zweiter Stelle mit
 # vorangegeangener zweiter Variable auftritt.
-# Alle Bedingungen müssen so gestellt werden, das die Hörwertigen
+# Alle Bedingungen muessen so gestellt werden, das die Hoerwertigen
 # zuletzt kommen, also z.B. alle zweifach WW vor den einfach WW.
 # WW = Wechselwirkung, HK = Hauptkompunenten
 
@@ -17,9 +17,9 @@
 ##    in den Spalten der Matrizen in indices herzustellen. 
 ##    Dort sind die Gruppen immer vorn (auch wenn aufgrund von Faktoren und WWen
 ##    entstanden.
-## ngroups enthält an erster Position den Effekt, der der ersten Gruppe entspricht
+## ngroups enthaelt an erster Position den Effekt, der der ersten Gruppe entspricht
 ##    usw., und erst nach den mehrspaltigen Effekten folgen die einspaltigen Effekte
-##    in ihrer natürlichen Reihenfolge.
+##    in ihrer natuerlichen Reihenfolge.
 ## Dies funktioniert derzeit nur, wenn alle Elemente von ngroups Zahlen 
 ## (keine Vektoren) sind.
 ## Falls echte Gruppen auftreten, liegen Vektoren vor; was dann?
@@ -30,7 +30,7 @@
  }
 
  # An erster Stelle (spalten) darf niemals eine WW stehen          
- # wird benötigt, weil davor und danach leer sein könnten
+ # wird benoetigt, weil davor und danach leer sein koennten
  if (any(spalten[1] == WW[[1]][,1])) {
     erg <- 0
     div.z <- 1
@@ -38,8 +38,8 @@
     davor <- NULL
     danach <- NULL
  } else {
-    davor <- andere ## sort nötig wg. Umordnung
-                    ## damit Veränderung von comb.WW funktioniert
+    davor <- andere ## sort necessary because of reordering
+                    ## so that change of comb.WW works
     if (!is.null(davor)) davor <- sort(davor,method="quick")
     if (is.null(spalten)) {
         danach <- 1:p
@@ -49,7 +49,7 @@
     } 
 
     WW.sa  <- list("davor" = davor, "danach" = danach)
-    # Bestimmung der Zusammenhänge (Farbkombination)
+    # Bestimmung der Zusammenhaenge (Farbkombination)
     WW2 <- WW
     new.order <- 1:p
     for (i in 1:nrow(WW2$WW)){
@@ -75,7 +75,7 @@
         comb <- new.order[WW.sa[[i]]]  ## davor-Elemente bzw. danach-Elemente
 
         comb.table <- table(comb)
-        # vorläufiger Teiler (innerhalb der Gruppen nur eine festgelegte Reihenfolge)
+        # vorlaeufiger Teiler (innerhalb der Gruppen nur eine festgelegte Reihenfolge)
         div.z[i] <- prod(factorial(as.numeric(comb.table)))
         
         # wird wieder verkleinert durch Wegnahme interner Reihenfolgen
@@ -90,11 +90,11 @@
                 comb.WW <- WW$WW
                 comb.s.WW <- comb.s[which(comb.s %in% comb.WW[,1])]
                 comb.s.HW <- comb.s[which(comb.s %in% comb.WW[,2])]
-                ## Nullsetzen der für diese Gruppe nicht relevanten Effekte
+                ## Nullsetzen der fuer diese Gruppe nicht relevanten Effekte
                 comb.WW[!(comb.WW %in% comb.s)] <- 0
                 for (k in 1:length(comb.s)){
                     ## comb.WW darf nur maximal-Index=Anzahl verschiedener Indizes haben
-                    ## WWen brauchen höhere Indizes als Hauptwirkungen
+                    ## WWen brauchen hoehere Indizes als Hauptwirkungen
                     ## Werte in comb.WW durch ihre Position in comb.s ersetzt
                     if (comb.s[k] %in% comb.s.HW) comb.WW[comb.WW==comb.s[k]] <- 
                           which(comb.s.HW==comb.s[k])
@@ -102,7 +102,7 @@
                           length(comb.s.HW) + which(comb.s.WW==comb.s[k])
                     }
                 comb.WW <- matrix(comb.WW[apply(comb.WW != 0,1,all),], ncol=2)
-                ## Nullzeilen gelöscht
+                ## Nullzeilen geloescht
                 if (length(comb.WW) > 0)
                     div.n[i] <- div.n[i]*sum(apply(jetzt,2,checkWW,WW = comb.WW,ord=TRUE))
                 else div.n[i] <- div.n[i]*factorial(length(comb.s))

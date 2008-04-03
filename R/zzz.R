@@ -13,7 +13,7 @@
 
 cat("This is the global version of package relaimpo.","\n")
 cat( "If you are a non-US user, a version with the interesting additional metric pmvd is available","\n")
-cat("from Ulrike Groempings web site at www.tfh-berlin.de/~groemp.","\n")
+cat("from Ulrike Groempings web site at prof.tfh-berlin.de/groemping/.","\n")
 
 }
 

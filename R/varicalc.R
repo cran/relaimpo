@@ -15,9 +15,9 @@ if (!(is.null(ngroups) || length(groups)==length(ngroups))) stop ("unexpected er
     for (k in liste) {
         jetzt <- nchoosek(g, k)
         indices[[k + 1]] <- jetzt
-###bevor man mit den Gruppen arbeiten kann, muss man zunächst eine neue Reihenfolge festlegen
+###bevor man mit den Gruppen arbeiten kann, muss man zunaechst eine neue Reihenfolge festlegen
 ###der Einfachheit halber die Gruppen zuerst, dann die ungruppierten
-###groups kann nach Erstellung der Dokumentationsmatrix durch die Einzelspalten ergänzt werden
+###groups kann nach Erstellung der Dokumentationsmatrix durch die Einzelspalten ergaenzt werden
         varjetzt <- matrix(0, 1, choose(g, k))
         for (j in 1:(choose(g, k))) {
             if (is.null(groups)) diese <- jetzt[,j] + 1

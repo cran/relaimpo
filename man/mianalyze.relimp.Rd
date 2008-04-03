@@ -157,7 +157,7 @@ Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivari
 
 Little, R.J.A. and Rubin, D.B. (2002) \emph{Statistical Analysis with Missing Data}, Wiley, New York.
 
-Go to \url{http://www.tfh-berlin.de/~groemp} for further information and references.
+Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.
 }
 \author{ Ulrike Groemping, TFH Berlin }
 

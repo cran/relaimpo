@@ -37,7 +37,7 @@ Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March
 
 Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivariate and Multivariate Analysis}, Glenview IL: Scott, Foresman.
 
-Go to \url{http://www.tfh-berlin.de/~groemp} for further information and references.}
+Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.}
 \section{Acknowlegment }{ This package uses as an internal function the function \code{nchoosek} from \pkg{vsn}, authored by Wolfgang Huber, available under LGPL. }
 \author{ Ulrike Groemping, TFH Berlin }
 \note{ There are two versions of this package. The version on CRAN is globally licensed under GPL version 2 (or later). 

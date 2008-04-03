@@ -31,8 +31,8 @@ function (implist, level = 0.95, sort = FALSE, ...,
     # strata is an expression for strata definition as needed in function svydesign
     # ids is an expression for Cluster ID definition as needed in function svydesign
     
-    rank <- FALSE  ### rank = TRUE nicht unterstützt
-    fixed <- FALSE  ### fixed = TRUE nicht unterstützt
+    rank <- FALSE  ### rank = TRUE nicht unterstuetzt
+    fixed <- FALSE  ### fixed = TRUE nicht unterstuetzt
     b <- b
     
     # error control
@@ -79,7 +79,7 @@ function (implist, level = 0.95, sort = FALSE, ...,
         stop("invalid confidence levels requested: ", paste(level,
             collapse = " "))
 
-## nur calc.relimp durchführen und ein Objekt des Typs relimplm zurückgeben
+## nur calc.relimp durchfuehren und ein Objekt des Typs relimplm zurueckgeben
 if (no.CI){
   if (is.null(formula)) 
         if (!is.null(deslist)) 
@@ -165,8 +165,8 @@ else
       if (!bootlist.out)
       bootlist[[i]]@boot$t <- bootlist[[i]]@boot$t0  ## save space
 
-#### anschließend MIcombine für die Berechnungen der Kombinationen
-#### Ausgabe-Verhalten aus diesem Programm (ohne den Kram für Ränge)
+#### anschließend MIcombine fuer die Berechnungen der Kombinationen
+#### Ausgabe-Verhalten aus diesem Programm (ohne den Kram fuer Raenge)
 
 bootrun <- bootlist[[1]]  ## for checks on groups etc., since should be same for all list elements
     nlev <- length(level)

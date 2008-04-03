@@ -93,7 +93,7 @@ calc.relimp.default.intern to output further detail needed for usage from within
 
 }
 
-\references{ Go to \url{http://www.tfh-berlin.de/~groemp} for further information and references.}
+\references{ Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.}
 \author{ Ulrike Groemping, TFH Berlin }
 
 \seealso{ \pkg{\link{relaimpo}}, \code{\link{calc.relimp}}, \code{\link{booteval.relimp}}, 

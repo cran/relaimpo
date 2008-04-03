@@ -135,7 +135,6 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
                 stop("Names in always must come from the names of the regressors.")
             if (is.character(always)) always <- which(names %in% always)
 
-             ## change UG 1.3: Block bis zur Abschlussmarkierung hinzugefügt
        if ((is.null(x) && !(ncol(y) == nrow(y))) || !is.null(x)) {
              ## not a covariance matrix, so that n is available and weights make sense
              wt <- rep(1/n, n)
@@ -158,7 +157,6 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
                 if (!length(wt) == n) stop("Length of object and length of design do not match.")
                 }
              wt <- wt[nomiss]  }
-             ## bis hierher hinzugefügt
     
     #### error checks for groups-related things
     #### groups is transferred into a list of vectors
