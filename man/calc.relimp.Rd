@@ -202,10 +202,17 @@ if \code{lmg} has been requested in \code{type} and \code{diff=TRUE}}
   \item{lmg.rank }{rank of the regressors relative contributions obtained from the \code{lmg} method, 
 if \code{lmg} has been requested in \code{type} and \code{rank=TRUE}}
   \item{metric, metric.diff, metric.rank }{analogous to \code{lmg} for other metrics}
+  \item{ave.coeffs}{average coefficients for variables not not requested by always only 
+            for models of different sizes;
+            
+            note that coefficients refer to modeling residuals after adjusting out variables 
+            listed in always (both from response and other explanatory variables)}
   \item{namen}{names of variables, starting with response}
   \item{type}{character vector of metrics available}
   \item{rela}{Have metrics been normalized to sum 100\% ?}
-  \item{always}{column numbers of variables always in the model}
+  \item{always}{column numbers of variables always in the model; 
+         in case of factors, the column numbers given here are not identical to those in 
+         the call to \code{calc.relimp}, but refer to the columns of the model matrix}
   \item{alwaysnam}{names of variables always in the model}
   \item{call}{contains the call that generated the object}
 }

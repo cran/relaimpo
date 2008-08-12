@@ -41,9 +41,12 @@ Objects should only be created by calls to the function \code{calc.relimp}.
     \item{\code{namen}:}{Object of class \code{"character"}: variable names, starting with name for response }
     \item{\code{nobs}:}{Object of class \code{"numeric"}: number of valid observations used in analysis 
                                             (available only if calculations are based on raw data) }
+    \item{\code{ave.coeff}:}{Object of class \code{"matrix"}: average coefficients for models of different sizes }
     \item{\code{type}:}{Object of class \code{"character"}: metrics that have been calculated }
     \item{\code{rela}:}{Object of class \code{"logical"}: TRUE means that metrics have been normalized to sum 100pct }
-    \item{\code{always}:}{Object of class \code{"numintnull"}: variables always in the model (adjusted for) }
+    \item{\code{always}:}{Object of class \code{"numintnull"}: variables always in the model (adjusted for),
+       in terms of columns in the model matrix (i.e. in case of factors in the model, there are more entries 
+       than in the call to function \code{calc.relimp}; first possible column is 2 (1 reserved for response)) }
     \item{\code{alwaysnam}:}{Object of class \code{"charnull"}: variable names of variables always in model }
   }
 }

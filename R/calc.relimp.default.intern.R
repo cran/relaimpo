@@ -501,15 +501,19 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     #first element of list unconditional, list initialized in full length
     indices <- rep(list(0), g + 1)
     variances <- rep(list(covg[1, 1]), g + 1)
+    betas <- matrix(NA,p,g)
+    betas[,g] <- solve(covg[-1,-1],covg[-1,1])
+
     #conditioning on all variables, i.e. var=s^2
     indices[[g + 1]] <- matrix(1:g, g, 1)
     variances[[g + 1]] <- covg[1:1] - covg[1, 2:(p + 1)] %*% 
         solve(covg[2:(p + 1), 2:(p + 1)], covg[2:(p + 1), 1])
 
-    hilf <- varicalc(type, alle, covg, p, indices, variances, g, groups, ngroups, WW)
+    hilf <- varicalc(type, alle, covg, p, indices, variances, betas, g, groups, ngroups, WW)
 
     indices <- hilf$indices
     variances <- hilf$variances
+    betas <- hilf$betas
 
     #output R-squared in order to show the total that is subdivided
     if (!is.null(always)) ausgabe <- new("relimplm", var.y = var.y, 
@@ -584,6 +588,17 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
            # and makes it possible for type to be a list without generating an error
     ## change UG 1.3: incorporate call
     slot(ausgabe, "call") <- sys.call(which = 1)
+    if (is.null(groups) & !is.null(betas)) {
+       rownames(betas) <- names[-1]
+       colnames(betas) <- paste(1:g,c("X",rep("Xs",g-1)),sep="")
+    }
+    else {
+       if (!is.null(betas)) {
+         rownames(betas) <- colnames(covall)[-c(1,always)]
+         colnames(betas) <- paste(1:g,c("group",rep("groups",g-1)),sep="")
+       }
+    }
+    slot(ausgabe, "ave.coeffs") <- betas
     if (!is.null(groups)) slot(ausgabe, "groupdocu") <- groupdocu
     if (test)
        {

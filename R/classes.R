@@ -32,7 +32,7 @@ setClass("relimplm",representation=representation(
     lmg.diff="numeric",pmvd.diff="numeric",first.diff="numeric",
     last.diff="numeric",
     betasq.diff="numeric",pratt.diff="numeric",
-    namen="character",nobs="numeric",type="character",rela="logical",
+    namen="character",nobs="numeric",ave.coeffs="numintmatnull",type="character",rela="logical",
     always="numintnull",alwaysnam="charnull", groupdocu="list", call="langnull"))
 setValidity("relimplm",function(object){
     p<-length(slot(object,"namen"))-1

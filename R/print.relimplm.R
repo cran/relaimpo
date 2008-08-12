@@ -1,5 +1,5 @@
 "print.relimplm" <-
-function (x, ...) 
+function (x, ..., show.coeffs = ifelse(any(c("lmg", "pmvd") %in% x@type) & is.null(x@always), TRUE, FALSE)) 
 {
     if (!(is(x, "relimplm"))) 
         stop("x must be the output from function calc.relimp")
@@ -88,5 +88,11 @@ function (x, ...)
     else print(matrix(cbind(x@lmg, x@pmvd, x@last, x@first), 
         g, length(type), dimnames = list(x@groupdocu[[1]], type)))
 
+    if (show.coeffs & !is.null(x@ave.coeffs)) {
+      cat("\n")
+      cat("Average coefficients for different model sizes:", "\n")
+      cat("\n")
+      print(x@ave.coeffs)
+    }
 }
 

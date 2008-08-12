@@ -28,7 +28,7 @@
 
 }
 \usage{
-\method{print}{relimplm}(x,...)
+\method{print}{relimplm}(x,...,show.coeffs = ifelse(any(c("lmg", "pmvd") \%in\% x@type) & is.null(x@always), TRUE, FALSE))
 
 \method{plot}{relimplm}(x,...,names.abbrev=4, ylim=NULL, main=NULL, cex.title=1.5)
 
@@ -46,6 +46,10 @@
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{ \code{x} is an output object from package \pkg{relaimpo} of the required class }
+  \item{show.coeffs}{ \code{show.coeffs}, if set to \code{FALSE}, suppresses printing of averaged coefficients, 
+           which are otherwise printed, if \code{lmg} and/or \code{pmvd} are among the metrics in \code{x} and 
+           \code{always} is \code{NULL}. 
+           See details for a discussion of the averaged coefficients, if \code{always} is not \code{NULL}.}
   \item{object}{ \code{object} is an object of class \code{relimplmbootMI} 
              (output from function \code{mianalyze.relimp}) }
   \item{...}{ further arguments to functions }
@@ -68,7 +72,17 @@ coincide with the S3 methods for \code{print} and an S4 method for coercing obje
 (of their numeric elements).
 
 Print (and show) methods produce annotated output for \code{calc.relimp}, \code{booteval.relimp}, and 
-\code{mianalyze.relimp} (or the objects produced by these functions). 
+\code{mianalyze.relimp} (or the objects produced by these functions). Since version 2.1, \code{calc.relimp} 
+provides averaged coefficients for different sub model sizes (slot \code{ave.coeffs} of class \code{relimplm}), 
+if metrics based on averaging over orderings (\code{lmg} and/or \code{pmvd}) are calculated. 
+These are per default printed if the slot \code{always} of \code{x} is \code{NULL}. 
+If some variables were forced into all models (non-NULL \code{always}), the averaged coefficients 
+refer to the adjusted model after taking residuls from regressions on the \code{always}-columns 
+of the X-matrix for both response and the other columns of the X-matrix. The reason is that these could be 
+easily and cheaply implemented into the existing code and do correspond to sub models relevant 
+for \code{lmg} and \code{pmvd}. Users who are interested in these coefficients, can set option \code{show.coeffs=TRUE} 
+in spite of non-NULL \code{always}. 
+
 The plot methods produce barplots of relative contributions, 
 either of the metrics alone for output objects of class \code{relimplm} from function \code{calc.relimp}, 
 or of the metrics with lines indicating confidence intervals for output objects of class \code{relimplmbooteval} 

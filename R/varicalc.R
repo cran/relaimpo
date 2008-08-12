@@ -1,5 +1,5 @@
 "varicalc" <- 
-function (type, alle, covg, p, indices, variances, g, groups, ngroups=NULL, WW=NULL) 
+function (type, alle, covg, p, indices, variances, betas, g, groups, ngroups=NULL, WW=NULL) 
 {
 if (!(is.null(ngroups) || length(groups)==length(ngroups))) stop ("unexpected error occurred in varicalc")
     # Author and copyright holder: Ulrike Groemping
@@ -14,12 +14,21 @@ if (!(is.null(ngroups) || length(groups)==length(ngroups))) stop ("unexpected er
         liste <- 1:(g - 1)
     for (k in liste) {
         jetzt <- nchoosek(g, k)
+        if (length(WW[[1]]) > 0) {
+          if (!is.null(ngroups)) WWc <- apply(jetzt,2,checkWW,WW[[1]],ngroups)
+          else WWc <- apply(jetzt,2,checkWW,WW[[1]])
+          jetzt <- jetzt[,WWc]
+          if (is.vector(jetzt)) 
+             jetzt <- matrix(jetzt, ncol = 1)
+          if (k==1) jetzt <- matrix(jetzt, nrow=1)
+        }
         indices[[k + 1]] <- jetzt
+        betahilf <- matrix(NA,p,ncol(jetzt))
 ###bevor man mit den Gruppen arbeiten kann, muss man zunaechst eine neue Reihenfolge festlegen
 ###der Einfachheit halber die Gruppen zuerst, dann die ungruppierten
 ###groups kann nach Erstellung der Dokumentationsmatrix durch die Einzelspalten ergaenzt werden
-        varjetzt <- matrix(0, 1, choose(g, k))
-        for (j in 1:(choose(g, k))) {
+        varjetzt <- matrix(0, 1, ncol(jetzt))
+        for (j in 1:ncol(jetzt)) {
             if (is.null(groups)) diese <- jetzt[,j] + 1
             else diese <- list2vec(groups[jetzt[,j]])
 
@@ -27,24 +36,12 @@ if (!(is.null(ngroups) || length(groups)==length(ngroups))) stop ("unexpected er
             varjetzt[j] <- (covg[andere, andere] - covg[andere, 
                 diese] %*% solve(covg[diese, diese], matrix(covg[diese, 
                 andere], length(diese), p + 1 - length(diese))))[1, 1]
+               betahilf[diese-1,j] <- solve(covg[diese, diese], covg[diese,1])
         }
         variances[[k + 1]] <- varjetzt
+        betas[,k] <- rowMeans(betahilf,na.rm=TRUE)
     }
-    ## change by ML
-    if (length(WW[[1]]) > 0) {
-      for (j in 2:(length(indices)-1)) {
-        if (!is.null(ngroups)) WWc <- apply(indices[[j]],2,checkWW,WW[[1]],ngroups)
-        else WWc <- apply(indices[[j]],2,checkWW,WW[[1]])
-        variances[[j]] <- variances[[j]][,WWc]
-        if (is.vector(indices[[j]][,WWc])) {
-           indices[[j]] <- matrix(indices[[j]][,WWc], ncol = 1)
-        } else {
-          indices[[j]] <- indices[[j]][,WWc]
-      }
-      }
-          indices[[2]] <- matrix(indices[[2]], nrow = 1)
-    }
-    ## change by ML end
-    return(list(indices = indices, variances = variances))
+    if (!any(c("lmg", "pmvd") %in% type)) betas <- NULL
+    return(list(indices = indices, variances = variances, betas = betas))
 }
 
