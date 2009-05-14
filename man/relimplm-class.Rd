@@ -67,7 +67,7 @@ next three in non-US version only: \code{pmvd}, \code{pmvd.rank}, \code{pmvd.dif
  %   \item{\$}{S3 method: extracts slots with \$ extractor }
 }
 }
-\author{ Ulrike Groemping, TFH Berlin }
+\author{ Ulrike Groemping, BHT Berlin }
 
 
 \seealso{

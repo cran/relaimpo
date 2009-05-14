@@ -227,7 +227,7 @@ Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivari
 
 Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.
 }
-\author{ Ulrike Groemping, TFH Berlin }
+\author{ Ulrike Groemping, BHT Berlin }
 \note{ There are two versions of this package. The version on CRAN is globally licensed under GPL version 2 (or later). 
 There is an extended version with the interesting additional metric \code{pmvd} that is licensed according to GPL version 2
 under the geographical restriction "outside of the US" because of potential issues with US patent 6,640,204. 

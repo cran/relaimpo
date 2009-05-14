@@ -125,7 +125,7 @@ Class \code{"relimplm"}, directly.
 %    \item{\$}{S3 method: extracts slots with \$ extractor }
     }
 }
-\author{ Ulrike Groemping, TFH Berlin}
+\author{ Ulrike Groemping, BHT Berlin}
 \seealso{
   \code{\link{relimplm-class}}, \code{\link{relimplmboot-class}}, \code{\link{relimplmbootMI-class}}, 
     \code{\link{booteval.relimp}}, \code{\link{print.relimplmbooteval}}, 

@@ -38,10 +38,10 @@ mianalyze.relimp(implist, level = 0.95, sort = FALSE, ..., b = 50, type = "lmg",
        from all imputed data sets in implist. Currently, \code{no.CI = TRUE} is the only setting for which 
        \code{mianalyze.relimp} works when using models with factors, groups or interactions.}
   \item{rela}{ cf. \code{\link{calc.relimp}}.}
-  \item{always }{ cf. \code{\link{calc.relimp}}.}
-  \item{groups }{ cf. \code{\link{calc.relimp}}.}
-  \item{groupnames }{ cf. \code{\link{calc.relimp}}.}
-  \item{deslist }{ is a list of design object of class \code{survey.design} (cf. package \code{survey}).
+  \item{always}{ cf. \code{\link{calc.relimp}}.}
+  \item{groups}{ cf. \code{\link{calc.relimp}}.}
+  \item{groupnames}{ cf. \code{\link{calc.relimp}}.}
+  \item{deslist}{ is a list of design object of class \code{survey.design} (cf. package \code{survey}).
        You can EITHER specify a \code{deslist} OR \code{weights} and/or \code{strata} and/or \code{ids}. 
        Note that the design list must contain the same data objects (in the \dQuote{variables} element) 
        that are listed in \code{implist}, so that a lot of storage space is needed in case of large datasets.
@@ -53,22 +53,22 @@ mianalyze.relimp(implist, level = 0.95, sort = FALSE, ..., b = 50, type = "lmg",
   \item{bootlist.out}{ If TRUE, the individual bootstrap results for each multiply imputed data set 
        are stored in the bootlist slot of the output object (may be storage-intensive).
        }
-  \item{formula }{ cf. \code{\link{boot.relimp}}; 
+  \item{formula}{ cf. \code{\link{boot.relimp}}; 
        NOTE: If no.CI = FALSE, i.e. confidence intervals are not suppressed, 
        \code{formula} has to follow the same restrictions as mentioned under item \code{design} for 
        \code{\link{boot.relimp}} (no calculated variables, no interaction terms, no factors),
        since confidence interval calculations in \code{mianalyze.relimp} are design-based,
        even if no \code{deslist-}option is given.}
-  \item{weights }{ is a vector of case weights for the observations in the data frame (or matrix).
+  \item{weights}{ is a vector of case weights for the observations in the data frame (or matrix).
        You can EITHER specify \code{weights} OR a \code{deslist}. 
        If \code{weights} is NULL, equal weights are assumed, unless otherwise specified in \code{deslist}.
        For the different types of weights and their appropriate treatment for obtaining confidence intervals,
        cf. the \dQuote{Details} section of \code{\link{boot.relimp}}.}
-  \item{strata }{ is a strata request that will be handed to function \code{svydesign} for defining the 
+  \item{strata}{ is a strata request that will be handed to function \code{svydesign} for defining the 
        strata in a survey design (to be given to mianalyze without the \dQuote{\~}).
        You can EITHER specify \code{strata} OR a \code{deslist}. 
        If \code{strata} is NULL, one stratum is assumed, unless otherwise specified in \code{deslist}.}
-  \item{ids }{ is an id-request that will be handed to function \code{svydesign} for defining the clusters 
+  \item{ids}{ is an id-request that will be handed to function \code{svydesign} for defining the clusters 
        in a survey design (to be given to mianalyze without the \dQuote{\~}).
        You can EITHER specify \code{ids} OR a \code{deslist}. 
        If \code{ids} is NULL, it is assumed that there are no clusters, 
@@ -131,17 +131,17 @@ mianalyze.relimp(implist, level = 0.95, sort = FALSE, ..., b = 50, type = "lmg",
 
 In addition to the items described for function \code{\link{calc.relimp}}, which are also available here, 
 the following items from class \code{relimplmbootMI} may be of interest for further calculations:
-  \item{metric.lower }{matrix of lower confidence bounds for \dQuote{metric}: one row for each confidence level, 
+  \item{metric.lower}{matrix of lower confidence bounds for \dQuote{metric}: one row for each confidence level, 
         one column for each element of \dQuote{metric}. \dQuote{metric} can be any of \code{lmg}, \code{lmg.rank}, 
         \code{lmg.diff}, ... 
        (replace \code{lmg} with other available relative importance metrics, cf. \code{\link{calc.relimp}})}
-  \item{metric.upper }{matrix of upper confidence bounds for \dQuote{metric}: one row for each confidence level, 
+  \item{metric.upper}{matrix of upper confidence bounds for \dQuote{metric}: one row for each confidence level, 
         one column for each element of \dQuote{metric}}
-  \item{nboot }{number of bootstrap runs underlying the evaluations}
-  \item{level }{confidence level}
-  \item{MIresult } {object of class \code{MIresult} that can be processed by the function summary.MIresult 
+  \item{nboot}{number of bootstrap runs underlying the evaluations}
+  \item{level}{confidence level}
+  \item{MIresult}{object of class \code{MIresult} that can be processed by the function summary.MIresult 
        from package survey}
-  \item{bootlist } {only available if bootlist.out=TRUE has been chosen; 
+  \item{bootlist}{only available if bootlist.out=TRUE has been chosen; 
        list of objects of class boot.relimp; each list element can be input to function 
        \code{\link{booteval.relimp}} }
 }
@@ -159,7 +159,7 @@ Little, R.J.A. and Rubin, D.B. (2002) \emph{Statistical Analysis with Missing Da
 
 Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.
 }
-\author{ Ulrike Groemping, TFH Berlin }
+\author{ Ulrike Groemping, BHT Berlin }
 
 \note{ There are two versions of this package. The version on CRAN is globally licensed under GPL version 2 (or later). 
 There is an extended version with the interesting additional metric \code{pmvd} that is licensed according to GPL version 2

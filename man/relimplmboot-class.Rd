@@ -32,7 +32,7 @@ Objects should only be created by calls to the function \code{boot.relimp}.
     \item{show}{S4 method: identical to \code{print}}
   }
 }
-\author{ Ulrike Groemping, TFH Berlin }
+\author{ Ulrike Groemping, BHT Berlin }
 \seealso{
   \code{\link{boot.relimp}}, \code{\link{booteval.relimp}},
   \code{\link{relimplmbooteval-class}},\code{\link{relimplmbootMI-class}}

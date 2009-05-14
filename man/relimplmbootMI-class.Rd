@@ -110,7 +110,7 @@ Objects should only be created by calls to function \code{mianalyze.relimp}.
 %    \item{plot}{ S3-method: plots estimated proportions with indication of confidence intervals }
 %    \item{\$}{S3 method: extracts slots with \$ extractor }
     }
-\author{ Ulrike Groemping, TFH Berlin}
+\author{ Ulrike Groemping, BHT Berlin}
 \seealso{
     \code{\link{relimplm-class}}, \code{\link{relimplmbooteval-class}}, 
     \code{\link{booteval.relimp}}, \code{\link{print.relimplmbootMI}}, 

@@ -99,7 +99,7 @@ the confidence level versus the level used in the original run (with interval bo
 Because of a defined S3-extraction method, 
 slots of classes \code{relimplm}, \code{relimplmbooteval} and \code{relimplmbootMI} can be extracted not only 
 with the @ extractor but also with \$. 
-Hence, output elements from functions \code{calc.relimp}, code{booteval.relimp}, and code{mianalyze.relimp}
+Hence, output elements from functions \code{calc.relimp}, \code{booteval.relimp}, and \code{mianalyze.relimp}
 can be extracted as though the output objects were lists.
 
 Note that there also is an an internally-used class relimplmtest that permits the internal function 
@@ -108,7 +108,7 @@ calc.relimp.default.intern to output further detail needed for usage from within
 }
 
 \references{ Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.}
-\author{ Ulrike Groemping, TFH Berlin }
+\author{ Ulrike Groemping, BHT Berlin }
 
 \seealso{ \pkg{\link{relaimpo}}, \code{\link{calc.relimp}}, \code{\link{booteval.relimp}}, 
        \code{\link{mianalyze.relimp}}, 
