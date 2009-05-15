@@ -1,7 +1,7 @@
 Package: relaimpo
 Title: Relative importance of regressors in linear models
-Version: 2.1-1
-Date: 2009-05-14
+Version: 2.1-2
+Date: 2009-05-15
 Author: Ulrike Groemping, with contributions from Matthias Lehrkamp
 Description: relaimpo provides several metrics for assessing relative
         importance in linear models. These can be printed, plotted and
@@ -18,6 +18,6 @@ LazyLoad: yes
 Encoding: latin1
 URL: http://prof.tfh-berlin.de/groemping/relaimpo/,
         http://prof.tfh-berlin.de/groemping/
-Packaged: Thu May 14 16:37:21 2009; Grömping
+Packaged: 2009-05-15 22:07:02 UTC; Grömping
 Repository: CRAN
-Date/Publication: 2009-05-15 11:27:09
+Date/Publication: 2009-05-17 16:22:08

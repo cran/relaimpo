@@ -1,5 +1,9 @@
 Changes for R-package relaimpo
 
+Version 2.1-2 (May 15th, 2009)
+Changes from previous versions (globally licenced CRAN version without pmvd)
+o now really updated CITATION file to conform to standards
+
 Version 2.1-1 (May 14th, 2009)
 Changes from previous versions (globally licenced CRAN version without pmvd)
 o updated CITATION file to conform to standards
