@@ -22,6 +22,10 @@ Objects should only be created by calls to the function \code{boot.relimp}.
     \item{\code{nobs}:}{Object of class \code{"numeric"}: number of valid observations used in calculations }
     \item{\code{always}:}{Object of class \code{"numintnull"}: variables always in the model }
     \item{\code{alwaysnam}:}{Object of class \code{"charnull"}: variable names of variables always in model }
+    \item{\code{groupdocu}:}{Object of class \code{"list"}: information on group definitions }
+    \item{\code{wt}:}{Object of class \code{"numintnull"}: observation weights }
+    \item{\code{vcov}:}{Object of class \code{"numintmatnull"}: variance-covariance matrix of the estimate}
+    \item{\code{call}:}{Object of class \code{"langnull"}: the call that created the object }
   }
 }
 \section{Methods}{

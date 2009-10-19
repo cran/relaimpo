@@ -139,7 +139,7 @@ the following items from class \code{relimplmbootMI} may be of interest for furt
         one column for each element of \dQuote{metric}}
   \item{nboot}{number of bootstrap runs underlying the evaluations}
   \item{level}{confidence level}
-  \item{MIresult}{object of class \code{MIresult} that can be processed by the function \code{summary.MIresult} 
+  \item{MIresult}{object of class \code{MIresult} that can be processed by the function summary.MIresult 
        from package survey}
   \item{bootlist}{only available if bootlist.out=TRUE has been chosen; 
        list of objects of class boot.relimp; each list element can be input to function 

@@ -1,5 +1,15 @@
 Changes for R-package relaimpo
 
+Version 2.1-4 (Oct 19th, 2009)
+Changes from previous versions
+o completed fix of slot information in documentation
+
+Version 2.1-3 (Oct 19th, 2009)
+Changes from previous versions
+o re-included version footer into CITATION file
+o removed Umlauts from CITATION for removing MacOS warnings 
+o fixed slot information in documentation
+
 Version 2.1-2 (May 15th, 2009)
 Changes from previous versions (globally licenced CRAN version without pmvd)
 o now really updated CITATION file to conform to standards
