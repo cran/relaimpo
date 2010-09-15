@@ -15,8 +15,8 @@ function (x, ..., names.abbrev = 4, ylim=NULL, main=NULL, cex.title=1.5)
     else ylab <- "% of response variance"
     if (x@rela && !is.null(x@always)) ylab <- expression("% of remaining " * R^2)
     if (is.null(ylim)){
-    maxi <- max(x@lmg, x@pmvd, x@last, x@first, x@betasq, x@pratt)
-    mini <- min(0, x@lmg, x@pmvd, x@last, x@first, x@betasq, x@pratt)
+    maxi <- max(x@lmg, x@pmvd, x@last, x@first, x@betasq, x@pratt, x@genizi, x@car)
+    mini <- min(0, x@lmg, x@pmvd, x@last, x@first, x@betasq, x@pratt, x@genizi, x@car)
         if (maxi>=0.5) axmax <- 10 * ceiling(10 * maxi)
         else {
         if (maxi>=0.1) axmax <- 5 * ceiling(20 * maxi)
@@ -57,6 +57,8 @@ function (x, ..., names.abbrev = 4, ylim=NULL, main=NULL, cex.title=1.5)
             par(mfrow = c(2, 2), oma=oma)
         if (ntype > 4) 
             par(mfrow = c(2, 3), oma=oma)
+        if (ntype > 6) 
+            par(mfrow = c(2, 4), oma=oma)
         if ("lmg" %in% x@type) 
             barplot(100 * x@lmg, ylab = ylab, main = "Method LMG",
                 names.arg = xnames, ylim = c(axmin, axmax), xlab = xlab)
@@ -74,6 +76,12 @@ function (x, ..., names.abbrev = 4, ylim=NULL, main=NULL, cex.title=1.5)
                 names.arg = xnames, ylim = c(axmin, axmax), xlab = xlab)
         if ("pratt" %in% x@type) 
             barplot(100 * x@pratt, ylab = ylab, main = "Method Pratt", 
+                names.arg = xnames, ylim = c(axmin, axmax), xlab = xlab)
+        if ("genizi" %in% x@type) 
+            barplot(100 * x@genizi, ylab = ylab, main = "Method Genizi", 
+                names.arg = xnames, ylim = c(axmin, axmax), xlab = xlab)
+        if ("car" %in% x@type) 
+            barplot(100 * x@car, ylab = ylab, main = "Method CAR", 
                 names.arg = xnames, ylim = c(axmin, axmax), xlab = xlab)
         title(main=main, outer=T, cex.main=cex.title)
         mtext(bquote(R^2==.(100*round(x@R2,4)) * .(eval(reltext))), side = 1, line=1.5, outer=T, cex=1, adj=0.5)

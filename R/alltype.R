@@ -1,2 +1,2 @@
-alltype <- function(){c("lmg","last", "first", "betasq", "pratt")}
+alltype <- function(){c("lmg","last", "first", "betasq", "pratt", "genizi", "car")}
 

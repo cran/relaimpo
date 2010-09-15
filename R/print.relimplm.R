@@ -83,7 +83,7 @@ function (x, ..., show.coeffs = ifelse(any(c("lmg", "pmvd") %in% x@type) & is.nu
     cat("\n")
     type <- slot(x, "type")
     if (!grouped) print(matrix(cbind(x@lmg, x@pmvd, x@last, x@first, x@betasq, 
-        x@pratt), p, length(type), dimnames = list(x@namen[2:(p + 
+        x@pratt, x@genizi, x@car), p, length(type), dimnames = list(x@namen[2:(p + 
         1)], type)))
     else print(matrix(cbind(x@lmg, x@pmvd, x@last, x@first), 
         g, length(type), dimnames = list(x@groupdocu[[1]], type)))

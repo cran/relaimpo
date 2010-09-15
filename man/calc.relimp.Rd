@@ -91,7 +91,7 @@ calc.relimp.lm(object, type = "lmg", groups = NULL, groupnames=NULL, always = NU
   \item{type   }{ can be a character string, character vector or list of character strings.
        It is the collection of metrics that are to be calculated. 
        Available metrics: \code{lmg}, \code{pmvd} (non-US version only), \code{last}, \code{first}, 
-       \code{betasq}, \code{pratt}. For brief sketches of their meaning cf. details section. }
+       \code{betasq}, \code{pratt}, \code{genizi} and \code{car}. For brief sketches of their meaning cf. details section. }
   \item{diff   }{ logical; if TRUE, pairwise differences between the relative contributions are calculated; default FALSE }
   \item{rank   }{ logical; if TRUE, ranks of regressors in terms of relative contributions are calculated; default TRUE }
   \item{rela   }{ is a logical requesting relative importances summing to 100\% (\code{rela=TRUE}). 
@@ -102,7 +102,9 @@ calc.relimp.lm(object, type = "lmg", groups = NULL, groupnames=NULL, always = NU
        valid character strings are all column names of \code{object} or \code{x} respectively 
        that refer to regressor variables. Numbers and names cannot be mixed. 
 
-       Relative importance is only assessed for the variables not selected in \code{always}. }
+       Relative importance is only assessed for the variables not selected in \code{always}. 
+       
+       This option currently does not work for metrics \code{genizi} and \code{car}.}
   \item{groups }{ is a list of vectors of column numbers or names of variables to be combined into groups. 
        If only one group is needed, a vector can be given. The numbers and character strings needed are of the same form 
        as for \code{always}. 
@@ -110,7 +112,8 @@ calc.relimp.lm(object, type = "lmg", groups = NULL, groupnames=NULL, always = NU
        Relative importance is only allocated between groups of regressors, no subdivision within groups is calculated. 
        Regressors that do not occur in any group are included as singletons.
        A regressor must not occur in \code{always} and in \code{groups}. Also, groups cannot be used with a linear model or a formula 
-       in case of higher order effects (interactions).}
+       in case of higher order effects (interactions). Finally, \code{groups} only works with the four metrics 
+       \code{lmg}, \code{pmvd}, \code{last} and \code{first}.}
   \item{groupnames }{ is a vector of names for the variable groups to be used for annotation of output.}
   \item{weights }{ is a vector of case weights for the observations in the data frame (or matrix).
        You can EITHER specify \code{weights} OR a \code{design}.
@@ -154,18 +157,28 @@ calc.relimp.lm(object, type = "lmg", groups = NULL, groupnames=NULL, always = NU
   \item{first}{ is each variables contribution when included first, which is just the squared covariance between y and the variable.}
   \item{betasq}{ is the squared standardized coefficient.} 
   \item{pratt}{ is the product of the standardized coefficient and the correlation.}
+  \item{genizi}{ is the \eqn{R^2} decomposition according to Genizi 1993}
+  \item{car}{ is the \eqn{R^2} decomposition according to Zuber and Strimmer 2010, also available from package \pkg{care} 
+         (squares of scores produced by function \code{\link[care]{carscore}}
 }
 Each metric is calculated using the internal function \dQuote{metric}\code{calc}, e.g. \code{lmgcalc}.
 
-Three of the metrics in \code{calc.relimp} (\code{lmg}, \code{pmvd} and \code{pratt}) decompose the model \eqn{R^2}. 
-If \code{always} requests some variables to be always in the model, these variables are included in the model first. 
-Only the remaining \eqn{R^2} that is not explained by these variables is decomposed among the other regressors.
-\code{lmg}, \code{pmvd} and \code{pratt} sum to the \eqn{R^2} that is to be decomposed, 
+Five of the metrics in \code{calc.relimp} (\code{lmg}, \code{pmvd}, \code{pratt}, \code{genizi} and \code{car}), 
+decompose the model \eqn{R^2}. 
+\code{calc.relimp} (\code{lmg}, \code{pmvd}, \code{pratt}, \code{genizi} and \code{car}) sum to the \eqn{R^2} that is to be decomposed, 
 if \code{rela = FALSE} and to 100pct if \code{rela = TRUE}.
 
 The other metrics also (artificially) sum to 100pct if \code{rela = TRUE}. 
 If \code{rela = FALSE}, they are given relative to var(y) (or the conditional variance of y after adjusting out the variables 
 requested in \code{always}) but do not sum to \eqn{R^2}.
+
+If \code{always} requests some variables to be always in the model, these are conditioned upon 
+(i.e. included into the model first). Only the remaining \eqn{R^2} that is not explained by 
+these variables is decomposed among the other regressors. This currently does not work for metrics \code{genizi} and \code{car}.
+
+Four of the metrics, \code{lmg}, \code{pmvd}, \code{first} and \code{last}, 
+are related to the order in which the variables are included into the model. 
+For these it is possible to consider the variables in groups that are always entered into the model together. 
 
 Note that \pkg{relaimpo} can only provide metric \code{lmg} for models with interactions (2-way interactions only). 
 It averages only over those orders, for which the interactions enter the model after both their main effects.
@@ -190,6 +203,7 @@ by several other \R-packages). Currently, possibilities in this function are lim
 it uses complex survey designs and bootstrapping which do not (yet) go together well with factors, interactions 
 and calculated quantities in formulae.
 
+}
 }
 \value{
   \item{var.y }{the variance of the response}
@@ -219,13 +233,22 @@ if \code{lmg} has been requested in \code{type} and \code{rank=TRUE}}
 \references{ 
 Chevan, A. and Sutherland, M. (1991) Hierarchical Partitioning. \emph{The American Statistician} \bold{45}, 90--96.
 
-Darlington, R.B. (1968) Multiple regression in psychological research and practice. \emph{Psychological Bulletin}  \bold{69}, 161--182.
+Darlington, R.B. (1968) Multiple regression in psychological research and practice. \emph{Psychological Bulletin} \bold{69}, 161--182.
 
 Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{http://www.prismanalytics.com/docs/RelativeImportance050319.pdf}
 
+Genizi, A. (1993) Decomposition of R2 in multiple regression with correlated regressors. \emph{Statistica Sinica} \bold{3}, 407--420. 
+Downloadable at \url{http://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
+
+Groemping, U. (2006) Relative Importance for Linear Regression in R: The Package relaimpo 
+         \emph{Journal of Statistical Software} \bold{17}, Issue 1. 
+         Downloadable at \url{http://www.jstatsoft.org/v17/i01}
+
 Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivariate and Multivariate Analysis}, Glenview IL: Scott, Foresman.
 
-Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.
+Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{http://www.uni-leipzig.de/strimmer/lab/publications/preprints/carscore2010.pdf}
+
+Go to \url{http://prof.beuth-hochschule.de/groemping/relaimpo/} for further information and references.
 }
 \author{ Ulrike Groemping, BHT Berlin }
 \note{ There are two versions of this package. The version on CRAN is globally licensed under GPL version 2 (or later). 
@@ -254,7 +277,7 @@ or family other than gaussian lead to an error message.
 #####################################################################
 data(swiss)
     calc.relimp(swiss, 
-       type = c("lmg", "last", "first", "betasq", "pratt") )
+       type = c("lmg", "last", "first", "betasq", "pratt", "genizi", "car") )
     # calculation of all available relative importance metrics 
         # non-US version offers the additional metric "pmvd", 
         # i.e. call would be 
@@ -268,7 +291,7 @@ data(swiss)
     crf
     linmod <- lm(Fertility~Agriculture+Examination+Education+Catholic+Infant.Mortality,swiss)
     crlm <- calc.relimp(linmod, 
-        type = c("lmg", "last", "first", "betasq", "pratt"), rela = TRUE )
+        type = c("lmg", "last", "first", "betasq", "pratt", "genizi", "car"), rela = TRUE )
     plot(crlm)
     # bar plot of the relative importance metrics
 

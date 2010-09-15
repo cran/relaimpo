@@ -35,10 +35,21 @@ Darlington, R.B. (1968) Multiple regression in psychological research and practi
 
 Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{http://www.prismanalytics.com/docs/RelativeImportance050319.pdf}
 
+Genizi, A. (1993) Decomposition of R2 in multiple regression with correlated regressors. \emph{Statistica Sinica} \bold{3}, 407--420. 
+   Downloadable at \url{http://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
+
+Groemping, U. (2006) Relative Importance for Linear Regression in R: The Package relaimpo 
+         \emph{Journal of Statistical Software} \bold{17}, Issue 1. 
+         Downloadable at \url{http://www.jstatsoft.org/v17/i01}
+
 Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivariate and Multivariate Analysis}, Glenview IL: Scott, Foresman.
 
-Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.}
-\section{Acknowlegment }{ This package uses as an internal function the function \code{nchoosek} from \pkg{vsn}, authored by Wolfgang Huber, available under LGPL. }
+Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{http://www.uni-leipzig.de/strimmer/lab/publications/preprints/carscore2010.pdf}
+
+Go to \url{http://prof.beuth-hochschule.de/groemping/relaimpo/} for further information and references.}
+
+\section{Acknowlegment }{ This package uses as an internal function the function \code{nchoosek} from \pkg{vsn}, authored by Wolfgang Huber, available under LGPL. 
+Furthermore, it uses a modified version of the function carscore from \pkg{care} by Verena Zuber and Korbinian Strimmer.}
 \author{ Ulrike Groemping, BHT Berlin }
 \note{ There are two versions of this package. The version on CRAN is globally licensed under GPL version 2 (or later). 
 There is an extended version with the interesting additional metric \code{pmvd} that is licensed according to GPL version 2

@@ -20,24 +20,30 @@ Objects should only be created by calls to the function \code{calc.relimp}.
     \item{\code{var.y}:}{Object of class \code{"numeric"} }
     \item{\code{R2}:}{Object of class \code{"numeric"} }
     \item{\code{R2.decomp}:}{Object of class \code{"numeric"} }
-    \item{\code{lmg}:}{Object of class \code{"numeric"} }
-    \item{\code{pmvd}:}{Object of class \code{"numeric"} }
-    \item{\code{last}:}{Object of class \code{"numeric"} }
-    \item{\code{first}:}{Object of class \code{"numeric"} }
-    \item{\code{betasq}:}{Object of class \code{"numeric"} }
+    \item{\code{lmg}:}{Object of class \code{"numeric"}  }
+    \item{\code{pmvd}:}{Object of class \code{"numeric"}  }
+    \item{\code{first}:}{Object of class \code{"numeric"}  }
+    \item{\code{last}:}{Object of class \code{"numeric"}  }
+    \item{\code{betasq}:}{Object of class \code{"numeric"}  }
     \item{\code{pratt}:}{Object of class \code{"numeric"}  }
+    \item{\code{genizi}:}{Object of class \code{"numeric"}  }
+    \item{\code{car}:}{Object of class \code{"numeric"}  }
     \item{\code{lmg.rank}:}{Object of class \code{"numeric"}  }
     \item{\code{pmvd.rank}:}{Object of class \code{"numeric"}  }
-    \item{\code{last.rank}:}{Object of class \code{"numeric"}  }
     \item{\code{first.rank}:}{Object of class \code{"numeric"}  }
+    \item{\code{last.rank}:}{Object of class \code{"numeric"}  }
     \item{\code{betasq.rank}:}{Object of class \code{"numeric"}  }
-    \item{\code{pratt.rank}:}{Object of class \code{"numeric"} }
+    \item{\code{pratt.rank}:}{Object of class \code{"numeric"}  }
+    \item{\code{genizi.rank}:}{Object of class \code{"numeric"}  }
+    \item{\code{car.rank}:}{Object of class \code{"numeric"}  }
     \item{\code{lmg.diff}:}{Object of class \code{"numeric"}  }
     \item{\code{pmvd.diff}:}{Object of class \code{"numeric"}  }
+    \item{\code{first.diff}:}{Object of class \code{"numeric"}  }
     \item{\code{last.diff}:}{Object of class \code{"numeric"}  }
-    \item{\code{first.diff}:}{Object of class \code{"numeric"} }
     \item{\code{betasq.diff}:}{Object of class \code{"numeric"}  }
-    \item{\code{pratt.diff}:}{Object of class \code{"numeric"} }
+    \item{\code{pratt.diff}:}{Object of class \code{"numeric"}  }
+    \item{\code{genizi.diff}:}{Object of class \code{"numeric"}  }
+    \item{\code{car.diff}:}{Object of class \code{"numeric"}  }
     \item{\code{namen}:}{Object of class \code{"character"}: variable names, starting with name for response }
     \item{\code{nobs}:}{Object of class \code{"numeric"}: number of valid observations used in analysis 
                                             (available only if calculations are based on raw data) }

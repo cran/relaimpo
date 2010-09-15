@@ -1,7 +1,7 @@
 "booteval.relimp" <-
 function (bootrun, bty = "perc", level = 0.95, sort = FALSE, norank = FALSE, 
     nodiff = FALSE, typesel = c("lmg", "pmvd", "last", "first", 
-        "betasq", "pratt")) 
+        "betasq", "pratt", "genizi", "car")) 
 {
 
     # Author and copyright holder: Ulrike Groemping
@@ -42,7 +42,6 @@ function (bootrun, bty = "perc", level = 0.95, sort = FALSE, norank = FALSE,
     always <- bootrun@always
     wt <- bootrun@wt
     if (is.null(wt)) wt <- rep(1, nrow(bootrun@boot$data))
-    
 
     nlev <- length(level)
     if (length(bootrun@groupdocu)>0) {
@@ -85,14 +84,13 @@ function (bootrun, bty = "perc", level = 0.95, sort = FALSE, norank = FALSE,
     ausgabe@R2.boot <- bootrun@boot$t[, 2]
     ausgabe@R2.decomp.boot <- bootrun@boot$t[, 3]
 
-
     #assign names to elements from bootrun in order to be able to refer to them later
     #columns of matrices can be referred to by their colnames (in quotes in square brackets instead of index)
     #elements of vectors analogously
     zaehl <- 4
     bootnames <- c("var.y", "R2", "R2.decomp")
     typname <- ""
-    for (a in c("lmg", "pmvd", "last", "first", "betasq", "pratt")) {
+    for (a in c("lmg", "pmvd", "last", "first", "betasq", "pratt", "genizi", "car")) {
         if (a %in% type) {
             bootnames <- c(bootnames, paste(names[2:(g+1)], ".", a, sep = ""))
             if (a %in% typesel) {
@@ -124,6 +122,7 @@ function (bootrun, bty = "perc", level = 0.95, sort = FALSE, norank = FALSE,
                 typname <- a
         }
     }
+
     ## omit always in case it was appended as numeric variable
     bootrun@boot$t<-bootrun@boot$t[,1:length(bootnames)]
     bootrun@boot$t0<-bootrun@boot$t0[1:length(bootnames)]

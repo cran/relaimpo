@@ -25,13 +25,13 @@ setClassUnion("langnull", c("language", "NULL"))  ## added call slot, NULL may b
 setClass("relimplm",representation=representation(
     var.y="numeric",R2="numeric",R2.decomp="numeric",
     lmg="numeric",pmvd="numeric",first="numeric",last="numeric",
-    betasq="numeric",pratt="numeric",
+    betasq="numeric",pratt="numeric",genizi="numeric",car="numeric",
     lmg.rank="numeric",pmvd.rank="numeric",
     first.rank="numeric",last.rank="numeric",
-    betasq.rank="numeric",pratt.rank="numeric",
+    betasq.rank="numeric",pratt.rank="numeric",genizi.rank="numeric",car.rank="numeric",
     lmg.diff="numeric",pmvd.diff="numeric",first.diff="numeric",
     last.diff="numeric",
-    betasq.diff="numeric",pratt.diff="numeric",
+    betasq.diff="numeric",pratt.diff="numeric",genizi.diff="numeric",car.diff="numeric",
     namen="character",nobs="numeric",ave.coeffs="numintmatnull",type="character",rela="logical",
     always="numintnull",alwaysnam="charnull", groupdocu="list", call="langnull"))
 setValidity("relimplm",function(object){
@@ -58,12 +58,20 @@ setValidity("relimplm",function(object){
     pratt<-is(object@pratt,"numeric") && (length(object@pratt) %in% c(0,p))
     pratt.rank<-is(object@pratt.rank,"numeric") && (length(object@pratt.rank) %in% c(0,p))
     pratt.diff<-is(object@pratt.diff,"numeric") && (length(object@pratt.diff) %in% c(0,p*(p-1)/2))
+    genizi<-is(object@genizi,"numeric") && (length(object@genizi) %in% c(0,p))
+    genizi.rank<-is(object@genizi.rank,"numeric") && (length(object@genizi.rank) %in% c(0,p))
+    genizi.diff<-is(object@genizi.diff,"numeric") && (length(object@genizi.diff) %in% c(0,p*(p-1)/2))
+    car<-is(object@car,"numeric") && (length(object@car) %in% c(0,p))
+    car.rank<-is(object@car.rank,"numeric") && (length(object@car.rank) %in% c(0,p))
+    car.diff<-is(object@car.diff,"numeric") && (length(object@car.diff) %in% c(0,p*(p-1)/2))
     namen <- is(slot(object,"namen"),"character")
     return(var.y && R2 && lmg && lmg.rank && lmg.diff 
         && pmvd && pmvd.rank && pmvd.diff 
         && last && last.rank && last.diff && first && first.rank && first.diff
         && betasq && betasq.rank && betasq.diff 
-        && pratt && pratt.rank && pratt.diff && namen)
+        && pratt && pratt.rank && pratt.diff
+        && genizi && genizi.rank && genizi.diff 
+        && car && car.rank && car.diff && namen)
     })
 
 
@@ -93,13 +101,21 @@ setClass("relimplmbooteval",representation=representation(
     pratt.lower="matrix",pratt.upper="matrix",
     pratt.rank.lower="matrix",pratt.rank.upper="matrix",
     pratt.diff.lower="matrix",pratt.diff.upper="matrix",
+    genizi.lower="matrix",genizi.upper="matrix",
+    genizi.rank.lower="matrix",genizi.rank.upper="matrix",
+    genizi.diff.lower="matrix",genizi.diff.upper="matrix",
+    car.lower="matrix",car.upper="matrix",
+    car.rank.lower="matrix",car.rank.upper="matrix",
+    car.diff.lower="matrix",car.diff.upper="matrix",
     var.y.boot="numeric",R2.boot="numeric",R2.decomp.boot="numeric",
     lmg.boot="matrix",pmvd.boot="matrix",last.boot="matrix",
-    first.boot="matrix",betasq.boot="matrix",pratt.boot="matrix",
+    first.boot="matrix",betasq.boot="matrix",pratt.boot="matrix",genizi.boot="matrix",car.boot="matrix",
     lmg.rank.boot="matrix",pmvd.rank.boot="matrix",last.rank.boot="matrix",
     first.rank.boot="matrix",betasq.rank.boot="matrix",pratt.rank.boot="matrix",
+    genizi.rank.boot="matrix",car.rank.boot="matrix",
     lmg.diff.boot="matrix",pmvd.diff.boot="matrix",last.diff.boot="matrix",
     first.diff.boot="matrix",betasq.diff.boot="matrix",pratt.diff.boot="matrix",
+    genizi.diff.boot="matrix",car.diff.boot="matrix",
     est="numintnull", vcov="numintmatnull", 
     level="numeric",nboot="numeric",diffnam="character",rank="logical",diff="logical",
     rela="logical",fixed="logical",type="character",sort="logical",bty="character",mark="matrix",
@@ -129,6 +145,12 @@ setClass("relimplmbootMI",representation=representation(
     pratt.lower="matrix",pratt.upper="matrix",
     pratt.rank.lower="matrix",pratt.rank.upper="matrix",
     pratt.diff.lower="matrix",pratt.diff.upper="matrix",
+    genizi.lower="matrix",genizi.upper="matrix",
+    genizi.rank.lower="matrix",genizi.rank.upper="matrix",
+    genizi.diff.lower="matrix",genizi.diff.upper="matrix",
+    car.lower="matrix",car.upper="matrix",
+    car.rank.lower="matrix",car.rank.upper="matrix",
+    car.diff.lower="matrix",car.diff.upper="matrix",
     MIresult = "ANY", est="numintnull", vcov="numintmatnull", bootlist="listnull",
     level="numeric",nboot="numeric",diffnam="character",rank="logical",diff="logical",
     rela="logical",fixed="logical",type="character",sort="logical",bty="character",mark="matrix",

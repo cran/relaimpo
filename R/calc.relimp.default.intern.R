@@ -86,6 +86,9 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
         stop("Duplicate elements in always")
     if (!is.null(always) && length(always) > p - 2)
         stop("always has too many elements, less than two regressors left")
+    if (!is.null(always) && any(c("car","genizi") %in% type)) 
+         stop("Metrics genizi and car do not work with always.") 
+
     if (is.numeric(always) && any(!always %in% 2:(p+1)))
         stop("Numbers in always must be between 2 and p+1, corresponding to the position of regressors in cov(Y,X1,...,Xp).")
 
@@ -162,8 +165,8 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     #### groups is transferred into a list of vectors
     if (!is.null(groups)) 
     {
-      if (any(c("betasq","pratt") %in% type)) 
-         stop("Metrics betasq and pratt do not work with groups.") 
+      if (any(c("betasq","pratt","car","genizi") %in% type)) 
+         stop("Metrics betasq, pratt, genizi and car do not work with groups.") 
       if (!is.list(groups)) {
         if ((is.numeric(groups) || is.integer(groups)) && !all(groups %in% 2:(p+1)))
             stop(paste("Numbers in groups must refer to columns 2 to ", p+1, " in Y,X1,...,Xp.", sep=""))
@@ -437,8 +440,8 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     
     ## redo here because of factor-based groups
     if (!is.null(groups)) {
-       if (any(c("betasq","pratt") %in% type)) 
-          stop("Metrics betasq and pratt do not work with groups or factors.")} 
+       if (any(c("betasq","pratt","genizi","car") %in% type)) 
+          stop("Metrics betasq, pratt, genizi and car do not work with groups or factors.")} 
 
     if (!is.null(ogroups)) {
     if (!is.null(ogroupnames)) 
@@ -570,10 +573,25 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
         if (rank) names(ausgabe@pratt.rank)<-names[2:(g+1)]
         }
 
+    if ("genizi" %in% type) 
+        {
+        ausgabe <- genizicalc(ausgabe, covg, g, rank, diff, rela, var.y)
+        names(ausgabe@genizi)<-names[2:(g+1)]
+        if (rank) names(ausgabe@genizi.rank)<-names[2:(g+1)]
+        }
+
+    if ("car" %in% type) 
+        {
+        ausgabe <- carcalc(ausgabe, covg, g, rank, diff, rela, var.y)
+        names(ausgabe@car)<-names[2:(g+1)]
+        if (rank) names(ausgabe@car.rank)<-names[2:(g+1)]
+        }
+
     #ausgabe contains (in this order) var.y, R2, lmg, rank.lmg, diff.lmg, 
     #                        pmvd, rank.pmvd, diff.pmvd,  (non-US version only)
     #                        last, rank.last, diff.last, first, rank.first, diff.first,
-    #                                 betasq, rank.betasq, diff.betasq, pratt, rank.pratt, diff.pratt
+    #                                 betasq, rank.betasq, diff.betasq, pratt, rank.pratt, diff.pratt,
+    #                                 genizi, genizi.rank, genizi.diff, car, rank.car, diff.car    
     # as far as requested by the call
     # default: R2, lmg, rank.lmg
     # in addition, some logicals and names are included

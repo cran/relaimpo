@@ -144,6 +144,26 @@ function (x, ..., lev = max(x@level), names.abbrev = 4, ylim=NULL, main=NULL, ce
             segments(plt, 100 * x@pratt.lower[pick, ][index], plt, 
                 100 * x@pratt.upper[pick, ][index])
         }
+        if ("genizi" %in% type) {
+            index <- 1:p
+            if (x@sort) 
+                index <- sort(x@genizi, decreasing = T, index = T)$ix
+            plt <- barplot(100 * x@genizi[index], main = "Method Genizi", 
+                names.arg = xnames[index], ylim = c(axmin, axmax), 
+                ylab = ylab, xlab = xlab)
+            segments(plt, 100 * x@genizi.lower[pick, ][index], plt, 
+                100 * x@genizi.upper[pick, ][index])
+        }
+        if ("car" %in% type) {
+            index <- 1:p
+            if (x@sort) 
+                index <- sort(x@car, decreasing = T, index = T)$ix
+            plt <- barplot(100 * x@car[index], main = "Method CAR", 
+                names.arg = xnames[index], ylim = c(axmin, axmax), 
+                ylab = ylab, xlab = xlab)
+            segments(plt, 100 * x@car.lower[pick, ][index], plt, 
+                100 * x@car.upper[pick, ][index])
+        }
         title(main=main, line=2, outer=T, cex.main=cex.title)
         if (!x@fixed) title(main=paste("with ", 100 * level[pick], 
                   "% bootstrap confidence intervals", sep=""), line=0.5, outer=T, cex.main=1.2)

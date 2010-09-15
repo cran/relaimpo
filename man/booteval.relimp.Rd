@@ -8,9 +8,9 @@
 \title{ Functions to Bootstrap Relative Importance Metrics }
 \description{
   These functions provide bootstrap confidence intervals for relative importances. 
-	\code{boot.relimp} uses the R package boot to do the actual bootstrapping of requested metrics 
+  \code{boot.relimp} uses the R package boot to do the actual bootstrapping of requested metrics 
       (which may take quite a while), 
-	while \code{booteval.relimp} evaluates the results and provides confidence intervals.
+  while \code{booteval.relimp} evaluates the results and provides confidence intervals.
       Output from \code{booteval.relimp} is printed with a tailored print method, and a plot method
       produces bar plots with confidence indication of the relative importance metrics. 
 }
@@ -33,7 +33,7 @@ boot.relimp.lm(object, type = "lmg", groups = NULL, groupnames=NULL, always = NU
 ## function for evaluating bootstrap results
 booteval.relimp(bootrun, bty = "perc", level = 0.95, 
     sort = FALSE, norank = FALSE, nodiff = FALSE, 
-    typesel = c("lmg", "pmvd", "last", "first", "betasq", "pratt"))
+    typesel = c("lmg", "pmvd", "last", "first", "betasq", "pratt", "genizi", "car"))
 }
 %- end of 'usage'
 \arguments{
@@ -178,12 +178,21 @@ Darlington, R.B. (1968) Multiple regression in psychological research and practi
 
 Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{http://www.prismanalytics.com/docs/RelativeImportance050319.pdf}
 
-Fox, J. (2002) Bootstrapping regression models. \emph{An R and S-PLUS Companion to Applied Regression: A web appendix to the book}.  	
+Fox, J. (2002) Bootstrapping regression models. \emph{An R and S-PLUS Companion to Applied Regression: A web appendix to the book}.  
 \url{http://cran.r-project.org/doc/contrib/Fox-Companion/appendix-bootstrapping.pdf}.
+
+Genizi, A. (1993) Decomposition of R2 in multiple regression with correlated regressors. \emph{Statistica Sinica} \bold{3}, 407--420. 
+Downloadable at \url{http://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
+
+Groemping, U. (2006) Relative Importance for Linear Regression in R: The Package relaimpo 
+         \emph{Journal of Statistical Software} \bold{17}, Issue 1. 
+         Downloadable at \url{http://www.jstatsoft.org/v17/i01}
 
 Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivariate and Multivariate Analysis}, Glenview IL: Scott, Foresman.
 
-Go to \url{http://prof.tfh-berlin.de/groemping/} for further information and references.
+Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{http://www.uni-leipzig.de/strimmer/lab/publications/preprints/carscore2010.pdf}
+
+Go to \url{http://prof.beuth-hochschule.de/groemping/relaimpo/} for further information and references.
 }
 \author{ Ulrike Groemping, BHT Berlin }
 \note{ There are two versions of this package. The version on CRAN is globally licensed under GPL version 2 (or later). 
