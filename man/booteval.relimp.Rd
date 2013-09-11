@@ -18,17 +18,18 @@
 ## generic function
 boot.relimp(object, ...)
 
-## default S3 method, should be called without suffix ".default"
-boot.relimp.default(object, x = NULL, ..., b = 1000, type = "lmg", 
+## default S3 method
+\method{boot.relimp}{default}(object, x = NULL, ..., b = 1000, type = "lmg", 
     rank = TRUE, diff = TRUE, rela = FALSE, always = NULL, 
     groups = NULL, groupnames = NULL, fixed=FALSE, 
     weights = NULL, design = NULL)
 
-## S3 method for formula objects, should be called without suffix ".formula"
-boot.relimp.formula(formula, data, weights, na.action, ..., subset = NULL)
+## S3 method for formula objects
+\method{boot.relimp}{formula}(formula, data, weights, na.action, ..., subset = NULL)
 
-## S3 method for objects of class lm, should be called without suffix ".lm"
-boot.relimp.lm(object, type = "lmg", groups = NULL, groupnames=NULL, always = NULL, ..., b=1000)
+## S3 method for objects of class lm
+\method{boot.relimp}{lm}(object, type = "lmg", groups = NULL, groupnames=NULL, always = NULL, 
+    ..., b=1000)
 
 ## function for evaluating bootstrap results
 booteval.relimp(bootrun, bty = "perc", level = 0.95, 

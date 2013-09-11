@@ -16,16 +16,16 @@ For completeness and comparison purposes, several other metrics are also on offe
 ## generic function
 calc.relimp(object, ...)
 
-## default S3 method, should be called without suffix ".default"
-calc.relimp.default(object, x = NULL, ..., 
+## default S3 method
+\method{calc.relimp}{default}(object, x = NULL, ..., 
        type = "lmg", diff = FALSE, rank = TRUE, rela = FALSE, always = NULL, 
        groups = NULL, groupnames = NULL, weights=NULL, design=NULL)
 
-## S3 method for formula object, should be called without suffix ".formula"
-calc.relimp.formula(formula, data, weights, na.action, ..., subset=NULL)
+## S3 method for formula object
+\method{calc.relimp}{formula}(formula, data, weights, na.action, ..., subset=NULL)
 
 ## S3 method for objects of class lm
-calc.relimp.lm(object, type = "lmg", groups = NULL, groupnames=NULL, always = NULL, ...)
+\method{calc.relimp}{lm}(object, type = "lmg", groups = NULL, groupnames=NULL, always = NULL, ...)
 
 }
 \arguments{

@@ -10,8 +10,9 @@ The output object can be summarized, printed and plotted.
 }
 \usage{
 mianalyze.relimp(implist, level = 0.95, sort = FALSE, ..., b = 50, type = "lmg", 
-    diff = TRUE, no.CI = FALSE, rela = FALSE, always = NULL, groups = NULL, groupnames = NULL, 
-    deslist = NULL, bootlist.out = FALSE, formula = NULL, weights = NULL, strata=NULL, ids=NULL)
+    diff = TRUE, no.CI = FALSE, rela = FALSE, always = NULL, groups = NULL, 
+    groupnames = NULL, deslist = NULL, bootlist.out = FALSE, formula = NULL, 
+    weights = NULL, strata=NULL, ids=NULL)
 }
 \arguments{
   \item{implist}{list of data frames or matrices containing multiply-imputed datasets, 
@@ -204,7 +205,7 @@ many regressors. Hence, bootstrapping of multiple data sets should be used with 
   smi.cr.list[[1]]
   
   ## obtain confidence intervals, 
-  ## currently only usable for models without calculated variables, factors, groups, or interactions
+  ## currently only usable for models without calculated variables, factors, groups, interactions
   
   ## call without using weights, strata, clusters or a design list
   mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave)  
@@ -216,7 +217,8 @@ many regressors. Hence, bootstrapping of multiple data sets should be used with 
       summary(mitest,lev=0.8)
   ## call with design list
   deslist = lapply(smi[[1]], function(obj) svydesign(~id,strata=~sex,weights=~cistot,data=obj))
-  mitest <- mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave, deslist=deslist, level=c(0.8))
+  mitest <- mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave, deslist=deslist, 
+       level=c(0.8))
   mitest  
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

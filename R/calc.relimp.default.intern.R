@@ -106,7 +106,7 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
              nobs <- nrow(y)
              if (!nobs==n) 
                  warning(paste((n-nobs), "observations deleted due to missing"))
-             if (!(nobs > ncol(y)+2)) 
+             if (!(nobs > ncol(y))) 
                 stop("Too few complete observations for estimating this model")
        }
     }
@@ -124,7 +124,7 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
         nobs <- sum(nomiss)
         if (!nobs==n) 
               warning(paste((n-nobs), "observations deleted due to missing"))
-        if (!(nobs > ncol(x)+3)) 
+        if (!(nobs > ncol(x)+1)) 
               stop("Too few complete observations for estimating this model")
          ## ynam <- deparse(substitute(object)) happened in calling program
          if (is.matrix(y)  & !is.null(colnames(y))) ynam <- colnames(y)
@@ -375,7 +375,7 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     if (is.null(x)) {
        # not a covariance matrix
        if (!(ncol(y) == nrow(y))) {
-             if (!(nobs > ncol(y)+2)) 
+             if (!(nobs > ncol(y))) 
                 stop("Too few complete observations for estimating this model")
              ## change UG 1.3: die cov-Funktion gewichtet
              covg <- cov.wt(y, wt=wt)$cov
@@ -384,7 +384,7 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     }
 
     if (!is.null(x)) {
-        if (!(nobs > ncol(x)+3)) 
+        if (!(nobs > ncol(x)+1)) 
               stop("Too few complete observations for estimating this model")
         ## change UG 1.3: die cov-Funktion gewichtet
         covg <- cov.wt(cbind(y,x), wt=wt)$cov

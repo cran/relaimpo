@@ -28,7 +28,8 @@
 
 }
 \usage{
-\method{print}{relimplm}(x,...,show.coeffs = ifelse(any(c("lmg", "pmvd") \%in\% x@type) & is.null(x@always), TRUE, FALSE))
+\method{print}{relimplm}(x,...,show.coeffs = ifelse(any(c("lmg", "pmvd") \%in\% x@type) 
+    & is.null(x@always), TRUE, FALSE))
 
 \method{plot}{relimplm}(x,...,names.abbrev=4, ylim=NULL, main=NULL, cex.title=1.5)
 
@@ -36,9 +37,11 @@
 
 \method{print}{relimplmbootMI}(x,...)                                    
 
-\method{plot}{relimplmbooteval}(x, ..., lev=max(x@level), names.abbrev=4, ylim=NULL, main=NULL, cex.title=1.5)   
+\method{plot}{relimplmbooteval}(x, ..., lev=max(x@level), names.abbrev=4, ylim=NULL, 
+    main=NULL, cex.title=1.5)   
 
-\method{plot}{relimplmbootMI}(x, ..., lev=max(x@level), names.abbrev=4, ylim=NULL, main=NULL, cex.title=1.5)   
+\method{plot}{relimplmbootMI}(x, ..., lev=max(x@level), names.abbrev=4, ylim=NULL, 
+    main=NULL, cex.title=1.5)   
 
 \method{summary}{relimplmbootMI}(object, ..., lev = max(object@level))                                    
 

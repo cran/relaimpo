@@ -1,7 +1,4 @@
-     import(boot)
-     import(survey)
-     import(MASS)
-     import(methods)
+     import(boot, survey, MASS, methods, mitools, corpcor)
      importFrom(graphics, plot)
      #importClassesFrom(boot,boot)
 ##     exportPattern("\\.relimp$")
