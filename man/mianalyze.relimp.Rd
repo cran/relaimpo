@@ -152,7 +152,7 @@ Chevan, A. and Sutherland, M. (1991) Hierarchical Partitioning. \emph{The Americ
 
 Darlington, R.B. (1968) Multiple regression in psychological research and practice. \emph{Psychological Bulletin}  \bold{69}, 161--182.
 
-Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{http://www.prismanalytics.com/docs/RelativeImportance050319.pdf}
+Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2255827}
 
 Genizi, A. (1993) Decomposition of R2 in multiple regression with correlated regressors. \emph{Statistica Sinica} \bold{3}, 407--420. 
 Downloadable at \url{http://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
@@ -165,7 +165,7 @@ Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivari
 
 Little, R.J.A. and Rubin, D.B. (2002) \emph{Statistical Analysis with Missing Data}, Wiley, New York.
 
-Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{http://www.uni-leipzig.de/strimmer/lab/publications/preprints/carscore2010.pdf}
+Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{http://arxiv.org/abs/1007.5516}
 
 Go to \url{http://prof.beuth-hochschule.de/groemping/} for further information and references.
 }

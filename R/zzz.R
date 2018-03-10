@@ -8,5 +8,6 @@ packageStartupMessage("This is the global version of package relaimpo.","\n")
 packageStartupMessage( "If you are a non-US user, a version with the interesting additional metric pmvd is available","\n")
 packageStartupMessage("from Ulrike Groempings web site at prof.beuth-hochschule.de/groemping.","\n")
 
+
 }
 

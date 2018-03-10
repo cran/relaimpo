@@ -1,5 +1,11 @@
 Changes for R-package relaimpo
 
+Version 2.2-3 (Mar 9th, 2018)
+  - changed package title to title case
+  - changed description to not start with package name
+  - fixed namespace file to register two missing S3 methods and import some functions from graphics and stats
+  - updated some URLs
+
 Version 2.2-2 (Sep 11th, 2013)
   - adapted man files to new line length requirements for usage and example lines
   - adapted package to current startup policy
@@ -7,7 +13,7 @@ Version 2.2-2 (Sep 11th, 2013)
   - adapted to new author coding
   - fixed improper documentation format for methods of calc.relimp and boot.relimp
 
-Version 2.2-1 (July 18th, 2011, not published)
+Version 2.2-1 (July 18th, 2011)
   - reduced number of observations required for running calc.relimp (used to be 
     larger than number of coefficients to be estimated + 2, 
     is now larger than number of coefficients to be estimated (i.e. at least 
