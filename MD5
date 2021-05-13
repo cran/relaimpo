@@ -1,4 +1,4 @@
-0529b2e59108387e0aff536fbe5b07e9 *DESCRIPTION
+1e6eb56e7a7f0334c479fa9193f237ca *DESCRIPTION
 2ef700db6cf1ba41236a0753c54297d0 *NAMESPACE
 5c3960ddd193854fbf8757f0260a8f5d *R/aaa.R
 983517b18d8598195be83a59945c3f20 *R/alltype.R
@@ -12,7 +12,7 @@ b71ac9e4316fb25571b63fb5f11d0a15 *R/boot.relimp.lm.R
 4c0897c7488ff874fcc69fc0a32b94b6 *R/booteval.relimp.R
 cf8d9c39ad4697d781cea18ae39d74c9 *R/calc.relimp.R
 07f60556922c014a8c95956079087c33 *R/calc.relimp.default.R
-9ae0fa42645b444bb8af76ca14841eac *R/calc.relimp.default.intern.R
+0f7f98ee7b9e4b6820d7c5d93ac650b7 *R/calc.relimp.default.intern.R
 1bd06ed0073372cc5b648d644c65bf93 *R/calc.relimp.formula.R
 718f7cf689a229476f51b33d878e6965 *R/calc.relimp.lm.R
 3358102332d59c836d8caba76f647047 *R/calcrelimp.forboot.R
@@ -47,12 +47,12 @@ cce03b96709023d7777471dfb8b306af *R/print.relimplmbootMI.R
 2d04ffca94adcc7f030d8ec9a38f2245 *R/varicalc.R
 b7a537a6169542b8ec37f313adf713f4 *R/zzz.R
 d6af4e0c54ff8a521b351c0fce50aa84 *inst/CITATION
-752c6739d9d30db84f837270a8f02b8d *inst/NEWS
-644f5758a9fd7db73a7c8c7af7547d62 *man/booteval.relimp.Rd
-9635ef9324e547d156a8dd391637931c *man/calc.relimp.Rd
+a5cd558689ca462eb107cf8c39eaacde *inst/NEWS
+d4c8db78896596719790dbd27ee99828 *man/booteval.relimp.Rd
+cb20da0242774709810954ec92ecda25 *man/calc.relimp.Rd
 50483de93826411f5f238b225bbe700a *man/classesmethods.relaimpo.Rd
-52d016ebcaaacd2b5b436f36a90654d6 *man/mianalyze.relimp.Rd
-90068606fef41ba2064990dff669a6ea *man/relaimpo-package.Rd
+ab1b8464982b9726125e0efb37e0ff50 *man/mianalyze.relimp.Rd
+df42e0f248b42140567bb2612ba956b1 *man/relaimpo-package.Rd
 2be6e6e4f0412612c026fc789cb6556f *man/relimplm-class.Rd
 174afdada1c20a7805d94edce3c8ab8e *man/relimplmboot-class.Rd
 80cb6eb4fd5abdb7fdc6e6761a8e0903 *man/relimplmbootMI-class.Rd

@@ -509,8 +509,10 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
 
     #conditioning on all variables, i.e. var=s^2
     indices[[g + 1]] <- matrix(1:g, g, 1)
-    variances[[g + 1]] <- covg[1:1] - covg[1, 2:(p + 1)] %*% 
-        solve(covg[2:(p + 1), 2:(p + 1)], covg[2:(p + 1), 1])
+    ### modified May 2021: introduced c() for forcing a scalar instead of
+    ###     a 1x1 matrix
+    variances[[g + 1]] <- covg[1:1] - c(covg[1, 2:(p + 1)] %*% 
+        solve(covg[2:(p + 1), 2:(p + 1)], covg[2:(p + 1), 1]))
 
     hilf <- varicalc(type, alle, covg, p, indices, variances, betas, g, groups, ngroups, WW)
 

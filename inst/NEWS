@@ -1,5 +1,11 @@
 Changes for R-package relaimpo
 
+Version 2.2-4 (May 13th, 2021)
+  - changed a line in calc.relimp.default.intern in order to turn a 1x1 matrix into a scalar before recycling
+  - updated URLs in manual pages
+  - added package care to Suggests
+  - commented out a line in example (shorten run time)
+
 Version 2.2-3 (Mar 9th, 2018)
   - changed package title to title case
   - changed description to not start with package name

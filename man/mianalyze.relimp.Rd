@@ -152,20 +152,20 @@ Chevan, A. and Sutherland, M. (1991) Hierarchical Partitioning. \emph{The Americ
 
 Darlington, R.B. (1968) Multiple regression in psychological research and practice. \emph{Psychological Bulletin}  \bold{69}, 161--182.
 
-Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2255827}
+Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2255827}
 
 Genizi, A. (1993) Decomposition of R2 in multiple regression with correlated regressors. \emph{Statistica Sinica} \bold{3}, 407--420. 
 Downloadable at \url{http://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
 
 Groemping, U. (2006) Relative Importance for Linear Regression in R: The Package relaimpo 
          \emph{Journal of Statistical Software} \bold{17}, Issue 1. 
-         Downloadable at \url{http://www.jstatsoft.org/v17/i01}
+         Downloadable at \url{https://www.jstatsoft.org/v17/i01}
 
 Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivariate and Multivariate Analysis}, Glenview IL: Scott, Foresman.
 
 Little, R.J.A. and Rubin, D.B. (2002) \emph{Statistical Analysis with Missing Data}, Wiley, New York.
 
-Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{http://arxiv.org/abs/1007.5516}
+Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{https://arxiv.org/abs/1007.5516}
 
 Go to \url{http://prof.beuth-hochschule.de/groemping/} for further information and references.
 }
@@ -208,7 +208,7 @@ many regressors. Hence, bootstrapping of multiple data sets should be used with 
   ## currently only usable for models without calculated variables, factors, groups, interactions
   
   ## call without using weights, strata, clusters or a design list
-  mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave)  
+  # mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave)  
   ## call using the id column (identical in all smi data sets) for cluster structure
   ident <- smi[[1]][[1]]$id
   mitest <- mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave, ids=ident)  
@@ -216,7 +216,7 @@ many regressors. Hence, bootstrapping of multiple data sets should be used with 
       ## postprocess: look at intervals with different confidence level
       summary(mitest,lev=0.8)
   ## call with design list
-  deslist = lapply(smi[[1]], function(obj) svydesign(~id,strata=~sex,weights=~cistot,data=obj))
+  deslist <- lapply(smi[[1]], function(obj) svydesign(~id,strata=~sex,weights=~cistot,data=obj))
   mitest <- mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave, deslist=deslist, 
        level=c(0.8))
   mitest  
