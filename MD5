@@ -1,4 +1,4 @@
-1e6eb56e7a7f0334c479fa9193f237ca *DESCRIPTION
+c3e3d33241b4fcf99801a971ed67e5fb *DESCRIPTION
 2ef700db6cf1ba41236a0753c54297d0 *NAMESPACE
 5c3960ddd193854fbf8757f0260a8f5d *R/aaa.R
 983517b18d8598195be83a59945c3f20 *R/alltype.R
@@ -9,7 +9,7 @@ fdb5294a5cab9d57ddb906e299dcfb15 *R/betasqcalc.R
 4ec51bdff03cd63ba0cc897eb427b77b *R/boot.relimp.default.intern.R
 674913166e427a1f270e227451f2791c *R/boot.relimp.formula.R
 b71ac9e4316fb25571b63fb5f11d0a15 *R/boot.relimp.lm.R
-4c0897c7488ff874fcc69fc0a32b94b6 *R/booteval.relimp.R
+aa8b6b979e3908c8872166afd502f003 *R/booteval.relimp.R
 cf8d9c39ad4697d781cea18ae39d74c9 *R/calc.relimp.R
 07f60556922c014a8c95956079087c33 *R/calc.relimp.default.R
 0f7f98ee7b9e4b6820d7c5d93ac650b7 *R/calc.relimp.default.intern.R
@@ -47,7 +47,7 @@ cce03b96709023d7777471dfb8b306af *R/print.relimplmbootMI.R
 2d04ffca94adcc7f030d8ec9a38f2245 *R/varicalc.R
 b7a537a6169542b8ec37f313adf713f4 *R/zzz.R
 d6af4e0c54ff8a521b351c0fce50aa84 *inst/CITATION
-a5cd558689ca462eb107cf8c39eaacde *inst/NEWS
+fe9bdc92947c8748e55abc12f4ab7116 *inst/NEWS
 d4c8db78896596719790dbd27ee99828 *man/booteval.relimp.Rd
 cb20da0242774709810954ec92ecda25 *man/calc.relimp.Rd
 50483de93826411f5f238b225bbe700a *man/classesmethods.relaimpo.Rd

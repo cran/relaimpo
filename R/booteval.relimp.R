@@ -112,8 +112,8 @@ function (bootrun, bty = "perc", level = 0.95, sort = FALSE, norank = FALSE,
                   a, "diff", sep = ""))
                 if (a %in% typesel) 
                   slot(ausgabe, paste(a, "diff", sep = ".")) <- bootrun@boot$t0[zaehl:(zaehl + g*(g - 1)/2-1)]
-                  slot(ausgabe, paste(a, "diff", "boot", sep = ".")) <- matrix(bootrun@boot$t[, 
-                    zaehl:(zaehl + g * (g - 1)/2 - 1)],1,g * (g - 1)/2)
+                  slot(ausgabe, paste(a, "diff", "boot", sep = ".")) <- bootrun@boot$t[, 
+                    zaehl:(zaehl + g * (g - 1)/2 - 1)]
                 zaehl <- zaehl + g * (g - 1)/2
             }
             if (a %in% typesel && !typname[1] == "") 

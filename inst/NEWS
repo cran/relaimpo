@@ -1,5 +1,9 @@
 Changes for R-package relaimpo
 
+Version 2.2-5 (May 14th, 2021)
+  - bug fix: output slot *metric*.diff.boot only contained the first bootstrap run; 
+    this did not affect any calculations
+
 Version 2.2-4 (May 13th, 2021)
   - changed a line in calc.relimp.default.intern in order to turn a 1x1 matrix into a scalar before recycling
   - updated URLs in manual pages
