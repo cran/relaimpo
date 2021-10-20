@@ -110,7 +110,7 @@ calc.relimp.default.intern to output further detail needed for usage from within
 
 }
 
-\references{ Go to \url{http://prof.beuth-hochschule.de/groemping/} for further information and references.}
+\references{ Go to \url{https://prof.bht-berlin.de/groemping/} for further information and references.}
 \author{ Ulrike Groemping, BHT Berlin }
 
 \seealso{ \pkg{\link{relaimpo}}, \code{\link{calc.relimp}}, \code{\link{booteval.relimp}}, 

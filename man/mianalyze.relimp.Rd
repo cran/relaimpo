@@ -167,7 +167,7 @@ Little, R.J.A. and Rubin, D.B. (2002) \emph{Statistical Analysis with Missing Da
 
 Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{https://arxiv.org/abs/1007.5516}
 
-Go to \url{http://prof.beuth-hochschule.de/groemping/} for further information and references.
+Go to \url{https://prof.bht-berlin.de/groemping/} for further information and references.
 }
 \author{ Ulrike Groemping, BHT Berlin }
 

@@ -113,7 +113,8 @@ function (bootrun, bty = "perc", level = 0.95, sort = FALSE, norank = FALSE,
                 if (a %in% typesel) 
                   slot(ausgabe, paste(a, "diff", sep = ".")) <- bootrun@boot$t0[zaehl:(zaehl + g*(g - 1)/2-1)]
                   slot(ausgabe, paste(a, "diff", "boot", sep = ".")) <- bootrun@boot$t[, 
-                    zaehl:(zaehl + g * (g - 1)/2 - 1)]
+                    zaehl:(zaehl + g * (g - 1)/2 - 1), drop=FALSE]
+                    ## bug fix Oct 2021 thanks to bug report by Josh Hodge
                 zaehl <- zaehl + g * (g - 1)/2
             }
             if (a %in% typesel && !typname[1] == "") 

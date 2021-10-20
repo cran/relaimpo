@@ -1,5 +1,10 @@
 Changes for R-package relaimpo
 
+Version 2.2-6 (Oct 2021)
+  - bug fix to booteval.relimp: filling output slot *metric*.diff.boot produced an error in case of only 
+    two variables
+  - updated several URLs
+
 Version 2.2-5 (May 14th, 2021)
   - bug fix: output slot *metric*.diff.boot only contained the first bootstrap run; 
     this did not affect any calculations

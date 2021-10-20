@@ -248,7 +248,7 @@ Lindeman, R.H., Merenda, P.F. and Gold, R.Z. (1980) \emph{Introduction to Bivari
 
 Zuber, V. and Strimmer, K. (2010) \emph{Variable importance and model selection by decorrelation}. Preprint, downloadable at \url{https://arxiv.org/abs/1007.5516}
 
-Go to \url{http://prof.beuth-hochschule.de/groemping/relaimpo/} for further information and references.
+Go to \url{https://prof.bht-berlin.de/groemping/relaimpo/} for further information and references.
 }
 \author{ Ulrike Groemping, BHT Berlin }
 \note{ There are two versions of this package. The version on CRAN is globally licensed under GPL version 2 (or later). 
