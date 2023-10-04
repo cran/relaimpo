@@ -1,4 +1,4 @@
-"calc.relimp.default.intern" <-
+"calc.relimp_default.intern" <-
 function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela = FALSE, always = NULL, 
         groups = NULL, groupnames=NULL, weights=NULL, design=NULL, WW=NULL, test=FALSE, ynam=NULL, ngroups=NULL) 
 {
@@ -40,7 +40,7 @@ function (object, x = NULL, ..., type = "lmg", diff = FALSE, rank = TRUE, rela =
     # weights gives a vector of observation weights (all equally weighted, if NULL)
     # design gives a design according to package survey (either weights OR design only)
     # WW is determined from calc.relimp.lm in case of interactions (German: WechselWirkungen)
-    # test is set to TRUE by routines that use calc.relimp.default.intern for error checking and preparation
+    # test is set to TRUE by routines that use calc.relimp_default.intern for error checking and preparation
     # ynam is used by calc.relimp.default in case data are given as y and x
 
 

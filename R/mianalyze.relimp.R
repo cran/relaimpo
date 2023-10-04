@@ -165,7 +165,7 @@ else
       if (!bootlist.out)
       bootlist[[i]]@boot$t <- bootlist[[i]]@boot$t0  ## save space
 
-#### anschließend MIcombine fuer die Berechnungen der Kombinationen
+#### anschliessend MIcombine fuer die Berechnungen der Kombinationen
 #### Ausgabe-Verhalten aus diesem Programm (ohne den Kram fuer Raenge)
 
 bootrun <- bootlist[[1]]  ## for checks on groups etc., since should be same for all list elements
@@ -184,7 +184,7 @@ bootrun <- bootlist[[1]]  ## for checks on groups etc., since should be same for
     # prepare output object by first providing estimates themselves
 
     ## relimplm-Objekt generiert
-    ## Werte werden anschließend unten korrigiert, da im Fall von WWen falsch
+    ## Werte werden anschliessend unten korrigiert, da im Fall von WWen falsch
     ## wg. nichtvorhandener ngroups-Information hier
     ausgabe <- calc.relimp(bootrun@boot$data, design=deslist[[1]], type = type, diff = diff,
         rank = rank, rela = rela, always=always, groups=groups,

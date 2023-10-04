@@ -66,11 +66,11 @@ mianalyze.relimp(implist, level = 0.95, sort = FALSE, ..., b = 50, type = "lmg",
        For the different types of weights and their appropriate treatment for obtaining confidence intervals,
        cf. the \dQuote{Details} section of \code{\link{boot.relimp}}.}
   \item{strata}{ is a strata request that will be handed to function \code{svydesign} for defining the 
-       strata in a survey design (to be given to mianalyze without the \dQuote{\~}).
+       strata in a survey design (to be given to mianalyze without the \code{~}).
        You can EITHER specify \code{strata} OR a \code{deslist}. 
        If \code{strata} is NULL, one stratum is assumed, unless otherwise specified in \code{deslist}.}
   \item{ids}{ is an id-request that will be handed to function \code{svydesign} for defining the clusters 
-       in a survey design (to be given to mianalyze without the \dQuote{\~}).
+       in a survey design (to be given to mianalyze without the \code{~}).
        You can EITHER specify \code{ids} OR a \code{deslist}. 
        If \code{ids} is NULL, it is assumed that there are no clusters, 
        unless otherwise specified in \code{deslist}.}
@@ -155,7 +155,7 @@ Darlington, R.B. (1968) Multiple regression in psychological research and practi
 Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2255827}
 
 Genizi, A. (1993) Decomposition of R2 in multiple regression with correlated regressors. \emph{Statistica Sinica} \bold{3}, 407--420. 
-Downloadable at \url{http://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
+Downloadable at \url{https://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
 
 Groemping, U. (2006) Relative Importance for Linear Regression in R: The Package relaimpo 
          \emph{Journal of Statistical Software} \bold{17}, Issue 1. 
@@ -208,7 +208,7 @@ many regressors. Hence, bootstrapping of multiple data sets should be used with 
   ## currently only usable for models without calculated variables, factors, groups, interactions
   
   ## call without using weights, strata, clusters or a design list
-  # mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave)  
+  mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave)  
   ## call using the id column (identical in all smi data sets) for cluster structure
   ident <- smi[[1]][[1]]$id
   mitest <- mianalyze.relimp(smi[[1]], formula = cistot ~ mdrkfre+sex+wave, ids=ident)  

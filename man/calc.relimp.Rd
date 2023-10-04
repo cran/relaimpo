@@ -38,7 +38,7 @@ calc.relimp(object, ...)
 
         Thus, object can be
 
-        a formula (e.g. y\~x1+x2+x3+x2:x3) (cf. below for details)
+        a formula (e.g. \code{y~x1+x2+x3+x2:x3}) (cf. below for details)
 
         OR
 
@@ -238,7 +238,7 @@ Darlington, R.B. (1968) Multiple regression in psychological research and practi
 Feldman, B. (2005) Relative Importance and Value. Manuscript (Version 1.1, March 19 2005), downloadable at \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2255827}
 
 Genizi, A. (1993) Decomposition of R2 in multiple regression with correlated regressors. \emph{Statistica Sinica} \bold{3}, 407--420. 
-Downloadable at \url{http://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
+Downloadable at \url{https://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
 
 Groemping, U. (2006) Relative Importance for Linear Regression in R: The Package relaimpo 
          \emph{Journal of Statistical Software} \bold{17}, Issue 1. 

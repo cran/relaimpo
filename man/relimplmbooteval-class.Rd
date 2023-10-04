@@ -143,13 +143,13 @@ Class \code{"\linkS4class{relimplm}"}, directly.
 }
 \section{Methods}{
   This documentation section documents S4 methods only. 
-  There are also S3-methods for printing, plotting and extracting slots with \$. 
+  There are also S3-methods for printing, plotting and extracting slots with \code{$}. 
   For their usage, see \code{\link{classesmethods.relaimpo}}.
     \describe{
 %    \item{print}{S3 method: meaningful printout of object }
     \item{show}{S4 method: identical to \code{print}}
 %    \item{plot}{S3 method: plots estimated proportions with indication of confidence intervals }
-%    \item{\$}{S3 method: extracts slots with \$ extractor }
+%    \item{\code{$}}{S3 method: extracts slots with \code{$} extractor }
     }
 }
 \author{ Ulrike Groemping, BHT Berlin}

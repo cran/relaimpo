@@ -118,7 +118,7 @@ Objects should only be created by calls to function \code{mianalyze.relimp}.
     }
 \section{Methods}{
   This documentation section documents S4 methods only. 
-  There are also S3-methods for printing, plotting, extracting slots with \$ and producing 
+  There are also S3-methods for printing, plotting, extracting slots with \code{$} and producing 
   a brief summary. For their usage, see \code{\link{classesmethods.relaimpo}}.
     \describe{
 %    \item{print}{ S3-method: meaningful printout of object }
@@ -126,7 +126,7 @@ Objects should only be created by calls to function \code{mianalyze.relimp}.
 %    \item{summary}{ S3-method: applies the function \code{summary} from package \pkg{mitools} 
          to the slot \code{MIresult} for a briefer output than the standard printout }
 %    \item{plot}{ S3-method: plots estimated proportions with indication of confidence intervals }
-%    \item{\$}{S3 method: extracts slots with \$ extractor }
+%    \item{\code{$}}{S3 method: extracts slots with \code{$} extractor }
     }
 \author{ Ulrike Groemping, BHT Berlin}
 \seealso{

@@ -1,4 +1,4 @@
-"boot.relimp.default.intern" <-
+"boot.relimp_default.intern" <-
 function (object, x = NULL, ..., b = 1000, type = "lmg", rank = TRUE, diff = TRUE, 
     rela = FALSE, always = NULL, groups = NULL, groupnames = NULL, fixed = FALSE, 
     weights = NULL, design = NULL, WW = NULL, ynam=NULL, ngroups=NULL) 
@@ -42,8 +42,8 @@ function (object, x = NULL, ..., b = 1000, type = "lmg", rank = TRUE, diff = TRU
     if (is.null(x) && ncol(y) == nrow(y))        
             stop("Bootstrapping cannot be based on a (square) covariance matrix.")
 
-    ## error control and preparation via calc.relimp.default.intern
-    hilf <- calc.relimp.default.intern(object,x=x,type=type,rank=rank,diff=diff,
+    ## error control and preparation via calc.relimp_default.intern
+    hilf <- calc.relimp_default.intern(object,x=x,type=type,rank=rank,diff=diff,
         rela=rela,always=always,groups=groups,groupnames=groupnames,
         weights=weights,design=design,WW=WW,ynam=ynam,test=TRUE,ngroups=ngroups)
         groupdocu <- hilf@groupdocu

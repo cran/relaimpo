@@ -24,7 +24,7 @@
   usage of which is described below. For class \code{relimplmbootMI}, there is in addition a summary-method,
   which produces a less detailed output than the show / print - method.
   For classes \code{relimplm}, \code{relimplmbooteval} and \code{relimplmbootMI}, 
-  there is in addition a method for extracting slots of the class with \$. 
+  there is in addition a method for extracting slots of the class with \code{$}. 
 
 }
 \usage{
@@ -101,12 +101,12 @@ the confidence level versus the level used in the original run (with interval bo
 
 Because of a defined S3-extraction method, 
 slots of classes \code{relimplm}, \code{relimplmbooteval} and \code{relimplmbootMI} can be extracted not only 
-with the @ extractor but also with \$. 
+with the \code{@} extractor but also with \code{$}. 
 Hence, output elements from functions \code{calc.relimp}, \code{booteval.relimp}, and \code{mianalyze.relimp}
 can be extracted as though the output objects were lists.
 
 Note that there also is an an internally-used class relimplmtest that permits the internal function 
-calc.relimp.default.intern to output further detail needed for usage from within other funtions. 
+calc.relimp_default.intern to output further detail needed for usage from within other funtions. 
 
 }
 

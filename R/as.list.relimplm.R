@@ -1,4 +1,4 @@
-"as.list.relimplm" <- function(from,to)
+aslistrelimplm <- function(from)
 {
     to <- slot(from,"var.y")
     to <- append(to,list(R2=slot(from,"R2")))
@@ -35,30 +35,8 @@
     return(to)
 }
 
-##setAs("relimplm","list",function(from,to){
-##    to<-slot(from,"var.y")
-##   to<-append(to,list(R2=slot(from,"R2")))
-##    to<-append(to,list(R2.decomp=slot(from,"R2.decomp")))
-##     if (length(from@lmg)>0) to<-append(to,list(lmg=as.vector(from@lmg)))
-##   if (length(from@lmg.rank)>0) to<-append(to,list(lmg.rank=as.vector(from@lmg.rank)))
-##    if (length(from@lmg.diff)>0) to<-append(to,list(lmg.diff=as.vector(from@lmg.diff)))
-##    if (length(from@pmvd)>0) to<-append(to,list(pmvd=as.vector(from@pmvd)))
-##    if (length(from@pmvd.rank)>0) to<-append(to,list(pmvd.rank=as.vector(from@pmvd.rank)))
-##    if (length(from@pmvd.diff)>0) to<-append(to,list(pmvd.diff=as.vector(from@pmvd.diff)))
-##    if (length(from@last)>0) to<-append(to,list(last=as.vector(from@last)))
-##    if (length(from@last.rank)>0) to<-append(to,list(last.rank=as.vector(from@last.rank)))
-##   if (length(from@last.diff)>0) to<-append(to,list(last.diff=as.vector(from@last.diff)))
-##    if (length(from@first)>0) to<-append(to,list(first=as.vector(from@first)))
-##    if (length(from@first.rank)>0) to<-append(to,list(first.rank=as.vector(from@first.rank)))
-##    if (length(from@first.diff)>0) to<-append(to,list(first.diff=as.vector(from@first.diff)))
-##    if (length(from@betasq)>0) to<-append(to,list(betasq=as.vector(from@betasq)))
-##    if (length(from@betasq.rank)>0) to<-append(to,list(betasq.rank=as.vector(from@betasq.rank)))
-##    if (length(from@betasq.diff)>0) to<-append(to,list(betasq.diff=as.vector(from@betasq.diff)))
-##    if (length(from@pratt)>0) to<-append(to,list(pratt=as.vector(from@pratt)))
-##    if (length(from@pratt.rank)>0) to<-append(to,list(pratt.rank=as.vector(from@pratt.rank)))
-##    if (length(from@pratt.diff)>0) to<-append(to,list(pratt.diff=as.vector(from@pratt.diff)))
-##    if (length(from@namen)>0) to<-append(to,list(namen=as.vector(from@namen)))
-##    # this function was also listed in the file classes.R, but did not seem to do anything there
-##    return(to)})
-
-
+## if necessary
+## as.list.relimplm <- function(x, ...) aslistrelimplm(x)
+## should work
+## setAs("relimplm","list",aslistrelimplm)
+## done in methods.R

@@ -11,7 +11,7 @@ function(data,indices,...){
     dat <- data[indices,-1]
     wt <- data[indices, 1]
     cova <- cov.wt(dat,wt=data[indices,1])$cov
-    ausgabe <- list2vec(as(calc.relimp.default.intern(cova,...),"list"))
+    ausgabe <- list2vec(as(calc.relimp_default.intern(cova,...),"list"))
     return(ausgabe)
 }
 

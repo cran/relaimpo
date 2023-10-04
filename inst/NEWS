@@ -1,5 +1,13 @@
 Changes for R-package relaimpo
 
+Version 2.2-7 (Oct 2023)
+  - eliminated non-ASCII characters and removed latin1 encoding
+  - removed escaped latex characters (\~ replaced by \code{~}, \$ by \code{$})
+  - removed note for method definition as.list.relimplm (now aslistrelimplm used in setAs)
+  - removed notes for calc.relimp.default.intern and boot.relimp.default.intern
+    by changing .default.intern to _default.intern
+  - updated CITATION file to new format
+
 Version 2.2-6 (Oct 2021)
   - bug fix to booteval.relimp: filling output slot *metric*.diff.boot produced an error in case of only 
     two variables

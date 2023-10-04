@@ -185,7 +185,7 @@ boot.relimp.lm <- function(object, type = "lmg", groups = NULL, groupnames=NULL,
     {if (length(ngroups)==0) ngroups <- NULL}
 
 
-    bt <- do.call("boot.relimp.default.intern", list(DATA, weights=weights, 
+    bt <- do.call("boot.relimp_default.intern", list(DATA, weights=weights, 
              groups = groups, groupnames = groupnames, WW = WW, always = always, ngroups=ngroups, ..., b=b))
     }
     else {

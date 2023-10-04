@@ -241,7 +241,7 @@ calc.relimp.lm <- function(object, type = "lmg", groups = NULL, groupnames=NULL,
     {if (length(ngroups)==0) ngroups <- NULL}
 
 
-      y <- do.call("calc.relimp.default.intern", list(DATA, weights=weights, 
+      y <- do.call("calc.relimp_default.intern", list(DATA, weights=weights, 
                 groups = groups, groupnames = groupnames, WW = WW, always = always, ngroups=ngroups, ...))
       } 
       else {

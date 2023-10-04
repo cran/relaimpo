@@ -2,7 +2,7 @@
 #classes and methods in the following
 #Method for coercing x of class relimplm to list 
 #with as(x,"list")
-setAs("relimplm","list",as.list.relimplm)
+setAs("relimplm","list",aslistrelimplm)
 setMethod("show",signature(object="relimplm"),function(object) print.relimplm(object))
 setMethod("show",signature(object="relimplmbooteval"),function(object) print.relimplmbooteval(object))
 setMethod("show",signature(object="relimplmbootMI"),function(object) print.relimplmbooteval(object))

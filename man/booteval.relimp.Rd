@@ -183,7 +183,7 @@ Fox, J. (2002) Bootstrapping regression models. \emph{An R and S-PLUS Companion 
 \url{https://socialsciences.mcmaster.ca/jfox/Books/Companion-2E/appendix/Appendix-Bootstrapping.pdf}.
 
 Genizi, A. (1993) Decomposition of R2 in multiple regression with correlated regressors. \emph{Statistica Sinica} \bold{3}, 407--420. 
-Downloadable at \url{http://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
+Downloadable at \url{https://www3.stat.sinica.edu.tw/statistica/password.asp?vol=3&num=2&art=10}
 
 Groemping, U. (2006) Relative Importance for Linear Regression in R: The Package relaimpo 
          \emph{Journal of Statistical Software} \bold{17}, Issue 1. 

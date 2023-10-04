@@ -60,7 +60,7 @@ Objects should only be created by calls to the function \code{calc.relimp}.
 }
 \section{Methods}{
   This documentation section documents S4 methods only. 
-  There are also S3-methods for printing, plotting and extracting slots with \$. 
+  There are also S3-methods for printing, plotting and extracting slots with \code{$}. 
   For their usage, see \code{\link{classesmethods.relaimpo}}.
   \describe{
     \item{coerce}{S4-method: If an object of this class is coerced to list by \code{as(object, "list")}, 
@@ -72,7 +72,7 @@ next three in non-US version only: \code{pmvd}, \code{pmvd.rank}, \code{pmvd.dif
  %   \item{print}{S3-method: meaningful printout of object, see \code{\link{print.relimplm}} }
     \item{show}{S4-method: identical to \code{print}}
  %   \item{plot}{S3-method: barplots of percentages, see \code{\link{plot.relimplm}}}
- %   \item{\$}{S3 method: extracts slots with \$ extractor }
+ %   \item{\code{$}}{S3 method: extracts slots with \code{$} extractor }
 }
 }
 \author{ Ulrike Groemping, BHT Berlin }

@@ -11,7 +11,7 @@ function(data,indices, ...){
     e <- data$e[indices]
     cova <- cov(cbind(data$fit+e,data[,1:(ncol(data)-2)]))
 
-    ausgabe <- list2vec(as(calc.relimp.default.intern(cova,...),"list"))
+    ausgabe <- list2vec(as(calc.relimp_default.intern(cova,...),"list"))
     return(ausgabe)
 }
 
